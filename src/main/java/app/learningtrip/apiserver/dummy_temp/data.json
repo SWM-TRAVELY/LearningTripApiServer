@@ -1,0 +1,65 @@
+{
+  "Place": [
+    {
+      "id": 128162,
+      "name": "숭례문",
+      "province": "서울 중구",
+      "imageURL": "http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg"
+    },
+    {
+      "id": 126508,
+      "name": "경복궁",
+      "province": "서울 종로구",
+      "imageURL": "http://tong.visitkorea.or.kr/cms/resource/23/2678623_image2_1.jpg"
+    },
+    {
+      "id": 126510,
+      "name": "종묘",
+      "province": "서울 중구",
+      "imageURL": "http://tong.visitkorea.or.kr/cms/resource/41/2678541_image2_1.jpg"
+    },
+    {
+      "id": 127642,
+      "name": "창덕궁과 후원",
+      "province": "서울 중구",
+      "imageURL": "http://tong.visitkorea.or.kr/cms/resource/47/2678647_image2_1.jpg"
+    }
+  ],
+  "Course": {
+    "courseId": 1,
+    "name": "조선",
+    "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO1ccmm0Rjp4Ws9uw9vNyfuaJT3XFUfTP61A&usqp=CAU",
+    "placeList": [
+      {
+        "id": 128162,
+        "name": "숭례문",
+        "province": "서울 중구",
+        "imageURL": "http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg"
+      },
+      {
+        "id": 126508,
+        "name": "경복궁",
+        "province": "서울 종로구",
+        "imageURL": "http://tong.visitkorea.or.kr/cms/resource/23/2678623_image2_1.jpg"
+      },
+      {
+        "id": 126510,
+        "name": "종묘",
+        "province": "서울 중구",
+        "imageURL": "http://tong.visitkorea.or.kr/cms/resource/41/2678541_image2_1.jpg"
+      },
+      {
+        "id": 127642,
+        "name": "창덕궁과 후원",
+        "province": "서울 중구",
+        "imageURL": "http://tong.visitkorea.or.kr/cms/resource/47/2678647_image2_1.jpg"
+      }
+    ]
+  },
+
+  "AutoComplete": {
+    "keywordList": []
+  },
+
+  "NearBy"
+}
