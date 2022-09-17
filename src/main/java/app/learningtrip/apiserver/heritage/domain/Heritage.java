@@ -9,14 +9,14 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter
-@Builder(builderMethodName = "HeritageBuilder")
+@Builder
 @Table
 public class Heritage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "heritage_id", unique = true, nullable = false)
-    private int id;
+    private long id;
     @Column(length = 50, nullable = false)
     private String name;
     @Column(length = 12)
@@ -45,8 +45,4 @@ public class Heritage {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
     public Place place;
-
-    public static HeritageBuilder builder() {
-        return HeritageBuilder();
-    }
 }

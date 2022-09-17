@@ -1,9 +1,15 @@
 package app.learningtrip.apiserver.place.controller;
 
+import app.learningtrip.apiserver.dummy_temp.PlaceThumbnail;
+import app.learningtrip.apiserver.keyword.domain.Keyword;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.domain.Place_Detail_Tour;
 import app.learningtrip.apiserver.place.domain.Place_Detail_Culture;
+import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailResponse;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -101,5 +107,26 @@ public class PlaceController {
                 .build();
         }
         return null;
+    }
+
+    @GetMapping("/place/related/{place_id}")
+    public ResponseEntity<PlaceThumbnailResponse> similarPlace(@PathVariable(name = "place_id") long place_id) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(1)
+            .name("숭례문")
+            .province("서울 중구")
+           .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(1)
+            .name("국립중앙박물관")
+            .province("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+
+        PlaceThumbnailResponse placeThumbnailResponse = new PlaceThumbnailResponse(placeThumbnailList);
+
+        return ResponseEntity.ok().body(placeThumbnailResponse);
     }
 }
