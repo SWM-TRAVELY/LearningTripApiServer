@@ -27,7 +27,7 @@ jobs:
     - name: Build & Test
       run: |
         ./gradlew build --no-daemon
-        sudo chmod 777 build/libs/api-server-0.0.1-SNAPSHOT.jar
+        sudo chmod -R 777 build
         
     - name: Kill Server process
       uses: appleboy/ssh-action@master
