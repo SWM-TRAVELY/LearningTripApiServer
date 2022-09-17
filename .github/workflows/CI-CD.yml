@@ -46,7 +46,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        source: "build/lib/api-server-0.0.1-SNAPSHOT.jar"
+        source: "build/libs/api-server-0.0.1-SNAPSHOT.jar"
         target: "/"
         strip_components: 2
     
