@@ -1,8 +1,12 @@
 package app.learningtrip.apiserver.heritage.controller;
 
+import app.learningtrip.apiserver.dummy_temp.PlaceThumbnail;
 import app.learningtrip.apiserver.heritage.domain.Heritage;
+import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailResponse;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.domain.Place_Detail_Tour;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,5 +71,24 @@ public class HeritageController {
             .place(place)
             .build();
         return heritage;
+    }
+
+    @GetMapping("/heritage/related/{place_id}")
+    public List<HeritageThumbnailResponse> related(@PathVariable(name = "place_id") Long place_id) {
+        HeritageThumbnailResponse heritageThumbnail_1 = HeritageThumbnailResponse.builder()
+            .id(1)
+            .name("문화재1")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build();
+        HeritageThumbnailResponse heritageThumbnail_2 = HeritageThumbnailResponse.builder()
+            .id(2)
+            .name("문화재2")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build();
+        List<HeritageThumbnailResponse> heritageThumbnailResponseList = new ArrayList<HeritageThumbnailResponse>();
+        heritageThumbnailResponseList.add(heritageThumbnail_1);
+        heritageThumbnailResponseList.add(heritageThumbnail_2);
+
+        return heritageThumbnailResponseList;
     }
 }
