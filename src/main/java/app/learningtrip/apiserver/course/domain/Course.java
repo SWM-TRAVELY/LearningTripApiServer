@@ -15,7 +15,5 @@ public class Course {
 
     private String name;
 
-    private String imageURL;
-
     private List<Place> placeList;
 }
