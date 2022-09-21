@@ -13,8 +13,8 @@ import lombok.experimental.SuperBuilder;
 public class Place {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "place_id", unique = true, nullable = false)
-    protected int id;
+    @Column(name="place_id", unique = true, nullable = false)
+    protected Long id;
     @Column(length = 3, nullable = false)
     protected int type;
     @Column(length = 100, nullable = false)
@@ -26,9 +26,9 @@ public class Place {
     @Column(length = 100, nullable = false)
     protected String address;
     @Column(length = 20)
-    protected double latitude;
+    protected Double latitude;
     @Column(length = 20)
-    protected double longitude;
+    protected Double longitude;
 
     @Column(length = 100)
     protected String tel;
@@ -46,4 +46,6 @@ public class Place {
     protected boolean pet;
 
     protected boolean bookTour;
+
+    public Place() {}
 }

@@ -1,14 +1,16 @@
 package app.learningtrip.apiserver.place.controller;
 
 import app.learningtrip.apiserver.dummy_temp.PlaceThumbnail;
-import app.learningtrip.apiserver.keyword.domain.Keyword;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.domain.Place_Detail_Tour;
 import app.learningtrip.apiserver.place.domain.Place_Detail_Culture;
 import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailResponse;
+import app.learningtrip.apiserver.place.service.PlaceService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class PlaceController {
+
+    @Autowired
+    private PlaceService placeService;
+
+    @GetMapping("/place/sieun/{place_id}")
+    public ResponseEntity<Optional<Place>> testPlace(@PathVariable(name = "place_id") long place_id) {
+        Optional<Place> place = placeService.findOne(place_id);
+        return ResponseEntity.ok().body(place);
+    }
 
     @GetMapping("/place/{place_id}")
     public Place info(@PathVariable(name = "place_id") int place_id){
