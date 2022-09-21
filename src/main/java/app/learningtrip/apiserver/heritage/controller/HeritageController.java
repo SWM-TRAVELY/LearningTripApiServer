@@ -4,11 +4,15 @@ import app.learningtrip.apiserver.dummy_temp.PlaceThumbnail;
 import app.learningtrip.apiserver.heritage.domain.Heritage;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageResponse;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailResponse;
+import app.learningtrip.apiserver.heritage.service.HeritageService;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.domain.Place_Detail_Tour;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +20,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class HeritageController {
+
+    @Autowired
+    private HeritageService heritageService;
+
+    @GetMapping("/heritage/sieun/{heritage_id}")
+    public ResponseEntity<Optional<Heritage>> testHeritage(@PathVariable(name = "heritage_id") long heritage_id) {
+
+        Optional<Heritage> heritage = heritageService.findOne(heritage_id);
+        return ResponseEntity.ok().body(heritage);
+    }
 
     @GetMapping("/heritage/{heritage_id}")
     public HeritageResponse info(@PathVariable(name = "heritage_id") Long heritage_id) {

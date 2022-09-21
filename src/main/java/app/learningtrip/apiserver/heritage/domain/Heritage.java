@@ -1,35 +1,37 @@
 package app.learningtrip.apiserver.heritage.domain;
 
 import app.learningtrip.apiserver.place.domain.Place;
-import app.learningtrip.apiserver.place.domain.Place.PlaceBuilder;
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter @Setter
 @Builder
 @Table
+@AllArgsConstructor
+@NoArgsConstructor
 public class Heritage {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "heritage_id", unique = true, nullable = false)
-    private long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="heritage_id", unique = true, nullable = false)
+    private Long id;
     @Column(length = 50, nullable = false)
     private String name;
     @Column(length = 12)
     private String type;
-    @Column(nullable = false)
     private String overview;
 
     @Column(length = 110, nullable = false)
     private String address;
     @Column(length = 20)
-    private double latitude;
+    private Double latitude;
     @Column(length = 20)
-    private double longitude;
+    private Double longitude;
 
     @Column(length = 15)
     private String cat1;
