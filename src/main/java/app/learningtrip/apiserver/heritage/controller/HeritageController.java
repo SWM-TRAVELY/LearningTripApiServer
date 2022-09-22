@@ -1,12 +1,9 @@
 package app.learningtrip.apiserver.heritage.controller;
 
-import app.learningtrip.apiserver.dummy_temp.PlaceThumbnail;
 import app.learningtrip.apiserver.heritage.domain.Heritage;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageResponse;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailResponse;
 import app.learningtrip.apiserver.heritage.service.HeritageService;
-import app.learningtrip.apiserver.place.domain.Place;
-import app.learningtrip.apiserver.place.domain.Place_Detail_Tour;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
