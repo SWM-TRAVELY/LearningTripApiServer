@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class HeritageThumbnailResponse {
+public class HeritageThumbnail {
     private long id;
 
     private String name;

@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Heritage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="heritage_id", unique = true, nullable = false)
+    @Column(name="id", unique = true, nullable = false)
     private Long id;
 
     @Column(length = 50, nullable = false)
@@ -52,6 +52,6 @@ public class Heritage {
     private String category4;       // 카테고리 4
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "place_id")
     public Place place;
 }
