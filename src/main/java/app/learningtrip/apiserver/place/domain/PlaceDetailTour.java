@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,8 +21,7 @@ import lombok.Setter;
 public class PlaceDetailTour implements Serializable {
 
   @Id
-  @OneToOne @JoinColumn(name = "id")
-  private Place place;
+  private Long id;
 
   private String experienceAge;       // 체험가능연령
 
@@ -32,4 +32,8 @@ public class PlaceDetailTour implements Serializable {
   private boolean heritageNatural;    // 세계자연유산 유무
 
   private boolean heritageRecord;     // 세계기록유산 유무
+
+  @OneToOne
+  @MapsId
+  private Place place;
 }

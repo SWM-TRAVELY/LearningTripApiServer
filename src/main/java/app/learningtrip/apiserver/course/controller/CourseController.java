@@ -8,6 +8,7 @@ import app.learningtrip.apiserver.place.domain.PlaceDetailCulture;
 import app.learningtrip.apiserver.place.domain.PlaceDetailTour;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailCultureResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailTourResponse;
+import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -55,10 +56,9 @@ public class CourseController {
 
     @GetMapping("/course/{course_id}")
     public ResponseEntity<Course> getCourse(@PathVariable(name = "course_id") long course_id) {
-        List<Place> placeList = new ArrayList<Place>();
+        List<PlaceResponse> placeList = new ArrayList<PlaceResponse>();
 
         placeList.add(PlaceDetailTourResponse.builder()
-            .type(12)
             .name("숭례문")
             .description("숭례문(崇禮門)은 조선 태조 5년(1396)에 최초로 축조되었고 1398년 2월 중건되었다. 이 문은 조선시대 한성 도성의 정문으로  4대문 가운데 남쪽에 위치하므로, 남대문으로도 불린다. 1448년에도 크게 고쳐지었다. "
                 + "이후 임진왜란과 병자호란 때에도 남대문은 피해를 입지 않았다.처음 만들어졌을 때는 양측에 성벽이 연결되어 있었지만 1908년 도로를 내기 위하여 헐어 내고 성문만 섬처럼 따로 떨어져 있었으나, 2006년 복원 공사를 마치고 지금과 같은 모습을 하게 되었다. "
@@ -69,13 +69,11 @@ public class CourseController {
                 + "<br><br>이는 1907년께 남대문을 관통하던 전차선로를 내면서 문 주위로 흙을 1미터 가량 쌓아올려 아래쪽 기단과 박석들이 완전히 묻힌 것으로 보인다고 밝혔다. 따라서 중구는 시민들이 지반보다 1.6ｍ 아래에 있는 이들 구조물을 볼 수 있도록 중앙통로 시굴 부분을 그대로 남겨둔 채 관람시설을 설치했다. "
                 + "숭례문의 중앙통로인 홍예문을 따라 숭례문을 둘러볼 수 있다. 그러나 숭례문은 2008년 2월 10일 화재로 인하여 전소되었고, 5년 3개월에 걸친 복구 사업을 완료하고 2013년 개방되었다. 2013년 5월 1일에는 숭례문 복구를 고하는 '고유제(告由祭)'가 치러졌다."
                 + "숭례문 복원에는 충남 태안의 안면송이 사용되었다. 안면송은 고려시대부터 궁궐이나 선박용으로 사용되어 왔으며, 이번 숭례문의 석가래, 기둥, 지붕 등에 사용되었다.")
-            .imageURL1("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
-            .imageURL2("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image3_1.jpg")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .address("서울특별시 중구 세종대로 40")
             .latitude(37.55998551)
             .longitude(126.9752993)
             .tel(null)
-            .info("02-779-8547~8")
             .restDate("월요일")
             .useTime("[개방시간] 09:00~18:00<br />\n"
                 + "※ 6~8월은 18:30까지 개방<br />\n"
@@ -92,7 +90,6 @@ public class CourseController {
             .build());
 
         placeList.add(PlaceDetailCultureResponse.builder()
-            .type(14)
             .name("국립중앙박물관")
             .description("국립중앙박물관은 42만 점의 소장유물을 소장하고 있으며, 고고, 역사, 미술, 기증, 아시아 관련 문화재를 전시하는 상설 전시실과 다양한 전시가 가능하도록 가변성 있게 구성된 기획 전시실, 체험과 참여 학습을 통해 전시를 이해하도록 설계된 어린이 박물관, 박물관 야외정원을 이용하여 석탑 등 다양한 석조유물을 전시한 야외전시실로 이뤄진다. "
                 + "국립중앙박물관은 국내·외 전시활동 외에도 유물의 수집과 보존, 조사연구, 사회교육활동, 학술자료발간, 국제문화교류활동, 각종 공연 등의 기회를 제공하는 복합문화공간으로서 교육적 측면 뿐 아니라 친환경 녹색공간과 휴게시설 및 양질의 문화 프로그램도 함께 마련되어 있어  남녀노소를 불문하고 언제든 찾아가고 싶은 새로운 도심 속 명소의  역할을 하고 있다. "
@@ -105,13 +102,11 @@ public class CourseController {
                 + "기단(基壇)은 밑돌·가운데돌·윗돌의 세 부분으로 이루어져 있으며, 각 면마다 소박한 조각이 멋스럽게 펼쳐져 있다. 밑돌에는 사자를 도드라지게 새겼고, 가운데돌에는 움푹 새긴 안상(眼象)안에 향로를 새겨 두었다.<br><br>2단으로 마련된 윗돌은 아래단에는 연꽃을 두 줄로 돌려 우아함을 살리고 윗단에는 둥그스름한 안상(眼象) 안에 여러 조각을 두어 장식하였다. "
                 + "사리를 모셔둔 탑신(塔身)의 몸돌은 면마다 문짝모양, 4천왕상(四天王像)을 번갈아가며 배치하였는데, 입체감을 잘 살려 사실적으로 표현하였다. 지붕돌은 당시의 목조건축양식을 특히 잘 따르고 있어서 경사면에 깊게 패인 기왓골, 기와의 끝마다 새겨진 막새기와 모양, 밑면의 서까래표현 등은 거의 실제 건물의 기와지붕을 보고 있는 듯하다. 꼭대기에 있는 머리장식은 탑을 옮기기 전까지 남아 있었으나, 지금은 모두 없어졌다. "
                 + "탑을 옮겨 세울 때 그 안에서 금동탑지(金銅塔誌)가 발견되었는데, 이를 통해 통일신라 문성왕 6년(844)에 이 탑을 세웠음을 알게 되었다. 사리탑 중에서는 가장 오래된 것으로, 규모는 그리 크지 않으나 단아한 기품과 깨끗한 솜씨가 잘 어우러져 있다. 이후 대부분의 사리탑이 이 양식을 따르고 있어 그 최초의 의의를 지니는 작품이다.")
-            .imageURL1("http://tong.visitkorea.or.kr/cms/resource/72/2658572_image2_1.jpg")
-            .imageURL2("http://tong.visitkorea.or.kr/cms/resource/72/2658572_image2_1.jpg")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/72/2658572_image2_1.jpg")
             .address("서울특별시 용산구 서빙고로 137")
             .latitude(37.52392312)
             .longitude(126.9803332)
             .tel("02-2077-9000")
-            .info("국립중앙박물관 02-2077-9000")
             .restDate("휴관일: 1월1일, 설날, 추석<br>상설전시실 정기휴실일: 매년 4월, 11월(첫째 월요일)<br>2022년 휴실일: 4.4.(월), 11.7.(월)<br>기획전시실(특별전시 종료시 휴실), 야외전시장은 정상 개관")
             .useTime("월, 화, 목, 금, 일요일: 10:00 ~ 18:00 (입장 마감: 17:30)<br>수, 토요일: 10:00 ~ 21:00 (입장 마감: 20:30)<br>옥외 전시장(정원)은 오전 7시부터 관람 가능")
             .parking("* 옥내주차장 : 754대<br />\n"

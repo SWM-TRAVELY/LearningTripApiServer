@@ -6,10 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@Getter @Setter
-@SuperBuilder
 @Data
-public class PlaceDetailTourResponse extends Place {
+@Getter @Setter @SuperBuilder
+public class PlaceDetailTourResponse extends PlaceResponse {
 
     private String experienceAge;
 

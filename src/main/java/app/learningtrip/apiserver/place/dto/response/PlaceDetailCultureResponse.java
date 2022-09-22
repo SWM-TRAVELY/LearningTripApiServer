@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@Getter @Setter @SuperBuilder
 @Data
-public class PlaceDetailCultureResponse extends Place {
+@Getter @Setter @SuperBuilder
+public class PlaceDetailCultureResponse extends PlaceResponse {
 
   private String discount;
 

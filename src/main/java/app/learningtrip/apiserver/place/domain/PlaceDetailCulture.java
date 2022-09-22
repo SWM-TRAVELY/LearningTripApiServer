@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,7 @@ import lombok.Setter;
 public class PlaceDetailCulture implements Serializable {
 
     @Id
-    @OneToOne @JoinColumn(name = "id")
-    private Place place;
+    private Long id;
 
     private String discount;        // 할인정보
 
@@ -29,4 +29,8 @@ public class PlaceDetailCulture implements Serializable {
     private String useFee;          // 이용요금
 
     private String spendTime;       // 소요시간
+
+    @OneToOne
+    @MapsId
+    private Place place;
 }

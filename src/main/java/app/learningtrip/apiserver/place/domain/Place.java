@@ -1,18 +1,20 @@
 package app.learningtrip.apiserver.place.domain;
 
+import java.io.Serializable;
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Entity @Table(name = "place")
-@RequiredArgsConstructor
-@Getter @Setter @SuperBuilder
-public class Place {
+@AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @Builder
+public class Place implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="place_id", unique = true, nullable = false)
+    @Column(name="id", unique = true, nullable = false)
     protected Long id;
 
     @Column(length = 100, nullable = false)
@@ -56,4 +58,10 @@ public class Place {
     protected boolean pet;              // 애완동물 가능 여부
 
     protected boolean bookTour;         // 교과서 여부
+
+    @OneToOne(mappedBy = "place")
+    private PlaceDetailTour placeDetailTour;
+
+    @OneToOne(mappedBy = "place")
+    private PlaceDetailCulture placeDetailCulture;
 }
