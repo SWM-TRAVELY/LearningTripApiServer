@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-@Getter @Setter
-@SuperBuilder
 @Entity @Table(name = "place")
 @RequiredArgsConstructor
+@Getter @Setter @SuperBuilder
 public class Place {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

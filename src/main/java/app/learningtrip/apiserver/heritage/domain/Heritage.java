@@ -8,11 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter
-@Builder
 @Entity @Table
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @Builder
 public class Heritage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
