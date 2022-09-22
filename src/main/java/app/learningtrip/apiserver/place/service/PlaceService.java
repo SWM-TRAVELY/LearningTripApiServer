@@ -1,18 +1,15 @@
 package app.learningtrip.apiserver.place.service;
 
-import app.learningtrip.apiserver.dummy_temp.PlaceThumbnail;
-import app.learningtrip.apiserver.place.domain.Place;
-import app.learningtrip.apiserver.place.domain.PlaceDetailTour;
+import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailCultureResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailTourResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
-import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailResponse;
+import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailListResponse;
 import app.learningtrip.apiserver.place.repository.PlaceDetailCultureRepository;
 import app.learningtrip.apiserver.place.repository.PlaceDetailTourRepository;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,7 +127,7 @@ public class PlaceService {
     /**
      * 유사 관광지 조회
      */
-    public PlaceThumbnailResponse similarPlaceDummy(long place_id) {
+    public PlaceThumbnailListResponse similarPlaceDummy(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
         placeThumbnailList.add(PlaceThumbnail.builder()
             .id(1)
@@ -145,7 +142,7 @@ public class PlaceService {
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build());
 
-        PlaceThumbnailResponse placeThumbnailResponse = new PlaceThumbnailResponse(placeThumbnailList);
+        PlaceThumbnailListResponse placeThumbnailResponse = new PlaceThumbnailListResponse(placeThumbnailList);
         return placeThumbnailResponse;
     }
 
