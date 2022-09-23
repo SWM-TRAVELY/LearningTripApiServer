@@ -3,10 +3,9 @@ package app.learningtrip.apiserver.heritage.service;
 import app.learningtrip.apiserver.heritage.domain.Heritage;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageResponse;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnail;
-import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailListResponse;
+import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailList;
 import app.learningtrip.apiserver.heritage.repository.HeritageRepository;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -41,25 +40,18 @@ public class HeritageService {
      * place안의 heritage 조회
      */
 
-//    public Optional<List<HeritageResponse>> getHeritages(long id) {
-//
-//        // heritage table에서 값 찾기
-//        List<Heritage> heritageList = heritageRepository.findMatchingHeritages(id);
-//
-//        List<HeritageResponse> heritageResponseList = null;
-//        for (Heritage heritage : heritageList) {
-//            heritageResponseList.add(HeritageResponse.builder()
-//                .id(heritage.getId())
-//                .name(heritage.getName())
-//                .imageURL(heritage.getImageURL())
-//                .description(heritage.getDescription())
-//                .type(heritage.getType())
-//                .category(heritage.getCategory4())
-//                .build());
-//        }
-//
-//        return Optional.ofNullable(heritageResponseList);
-//    }
+    public Optional<HeritageThumbnailList> getHeritages(long id) {
+
+        // heritage table에서 값 찾기
+        List<Heritage> heritageList = heritageRepository.findMatchingHeritages(id);
+        List<HeritageThumbnail> heritageThumbnails = new ArrayList<HeritageThumbnail>();
+        for (Heritage heritage : heritageList) {
+            heritageThumbnails.add(HeritageThumbnail.toThumbnail(heritage));
+        }
+        HeritageThumbnailList heritageThumbnailList = new HeritageThumbnailList(heritageThumbnails);
+
+        return Optional.ofNullable(heritageThumbnailList);
+    }
 
 
     /**
@@ -82,14 +74,14 @@ public class HeritageService {
         return heritageResponse;
     }
 
-    public HeritageThumbnailListResponse findHeritageDummy(long id) {
+    public HeritageThumbnailList findHeritageDummy(long id) {
         HeritageThumbnail heritageThumbnail_1 = HeritageThumbnail.builder()
-            .id(1)
+            .id(1L)
             .name("문화재1")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build();
         HeritageThumbnail heritageThumbnail_2 = HeritageThumbnail.builder()
-            .id(2)
+            .id(2L)
             .name("문화재2")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build();
@@ -97,7 +89,7 @@ public class HeritageService {
         heritageThumbnailList.add(heritageThumbnail_1);
         heritageThumbnailList.add(heritageThumbnail_2);
 
-        HeritageThumbnailListResponse heritageThumbnailListResponse = new HeritageThumbnailListResponse(heritageThumbnailList);
+        HeritageThumbnailList heritageThumbnailListResponse = new HeritageThumbnailList(heritageThumbnailList);
 
         return heritageThumbnailListResponse;
     }

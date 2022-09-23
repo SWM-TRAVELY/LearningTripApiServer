@@ -51,7 +51,7 @@ public class Heritage {
     @Column(length = 15)
     private String category4;       // 카테고리 4
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
     public Place place;
 }

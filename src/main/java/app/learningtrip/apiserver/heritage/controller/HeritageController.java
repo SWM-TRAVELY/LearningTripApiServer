@@ -1,11 +1,8 @@
 package app.learningtrip.apiserver.heritage.controller;
 
-import app.learningtrip.apiserver.heritage.domain.Heritage;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageResponse;
-import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnail;
-import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailListResponse;
+import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailList;
 import app.learningtrip.apiserver.heritage.service.HeritageService;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +31,8 @@ public class HeritageController {
     }
 
     @GetMapping("/heritage/related/{place_id}")
-    public ResponseEntity<Optional<HeritageThumbnailListResponse>> related(@PathVariable(name = "place_id") Long place_id) {
-        Optional<HeritageThumbnailListResponse> heritageThumbnailListResponse = Optional.ofNullable(heritageService.findHeritageDummy(place_id));
+    public ResponseEntity<Optional<HeritageThumbnailList>> related(@PathVariable(name = "place_id") Long place_id) {
+        Optional<HeritageThumbnailList> heritageThumbnailListResponse = heritageService.getHeritages(place_id);
         return ResponseEntity.ok().body(heritageThumbnailListResponse);
     }
 }
