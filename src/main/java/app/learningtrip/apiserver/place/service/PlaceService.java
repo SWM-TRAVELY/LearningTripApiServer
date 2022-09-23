@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.place.service;
 
+import app.learningtrip.apiserver.heritage.dto.response.HeritageResponse;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.domain.PlaceDetailCulture;
 import app.learningtrip.apiserver.place.domain.PlaceDetailTour;
@@ -119,7 +120,7 @@ public class PlaceService {
 
     public Optional<PlaceResponse> findInfo(long id) {
 
-        // place table에서 값 찾기
+        // place table 조회
         Optional<Place> place = placeRepository.findById(id);
         place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
 
@@ -127,50 +128,15 @@ public class PlaceService {
         if (place.get().getType() == TOUR) {
             Optional<PlaceDetailTour> placeDetailTour = placeDetailTourRepository.findById(
                 place.get().getId());
-            return Optional.ofNullable(PlaceDetailTourResponse.builder()
-                .id(placeDetailTour.get().getPlace().getId())
-                .name(placeDetailTour.get().getPlace().getName())
-                .description(placeDetailTour.get().getPlace().getDescription())
-                .imageURL(placeDetailTour.get().getPlace().getImageURL1())
-                .address(placeDetailTour.get().getPlace().getAddress())
-                .latitude(placeDetailTour.get().getPlace().getLatitude())
-                .longitude(placeDetailTour.get().getPlace().getLongitude())
-                .tel(placeDetailTour.get().getPlace().getTel())
-                .restDate(placeDetailTour.get().getPlace().getRestDate())
-                .useTime(placeDetailTour.get().getPlace().getUseTime())
-                .parking(placeDetailTour.get().getPlace().getParking())
-                .babyCarriage(placeDetailTour.get().getPlace().isBabyCarriage())
-                .pet(placeDetailTour.get().getPlace().isPet())
-                .bookTour(placeDetailTour.get().getPlace().isBookTour())
-                .experienceAge(placeDetailTour.get().getExperienceAge())
-                .experienceInfo(placeDetailTour.get().getExperienceInfo())
-                .heritageCulture(placeDetailTour.get().isHeritageCulture())
-                .heritageNatural(placeDetailTour.get().isHeritageNatural())
-                .heritageRecord(placeDetailTour.get().isHeritageRecord())
-                .build());
+
+            PlaceDetailTourResponse placeDetailTourResponse = PlaceDetailTourResponse.toResponse(placeDetailTour.get());
+            return Optional.ofNullable(placeDetailTourResponse);
         } else if (place.get().getType() == CULTURE) {
             Optional<PlaceDetailCulture> placeDetailCulture = placeDetailCultureRepository.findById(
                 place.get().getId());
-            return Optional.ofNullable(PlaceDetailCultureResponse.builder()
-                .id(placeDetailCulture.get().getPlace().getId())
-                .name(placeDetailCulture.get().getPlace().getName())
-                .description(placeDetailCulture.get().getPlace().getDescription())
-                .imageURL(placeDetailCulture.get().getPlace().getImageURL1())
-                .address(placeDetailCulture.get().getPlace().getAddress())
-                .latitude(placeDetailCulture.get().getPlace().getLatitude())
-                .longitude(placeDetailCulture.get().getPlace().getLongitude())
-                .tel(placeDetailCulture.get().getPlace().getTel())
-                .restDate(placeDetailCulture.get().getPlace().getRestDate())
-                .useTime(placeDetailCulture.get().getPlace().getUseTime())
-                .parking(placeDetailCulture.get().getPlace().getParking())
-                .babyCarriage(placeDetailCulture.get().getPlace().isBabyCarriage())
-                .pet(placeDetailCulture.get().getPlace().isPet())
-                .bookTour(placeDetailCulture.get().getPlace().isBookTour())
-                .discount(placeDetailCulture.get().getDiscount())
-                .parkingFee(placeDetailCulture.get().getParkingFee())
-                .useFee(placeDetailCulture.get().getUseFee())
-                .spendTime(placeDetailCulture.get().getSpendTime())
-                .build());
+
+            PlaceDetailCultureResponse placeDetailCultureResponse = PlaceDetailCultureResponse.toResponse(placeDetailCulture.get());
+            return Optional.ofNullable(placeDetailCultureResponse);
         } else {
             throw new NoSuchElementException("place의 type이 잘못되었습니다.");
         }

@@ -33,20 +33,8 @@ public class HeritageService {
         heritage.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Heritage입니다."));
 
         // HeritageResponse로 변환
-        Optional<HeritageResponse> heritageResponse;
-        if (heritage.isPresent()) {
-            return Optional.ofNullable(HeritageResponse.builder()
-                .id(heritage.get().getId())
-                .name(heritage.get().getName())
-                .imageURL(heritage.get().getImageURL())
-                .description(heritage.get().getDescription())
-                .type(heritage.get().getType())
-                .category(heritage.get().getCategory4())
-                .build());
-        }
-        else {
-            return Optional.empty();
-        }
+        HeritageResponse heritageResponse = HeritageResponse.toResponse(heritage.get());
+        return Optional.ofNullable(heritageResponse);
     }
 
     /**
