@@ -21,15 +21,9 @@ public class HeritageController {
     @Autowired
     private HeritageService heritageService;
 
-    @GetMapping("/heritage/sieun/{heritage_id}")
-    public ResponseEntity<Optional<Heritage>> testHeritage(@PathVariable(name = "heritage_id") long heritage_id) {
-        Optional<Heritage> heritage = heritageService.findOne(heritage_id);
-        return ResponseEntity.ok().body(heritage);
-    }
-
     @GetMapping("/heritage/{heritage_id}")
     public ResponseEntity<Optional<HeritageResponse>> info(@PathVariable(name = "heritage_id") Long heritage_id) {
-        Optional<HeritageResponse> heritageResponse = Optional.ofNullable(heritageService.heritageInfoDummy(heritage_id));
+        Optional<HeritageResponse> heritageResponse = heritageService.getInfo(heritage_id);
         return ResponseEntity.ok().body(heritageResponse);
     }
 

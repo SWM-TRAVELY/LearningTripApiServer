@@ -6,7 +6,9 @@ import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnail;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailListResponse;
 import app.learningtrip.apiserver.heritage.repository.HeritageRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +24,63 @@ public class HeritageService {
     }
 
     /**
-     * heritage 조회
+     * heritage 정보 조회
      */
-    public Optional<Heritage> findOne(long id) {
-        return heritageRepository.findById(id);
+    public Optional<HeritageResponse> getInfo(long id) {
+
+        // heritage table에서 값 찾기
+        Optional<Heritage> heritage = heritageRepository.findById(id);
+        heritage.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Heritage입니다."));
+
+        // HeritageResponse로 변환
+        Optional<HeritageResponse> heritageResponse;
+        if (heritage.isPresent()) {
+            return Optional.ofNullable(HeritageResponse.builder()
+                .id(heritage.get().getId())
+                .name(heritage.get().getName())
+                .imageURL(heritage.get().getImageURL())
+                .description(heritage.get().getDescription())
+                .type(heritage.get().getType())
+                .category(heritage.get().getCategory4())
+                .build());
+        }
+        else {
+            return Optional.empty();
+        }
     }
+
+    /**
+     * place안의 heritage 조회
+     */
+
+//    public Optional<List<HeritageResponse>> getHeritages(long id) {
+//
+//        // heritage table에서 값 찾기
+//        List<Heritage> heritageList = heritageRepository.findMatchingHeritages(id);
+//
+//        List<HeritageResponse> heritageResponseList = null;
+//        for (Heritage heritage : heritageList) {
+//            heritageResponseList.add(HeritageResponse.builder()
+//                .id(heritage.getId())
+//                .name(heritage.getName())
+//                .imageURL(heritage.getImageURL())
+//                .description(heritage.getDescription())
+//                .type(heritage.getType())
+//                .category(heritage.getCategory4())
+//                .build());
+//        }
+//
+//        return Optional.ofNullable(heritageResponseList);
+//    }
+
+
+    /**
+     * Dummy Data
+     */
 
     public HeritageResponse heritageInfoDummy(long id) {
         HeritageResponse heritageResponse = HeritageResponse.builder()
-            .id(1)
+            .id(1L)
             .name("서울 숭례문")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .type("국보")
