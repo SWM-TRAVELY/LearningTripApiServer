@@ -12,6 +12,7 @@ import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailListResponse;
 import app.learningtrip.apiserver.place.repository.PlaceDetailCultureRepository;
 import app.learningtrip.apiserver.place.repository.PlaceDetailTourRepository;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
+import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -118,7 +119,7 @@ public class PlaceService {
         }
     }
 
-    public Optional<PlaceResponse> findInfo(long id) {
+    public Optional<PlaceResponse> getInfo(long id) throws NoSuchObjectException {
 
         // place table 조회
         Optional<Place> place = placeRepository.findById(id);
@@ -128,17 +129,19 @@ public class PlaceService {
         if (place.get().getType() == TOUR) {
             Optional<PlaceDetailTour> placeDetailTour = placeDetailTourRepository.findById(
                 place.get().getId());
+            placeDetailTour.orElseThrow(() -> new NoSuchObjectException("올바르지 않은 type의 DB에 조회했습니다."));
 
             PlaceDetailTourResponse placeDetailTourResponse = PlaceDetailTourResponse.toResponse(placeDetailTour.get());
             return Optional.ofNullable(placeDetailTourResponse);
         } else if (place.get().getType() == CULTURE) {
             Optional<PlaceDetailCulture> placeDetailCulture = placeDetailCultureRepository.findById(
                 place.get().getId());
+            placeDetailCulture.orElseThrow(() -> new NoSuchObjectException("올바르지 않은 type의 DB에 조회했습니다."));
 
             PlaceDetailCultureResponse placeDetailCultureResponse = PlaceDetailCultureResponse.toResponse(placeDetailCulture.get());
             return Optional.ofNullable(placeDetailCultureResponse);
         } else {
-            throw new NoSuchElementException("place의 type이 잘못되었습니다.");
+            throw new NoSuchFieldError("place의 type이 잘못되었습니다.");
         }
     }
 

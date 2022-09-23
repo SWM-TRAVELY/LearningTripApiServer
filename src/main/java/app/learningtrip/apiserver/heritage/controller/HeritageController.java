@@ -6,6 +6,7 @@ import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnail;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailListResponse;
 import app.learningtrip.apiserver.heritage.service.HeritageService;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,14 @@ public class HeritageController {
     private HeritageService heritageService;
 
     @GetMapping("/heritage/{heritage_id}")
-    public ResponseEntity<Optional<HeritageResponse>> info(@PathVariable(name = "heritage_id") Long heritage_id) {
-        Optional<HeritageResponse> heritageResponse = heritageService.getInfo(heritage_id);
-        return ResponseEntity.ok().body(heritageResponse);
+    public ResponseEntity info(@PathVariable(name = "heritage_id") Long heritage_id) {
+        try {
+            Optional<HeritageResponse> heritageResponse = heritageService.getInfo(heritage_id);
+            return ResponseEntity.ok().body(heritageResponse);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/heritage/related/{place_id}")

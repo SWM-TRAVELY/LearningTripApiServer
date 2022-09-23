@@ -3,10 +3,12 @@ package app.learningtrip.apiserver.place.controller;
 import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailListResponse;
 import app.learningtrip.apiserver.place.service.PlaceService;
+import java.rmi.NoSuchObjectException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,10 +22,17 @@ public class PlaceController {
     private PlaceService placeService;
 
     @GetMapping("/place/{place_id}")
-    public ResponseEntity<Optional<PlaceResponse>> getInfo(@PathVariable(name = "place_id") long place_id) {
-        Optional<PlaceResponse> placeResponse = placeService.findInfo(place_id);
-
-        return ResponseEntity.ok().body(placeResponse);
+    public ResponseEntity getInfo(@PathVariable(name = "place_id") long place_id) {
+        try {
+            Optional<PlaceResponse> placeResponse = placeService.getInfo(place_id);
+            return ResponseEntity.ok().body(placeResponse);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NoSuchObjectException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (NoSuchFieldError e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/place/related/{place_id}")
