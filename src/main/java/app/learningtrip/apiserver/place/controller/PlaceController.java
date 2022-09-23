@@ -3,6 +3,7 @@ package app.learningtrip.apiserver.place.controller;
 import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailListResponse;
 import app.learningtrip.apiserver.place.service.PlaceService;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ public class PlaceController {
 
     @GetMapping("/place/{place_id}")
     public ResponseEntity<Optional<PlaceResponse>> getInfo(@PathVariable(name = "place_id") long place_id) {
-        Optional<PlaceResponse> placeResponse = Optional.ofNullable(placeService.findPlaceDummy(place_id));
+        Optional<PlaceResponse> placeResponse = placeService.findInfo(place_id);
+
         return ResponseEntity.ok().body(placeResponse);
     }
 
