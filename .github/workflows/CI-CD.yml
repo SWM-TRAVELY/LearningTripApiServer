@@ -38,7 +38,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         source: "build/libs/api-server-0.0.1-SNAPSHOT.jar"
-        target: "/tmp"
+        target: "/home/github-deploy"
         strip_components: 2
     
     - name: Run Server
