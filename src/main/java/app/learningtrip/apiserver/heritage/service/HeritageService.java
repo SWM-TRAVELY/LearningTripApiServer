@@ -3,7 +3,6 @@ package app.learningtrip.apiserver.heritage.service;
 import app.learningtrip.apiserver.heritage.domain.Heritage;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageResponse;
 import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnail;
-import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnailList;
 import app.learningtrip.apiserver.heritage.repository.HeritageRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,18 +36,17 @@ public class HeritageService {
     }
 
     /**
-     * place안의 heritage 조회
+     * place의 heritage 조회
      */
 
-    public Optional<HeritageThumbnailList> getHeritages(long id) {
+    public Optional<List<HeritageThumbnail>> getHeritages(long id) {
 
         // heritage table에서 값 찾기
         List<Heritage> heritageList = heritageRepository.findMatchingHeritages(id);
-        List<HeritageThumbnail> heritageThumbnails = new ArrayList<HeritageThumbnail>();
+        List<HeritageThumbnail> heritageThumbnailList = new ArrayList<HeritageThumbnail>();
         for (Heritage heritage : heritageList) {
-            heritageThumbnails.add(HeritageThumbnail.toThumbnail(heritage));
+            heritageThumbnailList.add(HeritageThumbnail.toThumbnail(heritage));
         }
-        HeritageThumbnailList heritageThumbnailList = new HeritageThumbnailList(heritageThumbnails);
 
         return Optional.ofNullable(heritageThumbnailList);
     }
@@ -58,7 +56,7 @@ public class HeritageService {
      * Dummy Data
      */
 
-    public HeritageResponse heritageInfoDummy(long id) {
+    public Optional<HeritageResponse> getInfoDummy(long id) {
         HeritageResponse heritageResponse = HeritageResponse.builder()
             .id(1L)
             .name("서울 숭례문")
@@ -71,10 +69,10 @@ public class HeritageService {
                 + "\u00AD\u00AD\u00AD2008년 숭례문 방화 사건(崇禮門放火事件)은 2008년 2월 10일 ~ 2월 11일 숭례문 건물이 방화로 타 무너진 사건이다. 화재는 2008년 2월 10일 오후 8시 40분 전후에 발생하여 다음날인 2008년 2월 11일 오전 0시 40분경 숭례문의 누각 2층 지붕이 붕괴하였고 이어 1층에도 불이 붙어 화재 5시간 만인 오전 1시 55분쯤 석축을 제외한 건물이 훼손되었다.")
             .category("성곽시설")
             .build();
-        return heritageResponse;
+        return Optional.ofNullable(heritageResponse);
     }
 
-    public HeritageThumbnailList findHeritageDummy(long id) {
+    public Optional<List<HeritageThumbnail>> getHeritagesDummy(long id) {
         HeritageThumbnail heritageThumbnail_1 = HeritageThumbnail.builder()
             .id(1L)
             .name("문화재1")
@@ -89,8 +87,6 @@ public class HeritageService {
         heritageThumbnailList.add(heritageThumbnail_1);
         heritageThumbnailList.add(heritageThumbnail_2);
 
-        HeritageThumbnailList heritageThumbnailListResponse = new HeritageThumbnailList(heritageThumbnailList);
-
-        return heritageThumbnailListResponse;
+        return Optional.of(heritageThumbnailList);
     }
 }
