@@ -42,13 +42,14 @@ public class PlaceService {
         Optional<Place> place = placeRepository.findById(id);
         place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
 
-        // PlaceResponse로 변환
+        // PlaceResponse로 변환: type별 다른 placeDetailResponse 생성
         if (place.get().getType() == TOUR) {
             Optional<PlaceDetailTour> placeDetailTour = placeDetailTourRepository.findById(
                 place.get().getId());
             placeDetailTour.orElseThrow(() -> new NoSuchObjectException("올바르지 않은 type의 DB에 조회했습니다."));
 
             PlaceDetailTourResponse placeDetailTourResponse = PlaceDetailTourResponse.toResponse(placeDetailTour.get());
+
             return Optional.ofNullable(placeDetailTourResponse);
         } else if (place.get().getType() == CULTURE) {
             Optional<PlaceDetailCulture> placeDetailCulture = placeDetailCultureRepository.findById(
@@ -56,8 +57,10 @@ public class PlaceService {
             placeDetailCulture.orElseThrow(() -> new NoSuchObjectException("올바르지 않은 type의 DB에 조회했습니다."));
 
             PlaceDetailCultureResponse placeDetailCultureResponse = PlaceDetailCultureResponse.toResponse(placeDetailCulture.get());
+
             return Optional.ofNullable(placeDetailCultureResponse);
         } else {
+
             throw new NoSuchFieldError("place의 type이 잘못되었습니다.");
         }
     }

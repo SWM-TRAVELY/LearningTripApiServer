@@ -24,15 +24,19 @@ public class PlaceController {
     private PlaceService placeService;
 
     @GetMapping("/{place_id}")
-    public ResponseEntity getInfo(@PathVariable(name = "place_id") long place_id) {
+    public ResponseEntity info(@PathVariable(name = "place_id") long place_id) {
         try {
             Optional<PlaceResponse> placeResponse = placeService.getInfo(place_id);
+
             return ResponseEntity.ok().body(placeResponse);
         } catch (NoSuchElementException e) {
+
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (NoSuchObjectException e) {
+
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (NoSuchFieldError e) {
+
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -40,6 +44,7 @@ public class PlaceController {
     @GetMapping("/related/{place_id}")
     public ResponseEntity<Optional<PlaceThumbnailListResponse>> similarPlace(@PathVariable(name = "place_id") long place_id) {
         Optional<PlaceThumbnailListResponse> placeThumbnailResponse = Optional.ofNullable(placeService.similarPlaceDummy(place_id));
+
         return ResponseEntity.ok().body(placeThumbnailResponse);
     }
 }

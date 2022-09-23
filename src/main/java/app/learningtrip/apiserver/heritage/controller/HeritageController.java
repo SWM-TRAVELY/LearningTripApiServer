@@ -27,8 +27,10 @@ public class HeritageController {
     public ResponseEntity info(@PathVariable(name = "heritage_id") Long heritage_id) {
         try {
             Optional<HeritageResponse> heritageResponse = heritageService.getInfo(heritage_id);
+
             return ResponseEntity.ok().body(heritageResponse);
         } catch (NoSuchElementException e) {
+
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
@@ -38,6 +40,7 @@ public class HeritageController {
     public ResponseEntity related(@PathVariable(name = "place_id") Long place_id, Model model) {
         Optional<List<HeritageThumbnail>> heritageThumbnailList = heritageService.getHeritages(place_id);
         model.addAttribute("heritageThumbnailList", heritageThumbnailList);
+
         return ResponseEntity.ok().body(model);
     }
 }

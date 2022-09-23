@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Place implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     protected Long id;
 
     @Column(length = 100, nullable = false)

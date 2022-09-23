@@ -8,18 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class HeritageService {
 
     private final HeritageRepository heritageRepository;
-
-    public HeritageService(HeritageRepository heritageRepository) {
-        this.heritageRepository = heritageRepository;
-    }
 
     /**
      * heritage 정보 조회
@@ -32,6 +30,7 @@ public class HeritageService {
 
         // HeritageResponse로 변환
         HeritageResponse heritageResponse = HeritageResponse.toResponse(heritage.get());
+
         return Optional.ofNullable(heritageResponse);
     }
 
@@ -43,6 +42,7 @@ public class HeritageService {
 
         // heritage table에서 값 찾기
         List<Heritage> heritageList = heritageRepository.findMatchingHeritages(id);
+
         List<HeritageThumbnail> heritageThumbnailList = new ArrayList<HeritageThumbnail>();
         for (Heritage heritage : heritageList) {
             heritageThumbnailList.add(HeritageThumbnail.toThumbnail(heritage));
