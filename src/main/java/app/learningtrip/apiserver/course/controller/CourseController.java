@@ -20,6 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class CourseController {
+    @GetMapping("/course/recommend")
+    public ResponseEntity<List<app.learningtrip.apiserver.dummy_temp.Course>> getRecommendCourse(){
+        List<app.learningtrip.apiserver.dummy_temp.Course> courseList = new ArrayList<app.learningtrip.apiserver.dummy_temp.Course>();
+
+        courseList.add(new app.learningtrip.apiserver.dummy_temp.Course(1));
+        courseList.add(new app.learningtrip.apiserver.dummy_temp.Course(2));
+
+        return ResponseEntity.ok().body(courseList);
+    }
 
     @GetMapping("/course/list")
     public ResponseEntity<CourseThumbnailListResponse> courseList() {

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,7 +69,18 @@ public class PlaceService {
     /**
      * 유사 관광지 조회
      */
+    public List<PlaceThumbnail> getSimilar(long place_id) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        return placeThumbnailList;
+    }
 
+    /**
+     * 주변 관광지 조회
+     */
+    public List<PlaceThumbnail> getNearby(long place_id) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        return placeThumbnailList;
+    }
 
     /**
      * Dummy Data
@@ -158,7 +170,7 @@ public class PlaceService {
         }
     }
 
-    public PlaceThumbnailListResponse similarPlaceDummy(long place_id) {
+    public List<PlaceThumbnail> getSimilarDummy(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
         placeThumbnailList.add(PlaceThumbnail.builder()
             .id(1)
@@ -173,8 +185,17 @@ public class PlaceService {
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build());
 
-        PlaceThumbnailListResponse placeThumbnailResponse = new PlaceThumbnailListResponse(placeThumbnailList);
-        return placeThumbnailResponse;
+        return placeThumbnailList;
     }
 
+    public List<PlaceThumbnail> getNearbyDummy(long place_id) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+
+        placeThumbnailList.add(new PlaceThumbnail(1));
+        placeThumbnailList.add(new PlaceThumbnail(2));
+        placeThumbnailList.add(new PlaceThumbnail(3));
+        placeThumbnailList.add(new PlaceThumbnail(4));
+
+        return placeThumbnailList;
+    }
 }
