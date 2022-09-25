@@ -30,13 +30,6 @@ public class Controller {
     return courseList;
   }
 
-  @GetMapping("place/recommend")
-  public ResponseEntity<RecommendPlaceResponse> getRecommendPlace(){
-    RecommendPlaceResponse recommendPlaceResponse = new RecommendPlaceResponse(createPlaceList());
-
-    return ResponseEntity.ok().body(recommendPlaceResponse);
-  }
-
   @GetMapping("course/recommend")
   public ResponseEntity<RecommendCourseResponse> getRecommendCourse(){
     RecommendCourseResponse recommendCourseResponse = new RecommendCourseResponse(createCourseList());

@@ -73,9 +73,10 @@ public class PlaceService {
     /**
      * Dummy Data
      */
-    public PlaceResponse findPlaceDummy(long place_id) {
+    public Optional<PlaceResponse> getInfoDummy(long place_id) {
         if (place_id == 12){
-            return PlaceDetailTourResponse.builder()
+            return Optional.ofNullable(PlaceDetailTourResponse.builder()
+                .id(place_id)
                 .name("숭례문")
                 .description("숭례문(崇禮門)은 조선 태조 5년(1396)에 최초로 축조되었고 1398년 2월 중건되었다. 이 문은 조선시대 한성 도성의 정문으로  4대문 가운데 남쪽에 위치하므로, 남대문으로도 불린다. 1448년에도 크게 고쳐지었다. "
                     + "이후 임진왜란과 병자호란 때에도 남대문은 피해를 입지 않았다.처음 만들어졌을 때는 양측에 성벽이 연결되어 있었지만 1908년 도로를 내기 위하여 헐어 내고 성문만 섬처럼 따로 떨어져 있었으나, 2006년 복원 공사를 마치고 지금과 같은 모습을 하게 되었다. "
@@ -104,9 +105,10 @@ public class PlaceService {
                 .worldCulturalHeritage(false)
                 .worldNaturalHeritage(false)
                 .worldRecordHeritage(false)
-                .build();
+                .build());
         } else {
-            return PlaceDetailCultureResponse.builder()
+            return Optional.ofNullable(PlaceDetailCultureResponse.builder()
+                .id(place_id)
                 .name("국립중앙박물관")
                 .description("국립중앙박물관은 42만 점의 소장유물을 소장하고 있으며, 고고, 역사, 미술, 기증, 아시아 관련 문화재를 전시하는 상설 전시실과 다양한 전시가 가능하도록 가변성 있게 구성된 기획 전시실, 체험과 참여 학습을 통해 전시를 이해하도록 설계된 어린이 박물관, 박물관 야외정원을 이용하여 석탑 등 다양한 석조유물을 전시한 야외전시실로 이뤄진다. "
                     + "국립중앙박물관은 국내·외 전시활동 외에도 유물의 수집과 보존, 조사연구, 사회교육활동, 학술자료발간, 국제문화교류활동, 각종 공연 등의 기회를 제공하는 복합문화공간으로서 교육적 측면 뿐 아니라 친환경 녹색공간과 휴게시설 및 양질의 문화 프로그램도 함께 마련되어 있어  남녀노소를 불문하고 언제든 찾아가고 싶은 새로운 도심 속 명소의  역할을 하고 있다. "
@@ -152,7 +154,7 @@ public class PlaceService {
                     + "※ 관람권 구입 :  기획전시실 앞 매표소(유료 진행 특별전시의 경우는 입장권을 받아 입장)<br />\n"
                     + "※ 관람권 발급 시간 : 관람 종료 1시간 전까지")
                 .spendTime(null)
-                .build();
+                .build());
         }
     }
 

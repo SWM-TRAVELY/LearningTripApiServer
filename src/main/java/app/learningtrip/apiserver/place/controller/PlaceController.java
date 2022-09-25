@@ -1,9 +1,12 @@
 package app.learningtrip.apiserver.place.controller;
 
 import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
+import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailListResponse;
 import app.learningtrip.apiserver.place.service.PlaceService;
 import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +26,22 @@ public class PlaceController {
     @Autowired
     private PlaceService placeService;
 
+    @GetMapping("/recommend")
+    public ResponseEntity getRecommendPlace(){
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+
+        placeThumbnailList.add(new PlaceThumbnail(1));
+        placeThumbnailList.add(new PlaceThumbnail(2));
+        placeThumbnailList.add(new PlaceThumbnail(3));
+        placeThumbnailList.add(new PlaceThumbnail(4));
+
+        return ResponseEntity.ok().body(placeThumbnailList);
+    }
+
     @GetMapping("/{place_id}")
     public ResponseEntity info(@PathVariable(name = "place_id") long place_id) {
-        try {
-            Optional<PlaceResponse> placeResponse = placeService.getInfo(place_id);
-
-            return ResponseEntity.ok().body(placeResponse);
-        } catch (NoSuchElementException e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (NoSuchObjectException e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (NoSuchFieldError e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        Optional<PlaceResponse> placeResponse = placeService.getInfoDummy(place_id);
+        return ResponseEntity.ok().body(placeResponse);
     }
 
     @GetMapping("/related/{place_id}")
