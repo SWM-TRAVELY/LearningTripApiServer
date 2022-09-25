@@ -81,12 +81,12 @@ public class CourseController {
             .parking(null)
             .babyCarriage(false)
             .pet(false)
-            .bookTour(true)
+            .textbook(true)
             .experienceAge(null)
             .experienceInfo(null)
-            .heritageCulture(false)
-            .heritageNatural(false)
-            .heritageRecord(false)
+            .worldCulturalHeritage(false)
+            .worldNaturalHeritage(false)
+            .worldRecordHeritage(false)
             .build());
 
         placeList.add(PlaceDetailCultureResponse.builder()
@@ -117,7 +117,7 @@ public class CourseController {
                 + "※ 주차공간 부족하니 가능한 대중교통 이용바람")
             .babyCarriage(false)
             .pet(false)
-            .bookTour(true)
+            .textbook(true)
             .discount(null)
             .parkingFee("승용차(15인승 이하) - 기본 2시간 2,000원 / 초과요금 매 30분당 500원 / 1일 최대(06:00~23:00) 10,000원<br />\n"
                 + "중/대형차(16인승 이상) - 기본 2시간 4,000원 / 초과요금 매 30분당 1,000원 / 1일 최대(06:00~23:00) 20,000원<br />\n"
