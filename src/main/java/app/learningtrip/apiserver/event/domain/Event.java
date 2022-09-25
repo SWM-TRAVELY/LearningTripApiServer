@@ -1,23 +1,21 @@
 package app.learningtrip.apiserver.event.domain;
 
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Builder(builderMethodName = "EventBuilder")
-@Getter @Setter
-@Table
+@Entity @Table
+@AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @Builder
 public class Event {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(unique = true, nullable = false)
-  private int id;
 
-  private String imgURL;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
+    private Long id;
 
-  public static EventBuilder builer() {
-      return EventBuilder();
-  }
+    private String imageURL;
 }

@@ -1,14 +1,13 @@
 package app.learningtrip.apiserver.place.dto.response;
 
-import app.learningtrip.apiserver.dummy_temp.PlaceThumbnail;
 import java.util.List;
 import lombok.Data;
 
 @Data
-public class PlaceThumbnailResponse {
+public class PlaceThumbnailListResponse {
     private List<PlaceThumbnail> placeThumbnailList;
 
-    public PlaceThumbnailResponse(List<PlaceThumbnail> placeThumbnailList) {
+    public PlaceThumbnailListResponse(List<PlaceThumbnail> placeThumbnailList) {
         this.placeThumbnailList = placeThumbnailList;
     }
 }

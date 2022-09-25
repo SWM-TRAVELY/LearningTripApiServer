@@ -1,7 +1,6 @@
 package app.learningtrip.apiserver.course.domain;
 
-import app.learningtrip.apiserver.dummy_temp.PlaceThumbnail;
-import app.learningtrip.apiserver.place.domain.Place;
+import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,5 +14,5 @@ public class Course {
 
     private String name;
 
-    private List<Place> placeList;
+    private List<PlaceResponse> placeList;
 }

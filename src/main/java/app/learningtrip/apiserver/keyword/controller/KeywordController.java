@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class KeywordController {
 
-    @GetMapping("/home/recommend/keyword")
+    @GetMapping("/home/keyword/recommend")
     public ResponseEntity<RecommendKeywordResponse> getRecommendKeyword() {
         List<Keyword> keywordList = new ArrayList<Keyword>();
         keywordList.add(Keyword.builder()
