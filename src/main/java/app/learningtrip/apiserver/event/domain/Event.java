@@ -17,5 +17,5 @@ public class Event {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    private String imgURL;
+    private String imageURL;
 }
