@@ -1,4 +1,4 @@
-package app.learningtrip.apiserver.dummy_temp;
+package app.learningtrip.apiserver.place.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
