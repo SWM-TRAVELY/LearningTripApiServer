@@ -41,7 +41,7 @@ public class HeritageService {
     public Optional<List<HeritageThumbnail>> getHeritages(long id) {
 
         // heritage table에서 값 찾기
-        List<Heritage> heritageList = heritageRepository.findMatchingHeritages(id);
+        List<Heritage> heritageList = heritageRepository.findAllByPlaceId(id);
 
         List<HeritageThumbnail> heritageThumbnailList = new ArrayList<HeritageThumbnail>();
         for (Heritage heritage : heritageList) {
