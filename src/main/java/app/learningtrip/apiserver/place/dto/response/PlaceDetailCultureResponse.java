@@ -35,7 +35,7 @@ public class PlaceDetailCultureResponse extends PlaceResponse {
         .parking(placeDetailCulture.getPlace().getParking())
         .babyCarriage(placeDetailCulture.getPlace().isBabyCarriage())
         .pet(placeDetailCulture.getPlace().isPet())
-        .bookTour(placeDetailCulture.getPlace().isBookTour())
+        .bookTour(placeDetailCulture.getPlace().isTextbook())
         .discount(placeDetailCulture.getDiscount())
         .parkingFee(placeDetailCulture.getParkingFee())
         .useFee(placeDetailCulture.getUseFee())

@@ -16,23 +16,23 @@ public class PlaceRepositoryTest {
 
     @Autowired PlaceRepository placeRepository;
 
-    @Test
-    @Transactional
-    public void testPlace() throws Exception {
-        // given
-        Place place = placeRepository.save(Place.builder()
-            .type(12)
-            .name("place")
-            .address("address")
-            .build());
-
-        // when
-        Optional<Place> findPlace = placeRepository.findById(place.getId());
-
-        // then
-        Assertions.assertThat(findPlace.get().getName()).isEqualTo(place.getName());
-        Assertions.assertThat(findPlace.get().getType()).isEqualTo(place.getType());
-        Assertions.assertThat(findPlace.get().getAddress()).isEqualTo(place.getAddress());
-
-    }
+//    @Test
+//    @Transactional
+//    public void testPlace() throws Exception {
+//        // given
+//        Place place = placeRepository.save(Place.builder()
+//            .type(12)
+//            .name("place")
+//            .address("address")
+//            .build());
+//
+//        // when
+//        Optional<Place> findPlace = placeRepository.findById(place.getId());
+//
+//        // then
+//        Assertions.assertThat(findPlace.get().getName()).isEqualTo(place.getName());
+//        Assertions.assertThat(findPlace.get().getType()).isEqualTo(place.getType());
+//        Assertions.assertThat(findPlace.get().getAddress()).isEqualTo(place.getAddress());
+//
+//    }
 }

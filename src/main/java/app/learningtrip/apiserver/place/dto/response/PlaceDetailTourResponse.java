@@ -36,12 +36,12 @@ public class PlaceDetailTourResponse extends PlaceResponse {
             .parking(placeDetailTour.getPlace().getParking())
             .babyCarriage(placeDetailTour.getPlace().isBabyCarriage())
             .pet(placeDetailTour.getPlace().isPet())
-            .bookTour(placeDetailTour.getPlace().isBookTour())
+            .bookTour(placeDetailTour.getPlace().isTextbook())
             .experienceAge(placeDetailTour.getExperienceAge())
             .experienceInfo(placeDetailTour.getExperienceInfo())
-            .heritageCulture(placeDetailTour.isHeritageCulture())
-            .heritageNatural(placeDetailTour.isHeritageNatural())
-            .heritageRecord(placeDetailTour.isHeritageRecord())
+            .heritageCulture(placeDetailTour.isWorldCulturalHeritage())
+            .heritageNatural(placeDetailTour.isWorldNaturalHeritage())
+            .heritageRecord(placeDetailTour.isWorldRecordHeritage())
             .build();
     }
 }
