@@ -37,11 +37,14 @@ public class PlaceService {
     /**
      * place 조회
      */
-    public Optional<PlaceResponse> getInfo(long id) throws NoSuchObjectException {
+    public Optional<PlaceResponse> getInfo(long id) throws NoSuchObjectException, NoSuchElementException {
 
         // place table 조회
         Optional<Place> place = placeRepository.findById(id);
-        place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
+        if (place.isPresent() == false) {
+            return getInfoDummy(id);
+        }
+        //place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
 
         // PlaceResponse로 변환: type별 다른 placeDetailResponse 생성
         if (place.get().getType() == TOUR) {
@@ -103,17 +106,17 @@ public class PlaceService {
                 .address("서울특별시 중구 세종대로 40")
                 .latitude(37.55998551)
                 .longitude(126.9752993)
-                .tel(null)
+                .tel("")
                 .restDate("월요일")
                 .useTime("[개방시간] 09:00~18:00<br />\n"
                     + "※ 6~8월은 18:30까지 개방<br />\n"
                     + "※ 12~2월은 17:30까지 개방")
-                .parking(null)
+                .parking("")
                 .babyCarriage(false)
                 .pet(false)
                 .textbook(true)
-                .experienceAge(null)
-                .experienceInfo(null)
+                .experienceAge("")
+                .experienceInfo("")
                 .worldCulturalHeritage(false)
                 .worldNaturalHeritage(false)
                 .worldRecordHeritage(false)
@@ -149,7 +152,7 @@ public class PlaceService {
                 .babyCarriage(false)
                 .pet(false)
                 .textbook(true)
-                .discount(null)
+                .discount("")
                 .parkingFee("승용차(15인승 이하) - 기본 2시간 2,000원 / 초과요금 매 30분당 500원 / 1일 최대(06:00~23:00) 10,000원<br />\n"
                     + "중/대형차(16인승 이상) - 기본 2시간 4,000원 / 초과요금 매 30분당 1,000원 / 1일 최대(06:00~23:00) 20,000원<br />\n"
                     + "※ 입차 후 20분 이내 출차 시 요금면제<br />\n"
@@ -165,7 +168,7 @@ public class PlaceService {
                     + "유료 : 유료특별전시<br /> \n"
                     + "※ 관람권 구입 :  기획전시실 앞 매표소(유료 진행 특별전시의 경우는 입장권을 받아 입장)<br />\n"
                     + "※ 관람권 발급 시간 : 관람 종료 1시간 전까지")
-                .spendTime(null)
+                .spendTime("")
                 .build());
         }
     }

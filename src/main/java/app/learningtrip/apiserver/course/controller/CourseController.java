@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class CourseController {
-    @GetMapping("/course/recommend")
+    @GetMapping("/home/course/recommend")
     public ResponseEntity<List<app.learningtrip.apiserver.dummy_temp.Course>> getRecommendCourse(){
         List<app.learningtrip.apiserver.dummy_temp.Course> courseList = new ArrayList<app.learningtrip.apiserver.dummy_temp.Course>();
 
@@ -31,7 +31,7 @@ public class CourseController {
     }
 
     @GetMapping("/course/list")
-    public ResponseEntity<CourseThumbnailListResponse> courseList() {
+    public ResponseEntity<List<CourseThumbnail>> courseList() {
         List<CourseThumbnail> courseThumbnailList = new ArrayList<CourseThumbnail>();
         courseThumbnailList.add(CourseThumbnail.builder()
             .id(1)
@@ -58,9 +58,7 @@ public class CourseController {
             .place_3(null)
             .build());
 
-        CourseThumbnailListResponse courseThumbnailListResponse = new CourseThumbnailListResponse(courseThumbnailList);
-
-        return ResponseEntity.ok().body(courseThumbnailListResponse);
+        return ResponseEntity.ok().body(courseThumbnailList);
     }
 
     @GetMapping("/course/{course_id}")
