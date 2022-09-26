@@ -8,7 +8,6 @@ import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailCultureResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailTourResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
-import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailListResponse;
 import app.learningtrip.apiserver.place.repository.PlaceDetailCultureRepository;
 import app.learningtrip.apiserver.place.repository.PlaceDetailTourRepository;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
@@ -176,15 +175,15 @@ public class PlaceService {
     public List<PlaceThumbnail> getSimilarDummy(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
         placeThumbnailList.add(PlaceThumbnail.builder()
-            .id(1)
+            .id(place_id)
             .name("숭례문")
-            .province("서울 중구")
+            .address("서울 중구")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build());
         placeThumbnailList.add(PlaceThumbnail.builder()
-            .id(1)
+            .id(place_id)
             .name("국립중앙박물관")
-            .province("서울특별시 용산구 서빙고로 137")
+            .address("서울특별시 용산구 서빙고로 137")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build());
 
@@ -193,12 +192,66 @@ public class PlaceService {
 
     public List<PlaceThumbnail> getNearbyDummy(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
-
-        placeThumbnailList.add(new PlaceThumbnail(1));
-        placeThumbnailList.add(new PlaceThumbnail(2));
-        placeThumbnailList.add(new PlaceThumbnail(3));
-        placeThumbnailList.add(new PlaceThumbnail(4));
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(place_id)
+            .name("숭례문")
+            .address("서울 중구")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(place_id)
+            .name("국립중앙박물관")
+            .address("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
 
         return placeThumbnailList;
+    }
+
+    public List<PlaceThumbnail> getSearchDummy(String keyword) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(1L)
+            .name("숭례문")
+            .address("서울 중구")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(2L)
+            .name("국립중앙박물관")
+            .address("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+
+        return placeThumbnailList;
+    }
+
+    public List<PlaceThumbnail> getRecommendDummy() {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(1L)
+            .name("숭례문")
+            .address("서울 중구")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(2L)
+            .name("국립중앙박물관")
+            .address("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+
+        return placeThumbnailList;
+    }
+
+    public List<String> getCompleteWordDummy(String word) {
+        List<String> stringList = new ArrayList<String>();
+        stringList.add("안녕 승윤");
+        stringList.add("나는 시은");
+        stringList.add("우리 모두");
+        stringList.add("파이팅");
+        stringList.add("~!");
+
+        return stringList;
     }
 }

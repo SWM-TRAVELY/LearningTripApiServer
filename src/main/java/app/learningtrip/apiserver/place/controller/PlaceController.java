@@ -25,12 +25,7 @@ public class PlaceController {
 
     @GetMapping("/home/place/recommend")
     public ResponseEntity recommendPlace(){
-        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
-
-        placeThumbnailList.add(new PlaceThumbnail(1));
-        placeThumbnailList.add(new PlaceThumbnail(2));
-        placeThumbnailList.add(new PlaceThumbnail(3));
-        placeThumbnailList.add(new PlaceThumbnail(4));
+        List<PlaceThumbnail> placeThumbnailList = placeService.getRecommendDummy();
 
         return ResponseEntity.ok().body(placeThumbnailList);
     }
@@ -59,5 +54,19 @@ public class PlaceController {
         List<PlaceThumbnail> placeThumbnailList = placeService.getNearbyDummy(place_id);
 
         return ResponseEntity.ok().body(placeThumbnailList);
+    }
+
+    @GetMapping("search/place/{word}")
+    public ResponseEntity searchPlace(@PathVariable("word") String word) {
+        List<PlaceThumbnail> placeThumbnailList = placeService.getSearchDummy(word);
+
+        return ResponseEntity.ok().body(placeThumbnailList);
+    }
+
+    @GetMapping("search/keyword/{word}")
+    public ResponseEntity completeWord(@PathVariable("word") String word) {
+        List<String> stringList = placeService.getCompleteWordDummy(word);
+
+        return ResponseEntity.ok().body(stringList);
     }
 }
