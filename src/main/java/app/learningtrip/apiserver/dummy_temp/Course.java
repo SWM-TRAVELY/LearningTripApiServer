@@ -28,7 +28,7 @@ public class Course {
       this.name = "코스1";
       this.imageURL = "http://www.thepingpong.co.kr/news/photo/201711/3746_15394_5227.jpg";
       List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
-제      placeThumbnailList.add(PlaceThumbnail.builder()
+      placeThumbnailList.add(PlaceThumbnail.builder()
           .id(1L)
           .name("숭례문")
           .address("서울 중구")

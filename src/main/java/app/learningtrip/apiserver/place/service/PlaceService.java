@@ -175,13 +175,13 @@ public class PlaceService {
     public List<PlaceThumbnail> getSimilarDummy(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
         placeThumbnailList.add(PlaceThumbnail.builder()
-            .id(place_id)
+            .id(1L)
             .name("숭례문")
             .address("서울 중구")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build());
         placeThumbnailList.add(PlaceThumbnail.builder()
-            .id(place_id)
+            .id(4L)
             .name("국립중앙박물관")
             .address("서울특별시 용산구 서빙고로 137")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
@@ -193,13 +193,13 @@ public class PlaceService {
     public List<PlaceThumbnail> getNearbyDummy(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
         placeThumbnailList.add(PlaceThumbnail.builder()
-            .id(place_id)
+            .id(5L)
             .name("숭례문")
             .address("서울 중구")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build());
         placeThumbnailList.add(PlaceThumbnail.builder()
-            .id(place_id)
+            .id(17L)
             .name("국립중앙박물관")
             .address("서울특별시 용산구 서빙고로 137")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
@@ -236,6 +236,18 @@ public class PlaceService {
             .build());
         placeThumbnailList.add(PlaceThumbnail.builder()
             .id(2L)
+            .name("국립중앙박물관")
+            .address("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(3L)
+            .name("숭례문")
+            .address("서울 중구")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(5L)
             .name("국립중앙박물관")
             .address("서울특별시 용산구 서빙고로 137")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
