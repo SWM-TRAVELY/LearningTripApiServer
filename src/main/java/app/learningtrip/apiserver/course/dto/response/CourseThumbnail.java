@@ -13,9 +13,9 @@ public class CourseThumbnail {
 
     private String imageURL;
 
-    private String place_1;
+    private String place1;
 
-    private String place_2;
+    private String place2;
 
-    private String place_3;
+    private String place3;
 }
