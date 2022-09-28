@@ -27,11 +27,11 @@ public class PlaceDetailTour implements Serializable {
 
   private String experienceInfo;      // 체험안내
 
-  private boolean heritageCulture;    // 세계문화유산 유무
+  private boolean worldCulturalHeritage;    // 세계문화유산 유무
 
-  private boolean heritageNatural;    // 세계자연유산 유무
+  private boolean worldNaturalHeritage;    // 세계자연유산 유무
 
-  private boolean heritageRecord;     // 세계기록유산 유무
+  private boolean worldRecordHeritage;     // 세계기록유산 유무
 
   @OneToOne
   @MapsId

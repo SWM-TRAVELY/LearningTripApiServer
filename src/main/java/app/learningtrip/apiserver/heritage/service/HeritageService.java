@@ -26,9 +26,10 @@ public class HeritageService {
 
         // heritage table에서 값 찾기
         Optional<Heritage> heritage = heritageRepository.findById(id);
-        heritage.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Heritage입니다."));
+        if (heritage.isPresent() == false) {
+            return getInfoDummy(id);
+        }
 
-        // HeritageResponse로 변환
         HeritageResponse heritageResponse = HeritageResponse.toResponse(heritage.get());
 
         return Optional.ofNullable(heritageResponse);
@@ -38,17 +39,17 @@ public class HeritageService {
      * place의 heritage 조회
      */
 
-    public Optional<List<HeritageThumbnail>> getHeritages(long id) {
+    public List<HeritageThumbnail> getHeritages(long id) {
 
         // heritage table에서 값 찾기
-        List<Heritage> heritageList = heritageRepository.findMatchingHeritages(id);
+        List<Heritage> heritageList = heritageRepository.findAllByPlaceId(id);
 
         List<HeritageThumbnail> heritageThumbnailList = new ArrayList<HeritageThumbnail>();
         for (Heritage heritage : heritageList) {
             heritageThumbnailList.add(HeritageThumbnail.toThumbnail(heritage));
         }
 
-        return Optional.ofNullable(heritageThumbnailList);
+        return heritageThumbnailList;
     }
 
 

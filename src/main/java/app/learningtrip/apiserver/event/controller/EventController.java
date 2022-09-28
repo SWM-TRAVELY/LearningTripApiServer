@@ -17,10 +17,9 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/home/banner")
-    public ResponseEntity list(Model model) {
+    public ResponseEntity list() {
         Optional<List<Event>> eventList = eventService.getList();
-        model. addAttribute("eventList", eventList);
 
-        return ResponseEntity.ok().body(model);
+        return ResponseEntity.ok().body(eventList);
     }
 }

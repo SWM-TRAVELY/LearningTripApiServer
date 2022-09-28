@@ -33,14 +33,12 @@ public class HeritageController {
 
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
 
     @GetMapping("/related/{place_id}")
-    public ResponseEntity related(@PathVariable(name = "place_id") Long place_id, Model model) {
-        Optional<List<HeritageThumbnail>> heritageThumbnailList = heritageService.getHeritages(place_id);
-        model.addAttribute("heritageThumbnailList", heritageThumbnailList);
+    public ResponseEntity related(@PathVariable(name = "place_id") Long place_id) {
+        List<HeritageThumbnail> heritageThumbnailList = heritageService.getHeritages(place_id);
 
-        return ResponseEntity.ok().body(model);
+        return ResponseEntity.ok().body(heritageThumbnailList);
     }
 }

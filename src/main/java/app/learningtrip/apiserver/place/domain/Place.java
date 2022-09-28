@@ -57,7 +57,7 @@ public class Place implements Serializable {
 
     protected boolean pet;              // 애완동물 가능 여부
 
-    protected boolean bookTour;         // 교과서 여부
+    protected boolean textbook;         // 교과서 여부
 
     @OneToOne(mappedBy = "place")
     private PlaceDetailTour placeDetailTour;

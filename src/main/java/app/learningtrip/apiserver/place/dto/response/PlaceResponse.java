@@ -35,5 +35,5 @@ public class PlaceResponse {
 
     protected boolean pet;
 
-    protected boolean bookTour;
+    protected boolean textbook;
 }

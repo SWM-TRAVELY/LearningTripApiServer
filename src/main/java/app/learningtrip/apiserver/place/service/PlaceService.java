@@ -8,7 +8,6 @@ import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailCultureResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailTourResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
-import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailListResponse;
 import app.learningtrip.apiserver.place.repository.PlaceDetailCultureRepository;
 import app.learningtrip.apiserver.place.repository.PlaceDetailTourRepository;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,11 +36,14 @@ public class PlaceService {
     /**
      * place 조회
      */
-    public Optional<PlaceResponse> getInfo(long id) throws NoSuchObjectException {
+    public Optional<PlaceResponse> getInfo(long id) throws NoSuchObjectException, NoSuchElementException {
 
         // place table 조회
         Optional<Place> place = placeRepository.findById(id);
-        place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
+        if (place.isPresent() == false) {
+            return getInfoDummy(id);
+        }
+        //place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
 
         // PlaceResponse로 변환: type별 다른 placeDetailResponse 생성
         if (place.get().getType() == TOUR) {
@@ -68,14 +71,26 @@ public class PlaceService {
     /**
      * 유사 관광지 조회
      */
+    public List<PlaceThumbnail> getSimilar(long place_id) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        return placeThumbnailList;
+    }
 
+    /**
+     * 주변 관광지 조회
+     */
+    public List<PlaceThumbnail> getNearby(long place_id) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        return placeThumbnailList;
+    }
 
     /**
      * Dummy Data
      */
-    public PlaceResponse findPlaceDummy(long place_id) {
+    public Optional<PlaceResponse> getInfoDummy(long place_id) {
         if (place_id == 12){
-            return PlaceDetailTourResponse.builder()
+            return Optional.ofNullable(PlaceDetailTourResponse.builder()
+                .id(place_id)
                 .name("숭례문")
                 .description("숭례문(崇禮門)은 조선 태조 5년(1396)에 최초로 축조되었고 1398년 2월 중건되었다. 이 문은 조선시대 한성 도성의 정문으로  4대문 가운데 남쪽에 위치하므로, 남대문으로도 불린다. 1448년에도 크게 고쳐지었다. "
                     + "이후 임진왜란과 병자호란 때에도 남대문은 피해를 입지 않았다.처음 만들어졌을 때는 양측에 성벽이 연결되어 있었지만 1908년 도로를 내기 위하여 헐어 내고 성문만 섬처럼 따로 떨어져 있었으나, 2006년 복원 공사를 마치고 지금과 같은 모습을 하게 되었다. "
@@ -90,23 +105,24 @@ public class PlaceService {
                 .address("서울특별시 중구 세종대로 40")
                 .latitude(37.55998551)
                 .longitude(126.9752993)
-                .tel(null)
+                .tel("")
                 .restDate("월요일")
                 .useTime("[개방시간] 09:00~18:00<br />\n"
                     + "※ 6~8월은 18:30까지 개방<br />\n"
                     + "※ 12~2월은 17:30까지 개방")
-                .parking(null)
+                .parking("")
                 .babyCarriage(false)
                 .pet(false)
-                .bookTour(true)
-                .experienceAge(null)
-                .experienceInfo(null)
-                .heritageCulture(false)
-                .heritageNatural(false)
-                .heritageRecord(false)
-                .build();
+                .textbook(true)
+                .experienceAge("")
+                .experienceInfo("")
+                .worldCulturalHeritage(false)
+                .worldNaturalHeritage(false)
+                .worldRecordHeritage(false)
+                .build());
         } else {
-            return PlaceDetailCultureResponse.builder()
+            return Optional.ofNullable(PlaceDetailCultureResponse.builder()
+                .id(place_id)
                 .name("국립중앙박물관")
                 .description("국립중앙박물관은 42만 점의 소장유물을 소장하고 있으며, 고고, 역사, 미술, 기증, 아시아 관련 문화재를 전시하는 상설 전시실과 다양한 전시가 가능하도록 가변성 있게 구성된 기획 전시실, 체험과 참여 학습을 통해 전시를 이해하도록 설계된 어린이 박물관, 박물관 야외정원을 이용하여 석탑 등 다양한 석조유물을 전시한 야외전시실로 이뤄진다. "
                     + "국립중앙박물관은 국내·외 전시활동 외에도 유물의 수집과 보존, 조사연구, 사회교육활동, 학술자료발간, 국제문화교류활동, 각종 공연 등의 기회를 제공하는 복합문화공간으로서 교육적 측면 뿐 아니라 친환경 녹색공간과 휴게시설 및 양질의 문화 프로그램도 함께 마련되어 있어  남녀노소를 불문하고 언제든 찾아가고 싶은 새로운 도심 속 명소의  역할을 하고 있다. "
@@ -134,8 +150,8 @@ public class PlaceService {
                     + "※ 주차공간 부족하니 가능한 대중교통 이용바람")
                 .babyCarriage(false)
                 .pet(false)
-                .bookTour(true)
-                .discount(null)
+                .textbook(true)
+                .discount("")
                 .parkingFee("승용차(15인승 이하) - 기본 2시간 2,000원 / 초과요금 매 30분당 500원 / 1일 최대(06:00~23:00) 10,000원<br />\n"
                     + "중/대형차(16인승 이상) - 기본 2시간 4,000원 / 초과요금 매 30분당 1,000원 / 1일 최대(06:00~23:00) 20,000원<br />\n"
                     + "※ 입차 후 20분 이내 출차 시 요금면제<br />\n"
@@ -151,28 +167,103 @@ public class PlaceService {
                     + "유료 : 유료특별전시<br /> \n"
                     + "※ 관람권 구입 :  기획전시실 앞 매표소(유료 진행 특별전시의 경우는 입장권을 받아 입장)<br />\n"
                     + "※ 관람권 발급 시간 : 관람 종료 1시간 전까지")
-                .spendTime(null)
-                .build();
+                .spendTime("")
+                .build());
         }
     }
 
-    public PlaceThumbnailListResponse similarPlaceDummy(long place_id) {
+    public List<PlaceThumbnail> getSimilarDummy(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
         placeThumbnailList.add(PlaceThumbnail.builder()
-            .id(1)
+            .id(1L)
             .name("숭례문")
-            .province("서울 중구")
+            .address("서울 중구")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build());
         placeThumbnailList.add(PlaceThumbnail.builder()
-            .id(1)
+            .id(4L)
             .name("국립중앙박물관")
-            .province("서울특별시 용산구 서빙고로 137")
+            .address("서울특별시 용산구 서빙고로 137")
             .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
             .build());
 
-        PlaceThumbnailListResponse placeThumbnailResponse = new PlaceThumbnailListResponse(placeThumbnailList);
-        return placeThumbnailResponse;
+        return placeThumbnailList;
     }
 
+    public List<PlaceThumbnail> getNearbyDummy(long place_id) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(5L)
+            .name("숭례문")
+            .address("서울 중구")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(17L)
+            .name("국립중앙박물관")
+            .address("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+
+        return placeThumbnailList;
+    }
+
+    public List<PlaceThumbnail> getSearchDummy(String keyword) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(1L)
+            .name("숭례문")
+            .address("서울 중구")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(2L)
+            .name("국립중앙박물관")
+            .address("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+
+        return placeThumbnailList;
+    }
+
+    public List<PlaceThumbnail> getRecommendDummy() {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(1L)
+            .name("숭례문")
+            .address("서울 중구")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(2L)
+            .name("국립중앙박물관")
+            .address("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(3L)
+            .name("숭례문")
+            .address("서울 중구")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+        placeThumbnailList.add(PlaceThumbnail.builder()
+            .id(5L)
+            .name("국립중앙박물관")
+            .address("서울특별시 용산구 서빙고로 137")
+            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
+            .build());
+
+        return placeThumbnailList;
+    }
+
+    public List<String> getCompleteWordDummy(String word) {
+        List<String> stringList = new ArrayList<String>();
+        stringList.add("안녕 승윤");
+        stringList.add("나는 시은");
+        stringList.add("우리 모두");
+        stringList.add("파이팅");
+        stringList.add("~!");
+
+        return stringList;
+    }
 }
