@@ -52,6 +52,30 @@ public class HeritageService {
         return heritageThumbnailList;
     }
 
+    public List<HeritageThumbnail> getHeritagesDummy(long id) {
+        List<HeritageThumbnail> heritageThumbnailList = new ArrayList<>();
+
+        heritageThumbnailList.add(HeritageThumbnail.builder()
+            .id(1L)
+            .name("서울 구 서대문형무소")
+            .imageURL("http://www.cha.go.kr/unisearch/images/history_site/1624954.jpg")
+            .build());
+
+        heritageThumbnailList.add(HeritageThumbnail.builder()
+            .id(2L)
+            .name("경국사 팔상도")
+            .imageURL("http://www.cha.go.kr/unisearch/images/tangible_cult_prop/2594863.jpg")
+            .build());
+
+        heritageThumbnailList.add(HeritageThumbnail.builder()
+            .id(3L)
+            .name("흥천사명 동종")
+            .imageURL("http://www.cha.go.kr/unisearch/images/treasure/1614859.jpg")
+            .build());
+
+        return heritageThumbnailList;
+    }
+
 
     /**
      * Dummy Data
@@ -71,23 +95,5 @@ public class HeritageService {
             .category("성곽시설")
             .build();
         return Optional.ofNullable(heritageResponse);
-    }
-
-    public Optional<List<HeritageThumbnail>> getHeritagesDummy(long id) {
-        HeritageThumbnail heritageThumbnail_1 = HeritageThumbnail.builder()
-            .id(1L)
-            .name("문화재1")
-            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
-            .build();
-        HeritageThumbnail heritageThumbnail_2 = HeritageThumbnail.builder()
-            .id(2L)
-            .name("문화재2")
-            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
-            .build();
-        List<HeritageThumbnail> heritageThumbnailList = new ArrayList<HeritageThumbnail>();
-        heritageThumbnailList.add(heritageThumbnail_1);
-        heritageThumbnailList.add(heritageThumbnail_2);
-
-        return Optional.of(heritageThumbnailList);
     }
 }
