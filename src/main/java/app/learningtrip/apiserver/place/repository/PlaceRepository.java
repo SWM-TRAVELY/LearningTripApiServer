@@ -1,6 +1,7 @@
 package app.learningtrip.apiserver.place.repository;
 
 import app.learningtrip.apiserver.place.domain.Place;
+import app.learningtrip.apiserver.search.dto.PlaceSearchResult;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +26,12 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
       + "order by ST_Distance_Sphere(point(p.longitude,p.latitude), point(:x,:y))")
   Optional<List<Place>> findPlacesByDistance(@Param("x") double lng, @Param("y") double lat,
       Pageable pageable);
+
+  @Query(value = "select p.name from Place p where p.name like %:keyword% order by p.name")
+  Optional<List<String>> findNamesByNameLike(@Param("keyword") String keyword);
+
+  @Query(value = "select new app.learningtrip.apiserver.search.dto.PlaceSearchResult(p.id, p.name, "
+      + "p.address, p.imageURL1) "
+      + "from Place p where p.name like %:keyword% order by p.name")
+  Optional<List<PlaceSearchResult>> findPlacesByNameLike(@Param("keyword") String keyword);
 }
