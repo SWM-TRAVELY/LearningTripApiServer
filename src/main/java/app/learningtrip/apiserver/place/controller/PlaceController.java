@@ -49,11 +49,16 @@ public class PlaceController {
         return ResponseEntity.ok().body(placeThumbnailResponse);
     }
 
-    @GetMapping("/place/nearby/{placeId}")
-    public ResponseEntity nearbyPlace(@PathVariable("placeId") Long place_id){
+    @GetMapping("/place/nearby/{placeId}/dummy")
+    public ResponseEntity nearbyPlaceDummy(@PathVariable("placeId") Long place_id){
         List<PlaceThumbnail> placeThumbnailList = placeService.getNearbyDummy(place_id);
 
         return ResponseEntity.ok().body(placeThumbnailList);
+    }
+
+    @GetMapping("/place/nearby/{placeId}")
+    public ResponseEntity<List<PlaceThumbnail>> nearbyPlace(@PathVariable("placeId") Long place_id){
+        return ResponseEntity.ok().body(placeService.getNearby(place_id));
     }
 
     @GetMapping("search/place/{word}")
