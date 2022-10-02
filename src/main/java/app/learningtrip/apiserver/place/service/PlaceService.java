@@ -103,19 +103,26 @@ public class PlaceService {
     public List<PlaceThumbnail> getRandom() throws NoSuchObjectException {
         int countOfPlace = placeRepository.countAllBy();
 
-        List<Integer> indexList = new ArrayList<Integer>();
+        List<Integer> duplicationCheckList = new ArrayList<Integer>();
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
 
         for (int i = 0; i < 4; i++) {
             int index = (int)(Math.random() * countOfPlace) + 1;
 
-            for (int listLength = 0; listLength < indexList.size(); listLength++) {
-                if (index == indexList.get(listLength)) {
-                    i--;
-                    continue;
+            // 중복 체크
+            int flag = 0;
+            for (int listLength = 0; listLength < duplicationCheckList.size(); listLength++) {
+                if (index == duplicationCheckList.get(listLength)) {
+                    flag = 1;
+                    break;
                 }
             }
-            indexList.add(index);
+            if (flag == 1) {
+                i--;
+                continue;
+            }
+
+            duplicationCheckList.add(index);
 
             Optional<Place> place = placeRepository.findById(Long.valueOf(index));
             place.orElseThrow(() -> new NoSuchObjectException("없는 관광지를 조회했습니다."));
@@ -213,7 +220,7 @@ public class PlaceService {
         placeType.add(14);
         placeType.add(12);
 
-        for (int i = 0; i< 18; i++) {
+        for (int i = 0; i < 18; i++) {
             Place makePlace = Place.builder()
                 .type(placeType.get(i))
                 .name(placeName.get(i))
@@ -276,7 +283,11 @@ public class PlaceService {
 
         List<Place> placeList = new ArrayList<Place>();
         for (String placeName : placeNameList) {
-            placeList.add(placeRepository.findByName(placeName));
+            Optional<Place> place = Optional.ofNullable(placeRepository.findByName(placeName));
+            if (place.isPresent() == false) {
+                continue;
+            }
+            placeList.add(place.get());
         }
         return placeList;
     }
