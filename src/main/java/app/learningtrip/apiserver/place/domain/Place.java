@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.place.domain;
 
+import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import java.io.Serializable;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -67,4 +68,13 @@ public class Place implements Serializable {
 
     @OneToOne(mappedBy = "place")
     private PlaceDetailCulture placeDetailCulture;
+
+    public PlaceThumbnail toPlaceThumbnail(){
+        return PlaceThumbnail.builder()
+            .id(this.id)
+            .name(this.name)
+            .address(this.address)
+            .imageURL(this.imageURL1)
+            .build();
+    }
 }
