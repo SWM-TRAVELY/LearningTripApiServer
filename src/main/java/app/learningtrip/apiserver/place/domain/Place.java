@@ -23,10 +23,13 @@ public class Place implements Serializable {
     @Column(length = 3, nullable = false)
     protected int type;             // 관광지 유형
 
+    @Column(length = 10000)
     protected String description;   // 설명
 
+    @Column(length = 100)
     protected String imageURL1;          // 이미지 1
 
+    @Column(length = 100)
     protected String imageURL2;          // 이미지 2
 
     @Column(length = 100, nullable = false)
@@ -41,7 +44,7 @@ public class Place implements Serializable {
     @Column(length = 100)
     protected String tel;           // 전화번호
 
-    @Column(length = 300)
+    @Column(length = 200)
     protected String info;          // 안내
 
     @Column(length = 200)
