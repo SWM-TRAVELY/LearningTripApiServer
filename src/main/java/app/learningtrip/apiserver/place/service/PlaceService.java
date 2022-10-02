@@ -1,6 +1,5 @@
 package app.learningtrip.apiserver.place.service;
 
-import app.learningtrip.apiserver.heritage.dto.response.HeritageResponse;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.domain.PlaceDetailCulture;
 import app.learningtrip.apiserver.place.domain.PlaceDetailTour;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +71,7 @@ public class PlaceService {
      */
     public List<PlaceThumbnail> getSimilar(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+
         return placeThumbnailList;
     }
 
@@ -81,9 +80,206 @@ public class PlaceService {
      */
     public List<PlaceThumbnail> getNearby(long place_id) {
         List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+
         return placeThumbnailList;
     }
 
+    /**
+     * 추천 관광지
+     */
+    public List<PlaceThumbnail> getRecommend() {
+        try {
+            List<PlaceThumbnail> placeThumbnailList = getRandom();
+
+            return placeThumbnailList;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * random 관광지
+     */
+    public List<PlaceThumbnail> getRandom() throws NoSuchObjectException {
+        int countOfPlace = placeRepository.countAllBy();
+
+        List<Integer> indexList = new ArrayList<Integer>();
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+
+        for (int i = 0; i < 4; i++) {
+            int index = (int)(Math.random() * countOfPlace) + 1;
+
+            for (int listLength = 0; listLength < indexList.size(); listLength++) {
+                if (index == indexList.get(listLength)) {
+                    i--;
+                    continue;
+                }
+            }
+            indexList.add(index);
+
+            Optional<Place> place = placeRepository.findById(Long.valueOf(index));
+            place.orElseThrow(() -> new NoSuchObjectException("없는 관광지를 조회했습니다."));
+
+            PlaceThumbnail placeThumbnail = PlaceThumbnail.builder()
+                .id(place.get().getId())
+                .name(place.get().getName())
+                .address(place.get().getAddress())
+                .imageURL(place.get().getImageURL1())
+                .build();
+            placeThumbnailList.add(placeThumbnail);
+        }
+
+        return placeThumbnailList;
+    }
+
+    /**
+     * 추천 코스 생성할 때 필요한 Place 생성
+     */
+    public List<String> getSeoulTextbookPlace() {
+        List<String> place = new ArrayList<String>();
+        place.add("암사동선사유적박물관");
+        place.add("서울 석촌동 고분군");
+        place.add("서울 풍납동 토성");
+        place.add("국립중앙박물관");
+        place.add("화폐박물관");
+
+        place.add("고려대학교박물관");
+        place.add("국립고궁박물관");
+        place.add("동국대학교 박물관");
+        place.add("서울대학교 규장각");
+        place.add("경복궁");
+
+        place.add("숭례문");
+        place.add("종묘 [유네스코 세계문화유산]");
+        place.add("국립한글박물관");
+        place.add("숭실대학교 한국기독교박물관");
+        place.add("서울역사박물관");
+
+        place.add("간송미술관(서울 보화각)");
+        place.add("서울대학교 박물관");
+        place.add("독립문");
+
+        return place;
+    }
+
+    public void setSeoulTextbookPlace() {
+        String imageURL = "https://i.ibb.co/QvY3mqG/image.png";
+
+        List<String> placeName = getSeoulTextbookPlace();
+
+        List<String> placeAddress = new ArrayList<String>();
+        placeAddress.add("서울특별시 강동구 올림픽로 875");
+        placeAddress.add("서울특별시 송파구 가락로7길 21");
+        placeAddress.add("서울특별시 송파구 강동대로 74");
+        placeAddress.add("서울특별시 용산구 서빙고로 137");
+        placeAddress.add("서울특별시 중구 남대문로 39");
+
+        placeAddress.add("서울특별시 성북구 안암로 145");
+        placeAddress.add("서울특별시 종로구 효자로 12");
+        placeAddress.add("서울특별시 중구 필동로1길 30");
+        placeAddress.add("서울특별시 관악구 관악로 1");
+        placeAddress.add("서울특별시 종로구 사직로 161");
+
+        placeAddress.add("서울특별시 중구 세종대로 40");
+        placeAddress.add("서울특별시 종로구 종로 157");
+        placeAddress.add("서울특별시 용산구 서빙고로 139");
+        placeAddress.add("서울특별시 동작구 상도로 369");
+        placeAddress.add("서울특별시 종로구 새문안로 55");
+
+        placeAddress.add("서울특별시 중구 을지로 281");
+        placeAddress.add("서울특별시 관악구 관악로 1");
+        placeAddress.add("서울특별시 서대문구 통일로 251");
+
+        List<Integer> placeType = new ArrayList<Integer>();
+        placeType.add(14);
+        placeType.add(12);
+        placeType.add(12);
+        placeType.add(14);
+        placeType.add(14);
+
+        placeType.add(14);
+        placeType.add(14);
+        placeType.add(14);
+        placeType.add(14);
+        placeType.add(12);
+
+        placeType.add(12);
+        placeType.add(12);
+        placeType.add(14);
+        placeType.add(14);
+        placeType.add(14);
+
+        placeType.add(14);
+        placeType.add(14);
+        placeType.add(12);
+
+        for (int i = 0; i< 18; i++) {
+            Place makePlace = Place.builder()
+                .type(placeType.get(i))
+                .name(placeName.get(i))
+                .address(placeAddress.get(i))
+                .imageURL1(imageURL)
+                .description("--")
+                .build();
+            placeRepository.save(makePlace);
+        }
+    }
+
+    public List<String> getGyeongjuTextbookPlace() {
+        List<String> place = new ArrayList<String>();
+        place.add("국립경주박물관");
+        place.add("경주 첨성대");
+        place.add("경주 감은사지");
+        place.add("경주 석굴암 [유네스코 세계문화유산]");
+        place.add("경주 불국사 [유네스코 세계문화유산]");
+        place.add("경주 원성왕릉");
+
+        return place;
+    }
+
+    public void setGyeongjuTextbookPlace() {
+        String imageURL = "https://i.ibb.co/QvY3mqG/image.png";
+
+        List<String> placeName = getGyeongjuTextbookPlace();
+
+        List<String> placeAddress = new ArrayList<String>();
+        placeAddress.add("경상북도 경주시 일정로 186");
+        placeAddress.add("경상북도 경주시 첨성로 140-25");
+        placeAddress.add("경상북도 경주시 양북면 용당리 55-1");
+        placeAddress.add("경상북도 경주시 진현동 불국로 873-243");
+        placeAddress.add("경상북도 경주시 불국로 385");
+        placeAddress.add("경상북도 경주시 외동읍 신계입실길 139");
+
+        List<Integer> placeType = new ArrayList<Integer>();
+        placeType.add(14);
+        placeType.add(12);
+        placeType.add(12);
+        placeType.add(12);
+        placeType.add(12);
+        placeType.add(12);
+
+        for (int i = 0; i < 6; i++) {
+            Place makePlace = Place.builder()
+                .id(Integer.toUnsignedLong(i))
+                .type(placeType.get(i))
+                .name(placeName.get(i))
+                .address(placeAddress.get(i))
+                .imageURL1(imageURL)
+                .description("--")
+                .build();
+            placeRepository.save(makePlace);
+        }
+    }
+
+    public List<Place> findSeoulTextbookPlace() {
+        List<String> placeNameList = getSeoulTextbookPlace();
+
+        List<Place> placeList = new ArrayList<Place>();
+        for (String placeName : placeNameList) {
+            placeList.add(placeRepository.findByName(placeName));
+        }
+        return placeList;
+    }
     /**
      * Dummy Data
      */
