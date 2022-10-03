@@ -5,6 +5,7 @@ import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import app.learningtrip.apiserver.place.service.PlaceService;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -52,7 +53,8 @@ public class PlaceController {
 
     @GetMapping("/place/related/{place_id}")
     public ResponseEntity<List<PlaceThumbnail>> similarPlace(@PathVariable(name = "place_id") long place_id) {
-        List<PlaceThumbnail> placeThumbnailResponse = placeService.getSimilarDummy(place_id);
+        List<PlaceThumbnail> placeThumbnailResponse = placeService.getSimilar(place_id);
+        Collections.shuffle(placeThumbnailResponse);
 
         return ResponseEntity.ok().body(placeThumbnailResponse);
     }

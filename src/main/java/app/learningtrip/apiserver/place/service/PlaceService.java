@@ -70,7 +70,7 @@ public class PlaceService {
      * 유사 관광지 조회
      */
     public List<PlaceThumbnail> getSimilar(long place_id) {
-        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        List<PlaceThumbnail> placeThumbnailList = getNearby(place_id);
 
         return placeThumbnailList;
     }
