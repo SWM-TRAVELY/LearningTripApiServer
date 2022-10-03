@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.course.dto.response;
 
+import app.learningtrip.apiserver.place.domain.Place;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -18,4 +19,14 @@ public class CoursePlaceResponse {
     String imageURL;
 
     String address;
+
+    public static CoursePlaceResponse toResponse(Place place) {
+        return CoursePlaceResponse.builder()
+            .id(place.getId())
+            .name(place.getName())
+            .description(place.getDescription())
+            .imageURL(place.getImageURL1())
+            .address(place.getAddress())
+            .build();
+    }
 }

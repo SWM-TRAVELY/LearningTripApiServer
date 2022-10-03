@@ -23,9 +23,17 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
+    @GetMapping("sieun/test")
+    public ResponseEntity testSave() {
+        placeService.setSeoulTextbookPlace();
+        //placeService.setGyeongjuTextbookPlace();
+
+        return ResponseEntity.ok().body(null);
+    }
+
     @GetMapping("/home/place/recommend")
     public ResponseEntity recommendPlace(){
-        List<PlaceThumbnail> placeThumbnailList = placeService.getRecommendDummy();
+        List<PlaceThumbnail> placeThumbnailList = placeService.getRecommend();
 
         return ResponseEntity.ok().body(placeThumbnailList);
     }
