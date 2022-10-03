@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CoursePlaceRepository extends JpaRepository<CoursePlace, Long> {
-    List<CoursePlace> findAllByCourseIdOrderByDay(Long course_id);
+    List<CoursePlace> findAllByCourseIdOrderByDayAscSequenceAsc(Long course_id);
 }

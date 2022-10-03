@@ -26,7 +26,9 @@ public class CoursePlace implements Serializable {
     @Column(unique = true, nullable = false)
     Long id;
 
-    int day;
+    Integer day;
+
+    Integer sequence;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")

@@ -22,5 +22,7 @@ public class Course {
     @Column(unique = true, nullable = false)
     private Long id;
 
+    private String user_id;
+
     private String name;
 }

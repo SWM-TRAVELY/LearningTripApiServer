@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,10 +43,10 @@ public class CourseController {
     }
 
     @GetMapping("/course/{course_id}")
-    public ResponseEntity getCourse(@PathVariable(name = "course_id") long course_id) {
-        CourseResponse courseResponse = courseService.getInfo(course_id);
+    public ResponseEntity getCourse(@PathVariable(name = "course_id") long course_id, Model model) {
+        Model model_result = courseService.getInfoNotDay(course_id, model);
 
-        return ResponseEntity.ok().body(courseResponse);
+        return ResponseEntity.ok().body(model_result);
     }
 
 }
