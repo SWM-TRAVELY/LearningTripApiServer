@@ -17,6 +17,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 @Service
 @Transactional
@@ -34,13 +35,36 @@ public class CourseService {
 
         // course table 조회
         Optional<Course> course = courseRepository.findById(id);
-        List<CoursePlace> coursePlace = coursePlaceRepository.findAllByCourseIdOrderByDay(id);
+        List<CoursePlace> coursePlace = coursePlaceRepository.findAllByCourseIdOrderByDayAscSequenceAsc(id);
 
         if (course.isPresent() == false) {
             throw new RuntimeException(Long.toString(id) + "번의 코스 정보를 찾을 수 없습니다.");
         }
 
         return CourseResponse.toResponse(course, coursePlace);
+    }
+
+    public Model getInfoNotDay(Long id, Model model) {
+
+        // course table 조회
+        Optional<Course> course = courseRepository.findById(id);
+        List<CoursePlace> coursePlaceList = coursePlaceRepository.findAllByCourseIdOrderByDayAscSequenceAsc(id);
+
+        if (course.isPresent() == false) {
+            throw new RuntimeException(Long.toString(id) + "번의 코스 정보를 찾을 수 없습니다.");
+        }
+
+        List<CoursePlaceResponse> placeList = new ArrayList<CoursePlaceResponse>();
+        for (CoursePlace coursePlace : coursePlaceList) {
+            placeList.add(CoursePlaceResponse.toResponse(coursePlace.getPlace()));
+        }
+
+
+        model.addAttribute("id", course.get().getId());
+        model.addAttribute("name", course.get().getName());
+        model.addAttribute("placeList", placeList);
+
+        return model;
     }
 
     /**
@@ -58,7 +82,7 @@ public class CourseService {
 
         // course_place table 조회
         for (Course course : courseList) {
-            List<CoursePlace> coursePlaceList = coursePlaceRepository.findAllByCourseIdOrderByDay(course.getId());
+            List<CoursePlace> coursePlaceList = coursePlaceRepository.findAllByCourseIdOrderByDayAscSequenceAsc(course.getId());
 
             List<Place> placeList = new ArrayList<Place>();
             for (CoursePlace coursePlace : coursePlaceList) {
@@ -88,20 +112,13 @@ public class CourseService {
             Optional<Course> course = courseRepository.findById(Long.valueOf(index));
             course.orElseThrow(() -> new NoSuchObjectException("없는 경로를 조회했습니다."));
 
-            List<CoursePlace> coursePlaceList = coursePlaceRepository.findAllByCourseIdOrderByDay(Long.valueOf(index));
-            List<String> placeNameList = new ArrayList<String>();
+            List<CoursePlace> coursePlaceList = coursePlaceRepository.findAllByCourseIdOrderByDayAscSequenceAsc(Long.valueOf(index));
+            List<Place> placeList = new ArrayList<Place>();
             for (CoursePlace coursePlace : coursePlaceList) {
-                placeNameList.add(coursePlace.getPlace().getName());
+                placeList.add(coursePlace.getPlace());
             }
 
-            CourseThumbnail courseThumbnail = CourseThumbnail.builder()
-                .id(course.get().getId())
-                .name(course.get().getName())
-                .imageURL(coursePlaceList.get(0).getPlace().getImageURL1())
-                .place1(placeNameList.get(0))
-                .place2(placeNameList.get(1))
-                .place3(placeNameList.get(2))
-                .build();
+            CourseThumbnail courseThumbnail = CourseThumbnail.toThumbnail(course.get(), placeList);
             courseThumbnailList.add(courseThumbnail);
         }
         return courseThumbnailList;
@@ -136,6 +153,7 @@ public class CourseService {
 
                 coursePlaceRepository.save(CoursePlace.builder()
                     .day(day)
+                    .sequence(placeCount+1)
                     .course(course)
                     .place(placeList.get(index))
                     .build());
@@ -153,6 +171,7 @@ public class CourseService {
 
         Course course = courseRepository.save(Course.builder()
             .name(name)
+            .user_id("admin@soma.com")
             .build());
 
         makePlaces(region, days, course);
@@ -166,7 +185,7 @@ public class CourseService {
         List<CourseThumbnail> courseThumbnailList = new ArrayList<CourseThumbnail>();
         for (String region : regions) {
             for (int days = 1; days < 5; days ++) {
-                for (int num = 0; num < 13; num++) {
+                for (int num = 0; num < 30; num++) {
                     makeCourse(region, days, num);
                 }
             }
@@ -229,6 +248,7 @@ public class CourseService {
 
         return courseResponse;
     }
+
     public List<CourseThumbnail> getListDummy() {
         List<CourseThumbnail> courseThumbnailList = new ArrayList<CourseThumbnail>();
         courseThumbnailList.add(CourseThumbnail.builder()
