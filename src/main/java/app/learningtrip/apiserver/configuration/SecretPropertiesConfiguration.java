@@ -7,7 +7,9 @@ import org.springframework.context.annotation.PropertySource;
 
 @Getter
 @Configuration
-@PropertySource(value = "classpath:secret.properties")
+@PropertySource(value = {
+    "classpath:secret.properties",
+    "file:/operation.properties"}, ignoreResourceNotFound = true)
 public class SecretPropertiesConfiguration {
     @Value("spring.datasource.url")
     private String url;

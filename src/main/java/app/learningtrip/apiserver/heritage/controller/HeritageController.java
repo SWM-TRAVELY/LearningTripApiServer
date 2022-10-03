@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class HeritageController {
 
-    @Autowired
-    private HeritageService heritageService;
+    private final HeritageService heritageService;
 
     @GetMapping("/{heritage_id}")
     public ResponseEntity info(@PathVariable(name = "heritage_id") Long heritage_id) {
@@ -36,8 +35,8 @@ public class HeritageController {
     }
 
     @GetMapping("/related/{place_id}")
-    public ResponseEntity related(@PathVariable(name = "place_id") Long place_id) {
-        List<HeritageThumbnail> heritageThumbnailList = heritageService.getHeritages(place_id);
+    public ResponseEntity<List<HeritageThumbnail>> related(@PathVariable(name = "place_id") Long place_id) {
+        List<HeritageThumbnail> heritageThumbnailList = heritageService.getHeritagesDummy(place_id);
 
         return ResponseEntity.ok().body(heritageThumbnailList);
     }
