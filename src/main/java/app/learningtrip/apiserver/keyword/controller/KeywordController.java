@@ -17,20 +17,11 @@ public class KeywordController {
 
     @Autowired
     private KeywordService keywordService;
-/*
+
     @GetMapping("/home/keyword/recommend")
     public ResponseEntity<List<Keyword>> getRecommendKeyword() {
         List<Keyword> keywordList = keywordService.getKeyword();
 
-        return ResponseEntity.ok().body(keywordList);
-    }
-*/
-    @GetMapping("/home/keyword/recommend")
-    public ResponseEntity<List<Keyword>> getRecommendKeywordDummy() {
-        List<Keyword> keywordList = new ArrayList<>();
-
-        keywordList.add(Keyword.builder().name("경주").imageURL("https://youimg1.tripcdn.com/target/0106j1200093s90ih82FB_C_640_320_R5_Q70.jpg_.webp?proc=source%2Ftrip").count(0).build());
-        keywordList.add(Keyword.builder().name("한양").imageURL("https://seoulcitywall.seoul.go.kr/image.do?file=/wallcourse/info/20211101073653083.jpg").count(0).build());
         return ResponseEntity.ok().body(keywordList);
     }
 
