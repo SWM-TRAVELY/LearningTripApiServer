@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,23 +77,9 @@ public class PlaceService {
 
     /**
      * 주변 관광지 조회
-     * @param place_id 관광지 id
-     * @return 관광지 id (경도, 위도) 주변의 반경 5000m 관광지 썸네일 리스트 (최대 8개)
      */
-    public List<PlaceThumbnail> getNearby(long place_id){
-        //
-        Place p = placeRepository.findById(place_id).orElseThrow(null);
-
-        List<Place> placeList = placeRepository.findPlacesByDistance(p.getLongitude(),
-            p.getLatitude(), PageRequest.of(0,9)).orElseThrow(null);
-
-        List<PlaceThumbnail> placeThumbnailList = new ArrayList<>();
-
-        placeList.forEach(place -> {
-            if (place.getId() != place_id){
-               placeThumbnailList.add(place.toPlaceThumbnail());
-            }
-        });
+    public List<PlaceThumbnail> getNearby(long place_id) {
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
 
         return placeThumbnailList;
     }
@@ -151,6 +135,9 @@ public class PlaceService {
                 .build();
             placeThumbnailList.add(placeThumbnail);
         }
+
+        return placeThumbnailList;
+    }
 
     /**
      * 추천 코스 생성할 때 필요한 Place 생성
