@@ -26,8 +26,8 @@ jobs:
         
     - name: Build & Test
       run: |
+        echo "${{ secrets.DB_URL }}\n{{ secrets.DB_ID }\n{{ secrets.DB_PW }}\n{{ secrets.DB_DDL }}" > /src/main/resources/secret.properties
         ./gradlew build --no-daemon
-        sudo chmod -R 777 build
         
     - name: Kill Server process
       uses: appleboy/ssh-action@master
