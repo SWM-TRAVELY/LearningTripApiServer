@@ -26,10 +26,7 @@ jobs:
         
     - name: Build & Test
       run: |
-        ls
-        cd /src/main/resources
-        echo "${{ secrets.DB_PROPERTIES }}" > secret.properties
-        cd ../../../
+        echo "${{ secrets.DB_PROPERTIES }}" > src/main/resources/secret.properties
         ./gradlew build --no-daemon
         
     - name: Kill Server process
