@@ -28,7 +28,7 @@ jobs:
       run: |
         ls
         cd /src/main/resources
-        echo "${{ secrets.DB_URL }}\n${{ secrets.DB_ID }\n${{ secrets.DB_PW }}\n${{ secrets.DB_DDL }}" > secret.properties
+        echo "${{ secrets.DB_URL }}\n""${{ secrets.DB_ID }\n""${{ secrets.DB_PW }}\n""${{ secrets.DB_DDL }}" > secret.properties
         cd ../../../
         ./gradlew build --no-daemon
         
