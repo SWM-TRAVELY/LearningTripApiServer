@@ -15,11 +15,11 @@ public class PlaceDetailTourResponse extends PlaceResponse {
 
     private String experienceInfo;
 
-    private boolean heritageCulture;
+    private boolean worldCulturalHeritage;
 
-    private boolean heritageNatural;
+    private boolean worldNaturalHeritage;
 
-    private boolean heritageRecord;
+    private boolean worldRecordHeritage;
 
     public static PlaceDetailTourResponse toResponse(PlaceDetailTour placeDetailTour) {
         return PlaceDetailTourResponse.builder()
@@ -36,12 +36,12 @@ public class PlaceDetailTourResponse extends PlaceResponse {
             .parking(placeDetailTour.getPlace().getParking())
             .babyCarriage(placeDetailTour.getPlace().isBabyCarriage())
             .pet(placeDetailTour.getPlace().isPet())
-            .bookTour(placeDetailTour.getPlace().isBookTour())
+            .textbook(placeDetailTour.getPlace().isTextbook())
             .experienceAge(placeDetailTour.getExperienceAge())
             .experienceInfo(placeDetailTour.getExperienceInfo())
-            .heritageCulture(placeDetailTour.isHeritageCulture())
-            .heritageNatural(placeDetailTour.isHeritageNatural())
-            .heritageRecord(placeDetailTour.isHeritageRecord())
+            .worldCulturalHeritage(placeDetailTour.isWorldCulturalHeritage())
+            .worldNaturalHeritage(placeDetailTour.isWorldNaturalHeritage())
+            .worldRecordHeritage(placeDetailTour.isWorldRecordHeritage())
             .build();
     }
 }

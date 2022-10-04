@@ -1,9 +1,12 @@
 package app.learningtrip.apiserver.place.controller;
 
 import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
-import app.learningtrip.apiserver.place.dto.response.PlaceThumbnailListResponse;
+import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import app.learningtrip.apiserver.place.service.PlaceService;
 import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,35 +19,69 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/place")
 @RequiredArgsConstructor
 public class PlaceController {
 
-    @Autowired
-    private PlaceService placeService;
+    private final PlaceService placeService;
 
-    @GetMapping("/{place_id}")
+    @GetMapping("sieun/test")
+    public ResponseEntity testSave() {
+        placeService.setSeoulTextbookPlace();
+        //placeService.setGyeongjuTextbookPlace();
+
+        return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping("/home/place/recommend")
+    public ResponseEntity recommendPlace(){
+        List<PlaceThumbnail> placeThumbnailList = placeService.getRecommend();
+
+        return ResponseEntity.ok().body(placeThumbnailList);
+    }
+
+    @GetMapping("/place/{place_id}")
     public ResponseEntity info(@PathVariable(name = "place_id") long place_id) {
         try {
             Optional<PlaceResponse> placeResponse = placeService.getInfo(place_id);
-
             return ResponseEntity.ok().body(placeResponse);
         } catch (NoSuchElementException e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (NoSuchObjectException e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (NoSuchFieldError e) {
-
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @GetMapping("/related/{place_id}")
-    public ResponseEntity<Optional<PlaceThumbnailListResponse>> similarPlace(@PathVariable(name = "place_id") long place_id) {
-        Optional<PlaceThumbnailListResponse> placeThumbnailResponse = Optional.ofNullable(placeService.similarPlaceDummy(place_id));
+    @GetMapping("/place/related/{place_id}")
+    public ResponseEntity<List<PlaceThumbnail>> similarPlace(@PathVariable(name = "place_id") long place_id) {
+        List<PlaceThumbnail> placeThumbnailResponse = placeService.getSimilar(place_id);
+        Collections.shuffle(placeThumbnailResponse);
 
         return ResponseEntity.ok().body(placeThumbnailResponse);
+    }
+
+    @GetMapping("/place/nearby/{placeId}/dummy")
+    public ResponseEntity nearbyPlaceDummy(@PathVariable("placeId") Long place_id){
+        List<PlaceThumbnail> placeThumbnailList = placeService.getNearbyDummy(place_id);
+
+        return ResponseEntity.ok().body(placeThumbnailList);
+    }
+
+    @GetMapping("/place/nearby/{placeId}")
+    public ResponseEntity<List<PlaceThumbnail>> nearbyPlace(@PathVariable("placeId") Long place_id){
+        return ResponseEntity.ok().body(placeService.getNearby(place_id));
+    }
+
+    @GetMapping("search/place/{word}")
+    public ResponseEntity searchPlace(@PathVariable("word") String word) {
+        List<PlaceThumbnail> placeThumbnailList = placeService.getSearchDummy(word);
+
+        return ResponseEntity.ok().body(placeThumbnailList);
+    }
+
+    @GetMapping("search/keyword/{word}")
+    public ResponseEntity completeWord(@PathVariable("word") String word) {
+        List<String> stringList = placeService.getCompleteWordDummy(word);
+
+        return ResponseEntity.ok().body(stringList);
     }
 }

@@ -2,9 +2,11 @@ package app.learningtrip.apiserver.keyword.controller;
 
 import app.learningtrip.apiserver.keyword.domain.Keyword;
 import app.learningtrip.apiserver.keyword.dto.response.RecommendKeywordResponse;
+import app.learningtrip.apiserver.keyword.service.KeywordService;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,21 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class KeywordController {
 
+    @Autowired
+    private KeywordService keywordService;
+
     @GetMapping("/home/keyword/recommend")
-    public ResponseEntity<RecommendKeywordResponse> getRecommendKeyword() {
-        List<Keyword> keywordList = new ArrayList<Keyword>();
-        keywordList.add(Keyword.builder()
-            .name("키워드1")
-            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
-            .build());
-        keywordList.add(Keyword.builder()
-            .name("키워드2")
-            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
-            .build());
+    public ResponseEntity<List<Keyword>> getRecommendKeyword() {
+        List<Keyword> keywordList = keywordService.getKeyword();
 
-        RecommendKeywordResponse recommendKeywordResponse = new RecommendKeywordResponse(keywordList);
-
-        return ResponseEntity.ok().body(recommendKeywordResponse);
+        return ResponseEntity.ok().body(keywordList);
     }
 
     @GetMapping("/home/keyword")

@@ -1,9 +1,10 @@
 package app.learningtrip.apiserver.search.service;
 
-import app.learningtrip.apiserver.search.dto.response.SearchByNameResponse;
-import org.springframework.stereotype.Service;
+import app.learningtrip.apiserver.search.dto.PlaceSearchResult;
+import java.util.List;
 
-@Service
 public interface SearchService {
-    SearchByNameResponse searchByName(String name);
+  List<String> autoComplete(String keyword);
+
+  List<PlaceSearchResult> searchResult(String keyword);
 }

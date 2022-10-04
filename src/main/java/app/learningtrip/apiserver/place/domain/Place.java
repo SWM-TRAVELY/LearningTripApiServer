@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.place.domain;
 
+import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import java.io.Serializable;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,10 +24,13 @@ public class Place implements Serializable {
     @Column(length = 3, nullable = false)
     protected int type;             // 관광지 유형
 
+    @Column(length = 10000)
     protected String description;   // 설명
 
+    @Column(length = 100)
     protected String imageURL1;          // 이미지 1
 
+    @Column(length = 100)
     protected String imageURL2;          // 이미지 2
 
     @Column(length = 100, nullable = false)
@@ -41,7 +45,7 @@ public class Place implements Serializable {
     @Column(length = 100)
     protected String tel;           // 전화번호
 
-    @Column(length = 300)
+    @Column(length = 200)
     protected String info;          // 안내
 
     @Column(length = 200)
@@ -57,11 +61,20 @@ public class Place implements Serializable {
 
     protected boolean pet;              // 애완동물 가능 여부
 
-    protected boolean bookTour;         // 교과서 여부
+    protected boolean textbook;         // 교과서 여부
 
     @OneToOne(mappedBy = "place")
     private PlaceDetailTour placeDetailTour;
 
     @OneToOne(mappedBy = "place")
     private PlaceDetailCulture placeDetailCulture;
+
+    public PlaceThumbnail toPlaceThumbnail(){
+        return PlaceThumbnail.builder()
+            .id(this.id)
+            .name(this.name)
+            .address(this.address)
+            .imageURL(this.imageURL1)
+            .build();
+    }
 }

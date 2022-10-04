@@ -4,12 +4,14 @@ import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.domain.PlaceDetailCulture;
 import app.learningtrip.apiserver.place.domain.PlaceDetailTour;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @Getter @Setter @SuperBuilder
+@EqualsAndHashCode(callSuper=false) // 더미데이터 삭제 시 삭제 필요!
 public class PlaceDetailCultureResponse extends PlaceResponse {
 
   private String discount;
@@ -35,7 +37,7 @@ public class PlaceDetailCultureResponse extends PlaceResponse {
         .parking(placeDetailCulture.getPlace().getParking())
         .babyCarriage(placeDetailCulture.getPlace().isBabyCarriage())
         .pet(placeDetailCulture.getPlace().isPet())
-        .bookTour(placeDetailCulture.getPlace().isBookTour())
+        .textbook(placeDetailCulture.getPlace().isTextbook())
         .discount(placeDetailCulture.getDiscount())
         .parkingFee(placeDetailCulture.getParkingFee())
         .useFee(placeDetailCulture.getUseFee())

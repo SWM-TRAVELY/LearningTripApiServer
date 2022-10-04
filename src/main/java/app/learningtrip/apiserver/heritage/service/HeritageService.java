@@ -6,7 +6,6 @@ import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnail;
 import app.learningtrip.apiserver.heritage.repository.HeritageRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,10 @@ public class HeritageService {
 
         // heritage table에서 값 찾기
         Optional<Heritage> heritage = heritageRepository.findById(id);
-        heritage.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Heritage입니다."));
+        if (heritage.isPresent() == false) {
+            return getInfoDummy(id);
+        }
 
-        // HeritageResponse로 변환
         HeritageResponse heritageResponse = HeritageResponse.toResponse(heritage.get());
 
         return Optional.ofNullable(heritageResponse);
@@ -38,17 +38,41 @@ public class HeritageService {
      * place의 heritage 조회
      */
 
-    public Optional<List<HeritageThumbnail>> getHeritages(long id) {
+    public List<HeritageThumbnail> getHeritages(long id) {
 
         // heritage table에서 값 찾기
-        List<Heritage> heritageList = heritageRepository.findMatchingHeritages(id);
+        List<Heritage> heritageList = heritageRepository.findAllByPlaceId(id);
 
         List<HeritageThumbnail> heritageThumbnailList = new ArrayList<HeritageThumbnail>();
         for (Heritage heritage : heritageList) {
             heritageThumbnailList.add(HeritageThumbnail.toThumbnail(heritage));
         }
 
-        return Optional.ofNullable(heritageThumbnailList);
+        return heritageThumbnailList;
+    }
+
+    public List<HeritageThumbnail> getHeritagesDummy(long id) {
+        List<HeritageThumbnail> heritageThumbnailList = new ArrayList<>();
+
+        heritageThumbnailList.add(HeritageThumbnail.builder()
+            .id(1L)
+            .name("서울 구 서대문형무소")
+            .imageURL("http://www.cha.go.kr/unisearch/images/history_site/1624954.jpg")
+            .build());
+
+        heritageThumbnailList.add(HeritageThumbnail.builder()
+            .id(2L)
+            .name("경국사 팔상도")
+            .imageURL("http://www.cha.go.kr/unisearch/images/tangible_cult_prop/2594863.jpg")
+            .build());
+
+        heritageThumbnailList.add(HeritageThumbnail.builder()
+            .id(3L)
+            .name("흥천사명 동종")
+            .imageURL("http://www.cha.go.kr/unisearch/images/treasure/1614859.jpg")
+            .build());
+
+        return heritageThumbnailList;
     }
 
 
@@ -70,23 +94,5 @@ public class HeritageService {
             .category("성곽시설")
             .build();
         return Optional.ofNullable(heritageResponse);
-    }
-
-    public Optional<List<HeritageThumbnail>> getHeritagesDummy(long id) {
-        HeritageThumbnail heritageThumbnail_1 = HeritageThumbnail.builder()
-            .id(1L)
-            .name("문화재1")
-            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
-            .build();
-        HeritageThumbnail heritageThumbnail_2 = HeritageThumbnail.builder()
-            .id(2L)
-            .name("문화재2")
-            .imageURL("http://tong.visitkorea.or.kr/cms/resource/01/1945801_image2_1.jpg")
-            .build();
-        List<HeritageThumbnail> heritageThumbnailList = new ArrayList<HeritageThumbnail>();
-        heritageThumbnailList.add(heritageThumbnail_1);
-        heritageThumbnailList.add(heritageThumbnail_2);
-
-        return Optional.of(heritageThumbnailList);
     }
 }

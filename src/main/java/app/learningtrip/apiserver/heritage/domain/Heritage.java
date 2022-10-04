@@ -17,17 +17,19 @@ public class Heritage {
     @Column(unique = true, nullable = false)
     private Long id;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 100, nullable = false)
     private String name;            // 이름
 
     @Column(length = 12)
     private String type;            // 문화재 유형
 
+    @Column(length = 5000)
     private String description;     // 설명
 
+    @Column(length = 100)
     private String imageURL;        // 이미지
 
-    @Column(length = 110, nullable = false)
+    @Column(length = 200, nullable = false)
     private String address;         // 주소
 
     @Column(length = 20)

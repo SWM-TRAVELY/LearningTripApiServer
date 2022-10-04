@@ -7,9 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Getter
 @Configuration
-@PropertySource(value = {
-    "classpath:secret.properties",
-    "file:/operation.properties"}, ignoreResourceNotFound = true)
+@PropertySource(value = "classpath:secret.properties")
 public class SecretPropertiesConfiguration {
     @Value("spring.datasource.url")
     private String url;
@@ -20,7 +18,7 @@ public class SecretPropertiesConfiguration {
     @Value("spring.datasource.password")
     private String password;
 
-    @Value("spring.datasource.driver-class-name")
-    private String driverClassName;
+    @Value("spring.jpa.hibernate.ddl-auto")
+    private String ddlAuto;
 }
 
