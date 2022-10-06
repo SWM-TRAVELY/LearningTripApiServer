@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class PlaceSearchResult {
 
-    private long placeId;
+    private long id;
 
     private String name;
 
@@ -13,8 +13,8 @@ public class PlaceSearchResult {
 
     private String imageURL;
 
-    public PlaceSearchResult(long placeId, String name, String address, String imageURL) {
-        this.placeId = placeId;
+    public PlaceSearchResult(long id, String name, String address, String imageURL) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.imageURL = imageURL;
