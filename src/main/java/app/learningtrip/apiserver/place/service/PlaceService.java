@@ -143,6 +143,12 @@ public class PlaceService {
             Optional<Place> place = placeRepository.findById(Long.valueOf(index));
             place.orElseThrow(() -> new NoSuchObjectException("없는 관광지를 조회했습니다."));
 
+            // 사진 없으면 추천하지 않음
+            if (place.get().getImageURL1().equals("")) {
+                i--;
+                continue;
+            }
+
             PlaceThumbnail placeThumbnail = PlaceThumbnail.builder()
                 .id(place.get().getId())
                 .name(place.get().getName())
