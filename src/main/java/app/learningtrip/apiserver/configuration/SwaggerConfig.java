@@ -32,7 +32,8 @@ public class SwaggerConfig {
             .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.event.controller"))
             .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.heritage.controller"))
             .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.keyword.controller"))
-            .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.search.controller")))
+            .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.search.controller"))
+            .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.user.controller")))
         .paths(PathSelectors.any())
         .build()
         .useDefaultResponseMessages(false);
