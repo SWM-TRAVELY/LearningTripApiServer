@@ -1,4 +1,4 @@
-package app.learningtrip.apiserver.user.dto;
+package app.learningtrip.apiserver.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
