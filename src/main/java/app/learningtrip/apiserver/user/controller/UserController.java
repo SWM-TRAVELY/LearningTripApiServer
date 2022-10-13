@@ -5,6 +5,7 @@ import app.learningtrip.apiserver.user.dto.ReissueTokenResponse;
 import app.learningtrip.apiserver.user.dto.SignUpRequest;
 import app.learningtrip.apiserver.user.dto.StatusResponse;
 import app.learningtrip.apiserver.user.service.UserServiceImpl;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ public class UserController {
   private final UserServiceImpl userService;
 
   @PostMapping("user/signup")
-  public ResponseEntity<StatusResponse> signUp(@RequestBody SignUpRequest request){
+  public ResponseEntity<StatusResponse> signUp(@Valid @RequestBody SignUpRequest request){
     return ResponseEntity.ok().body(userService.signUp(request));
   }
 
@@ -33,6 +34,11 @@ public class UserController {
   @PostMapping("auth/reissue_token")
   public ResponseEntity<ReissueTokenResponse> reissueToken(@RequestBody ReissueTokenRequest request) {
     return ResponseEntity.ok().body(userService.reissueToken(request));
+  }
+
+  @GetMapping("/user")
+  public ResponseEntity<String> user(){
+    return ResponseEntity.ok().body("sieun");
   }
 
 }
