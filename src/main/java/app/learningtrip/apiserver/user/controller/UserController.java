@@ -1,15 +1,17 @@
 package app.learningtrip.apiserver.user.controller;
 
-import app.learningtrip.apiserver.user.dto.ReissueTokenRequest;
-import app.learningtrip.apiserver.user.dto.ReissueTokenResponse;
-import app.learningtrip.apiserver.user.dto.SignUpRequest;
-import app.learningtrip.apiserver.user.dto.StatusResponse;
+import app.learningtrip.apiserver.user.dto.request.ReissueTokenRequest;
+import app.learningtrip.apiserver.user.dto.request.TokenGen4TestRequest;
+import app.learningtrip.apiserver.user.dto.response.ReissueTokenResponse;
+import app.learningtrip.apiserver.user.dto.request.SignUpRequest;
+import app.learningtrip.apiserver.user.dto.response.StatusResponse;
 import app.learningtrip.apiserver.user.service.UserServiceImpl;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ResponseHeader;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,14 +33,8 @@ public class UserController {
     return ResponseEntity.ok().body(userService.checkUsernameDuplicated(username));
   }
 
-  @PostMapping("auth/reissue_token")
-  public ResponseEntity<ReissueTokenResponse> reissueToken(@RequestBody ReissueTokenRequest request) {
-    return ResponseEntity.ok().body(userService.reissueToken(request));
-  }
-
   @GetMapping("/user")
   public ResponseEntity<String> user(){
     return ResponseEntity.ok().body("sieun");
   }
-
 }

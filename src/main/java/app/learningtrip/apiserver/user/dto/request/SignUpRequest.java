@@ -1,10 +1,9 @@
-package app.learningtrip.apiserver.user.dto;
+package app.learningtrip.apiserver.user.dto.request;
 
 import app.learningtrip.apiserver.user.domain.User;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;

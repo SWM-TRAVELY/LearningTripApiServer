@@ -1,6 +1,8 @@
 package app.learningtrip.apiserver.configuration;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +11,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -27,17 +30,23 @@ public class SwaggerConfig {
         .consumes(getConsumeContentTypes())
         .produces(getProduceContentTypes())
         .apiInfo(swaggerInfo()).select()
-        .apis(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.place.controller")
+        .apis(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.user.controller")
+            .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.place.controller"))
             .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.course.controller"))
             .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.event.controller"))
             .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.heritage.controller"))
             .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.keyword.controller"))
-            .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.search.controller"))
-            .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.user.controller")))
+            .or(RequestHandlerSelectors.basePackage("app.learningtrip.apiserver.search.controller")))
         .paths(PathSelectors.any())
         .build()
+        .securitySchemes(List.of(apiKey()))
         .useDefaultResponseMessages(false);
   }
+
+  private ApiKey apiKey() {
+    return new ApiKey("Bearer +accessToken", "Authorization", "header");
+  }
+
 
   private Set<String> getConsumeContentTypes() {
     Set<String> consumes = new HashSet<>();
@@ -49,6 +58,7 @@ public class SwaggerConfig {
   private Set<String> getProduceContentTypes() {
     Set<String> produces = new HashSet<>();
     produces.add("application/json;charset=UTF-8");
+    produces.add("application/text;charset=UTF-8");
     return produces;
   }
 }
