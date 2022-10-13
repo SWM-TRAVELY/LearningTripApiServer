@@ -2,6 +2,7 @@ package app.learningtrip.apiserver.course.service;
 
 import app.learningtrip.apiserver.course.domain.Course;
 import app.learningtrip.apiserver.course.domain.CoursePlace;
+import app.learningtrip.apiserver.course.dto.request.CourseDto;
 import app.learningtrip.apiserver.course.dto.response.CourseDay;
 import app.learningtrip.apiserver.course.dto.response.CoursePlaceResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseResponse;
@@ -9,10 +10,12 @@ import app.learningtrip.apiserver.course.dto.response.CourseThumbnail;
 import app.learningtrip.apiserver.course.repository.CoursePlaceRepository;
 import app.learningtrip.apiserver.course.repository.CourseRepository;
 import app.learningtrip.apiserver.place.domain.Place;
+import app.learningtrip.apiserver.place.repository.PlaceRepository;
 import app.learningtrip.apiserver.place.service.PlaceService;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final CoursePlaceRepository coursePlaceRepository;
     private final PlaceService placeService;
+    private final PlaceRepository placeRepository;
 
     /**
      * 코스 정보 조회
@@ -94,6 +98,49 @@ public class CourseService {
 
         return courseThumbnailList;
     }
+
+    /**
+     * 코스 생성
+     */
+    public void setCourse(CourseDto courseDto) {
+
+        // Course 탐색, 없으면 생성
+        Optional<Course> course = courseRepository.findById(courseDto.getId());
+
+        if (!course.isPresent()) {
+            course = Optional.ofNullable(courseRepository.save(Course.builder()
+                .name(courseDto.getName())
+                .user_id(courseDto.getUser_id())
+                .build()));
+        }
+        else {
+            course.get().setName(courseDto.getName());
+            courseRepository.save(course.get());
+        }
+
+        // Course-Place에서 현재 course 데이터 삭제
+        coursePlaceRepository.deleteAllByCourseId(course.get().getId());
+
+        List<Integer> placeIdList = courseDto.getPlaceList();
+        for (int placeNum = 0; placeNum < placeIdList.size(); placeNum++) {
+            Optional<Place> place = placeRepository.findById(Long.valueOf(placeIdList.get(placeNum)));
+            place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
+
+            coursePlaceRepository.save(CoursePlace.builder()
+                    .day(1)
+                    .sequence(placeNum+1)
+                    .course(course.get())
+                    .place(place.get())
+                    .build());
+        }
+    }
+
+    /**
+     * 코스 수정
+     */
+    public void modifyCourse(CourseDto courseDto) {
+    }
+
 
     /**
      * 추천 코스

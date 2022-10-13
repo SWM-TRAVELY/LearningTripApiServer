@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CoursePlaceRepository extends JpaRepository<CoursePlace, Long> {
     List<CoursePlace> findAllByCourseIdOrderByDayAscSequenceAsc(Long course_id);
+
+    void deleteAllByCourseId(Long course_id);
 }
