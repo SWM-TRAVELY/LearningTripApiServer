@@ -1,9 +1,13 @@
 package app.learningtrip.apiserver.user.service;
 
+import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
 import app.learningtrip.apiserver.user.domain.User;
 import app.learningtrip.apiserver.user.dto.request.SignUpRequest;
+import app.learningtrip.apiserver.user.dto.request.UpdateUserInfoRequest;
 import app.learningtrip.apiserver.user.dto.response.StatusResponse;
+import app.learningtrip.apiserver.user.dto.response.UserInfoResponse;
 import app.learningtrip.apiserver.user.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,5 +53,57 @@ public class UserServiceImpl implements UserService{
       return new StatusResponse(false, "UsernameAlreadyExist");
     }
     return new StatusResponse(true, "UsernameNotExist");
+  }
+
+  /**
+   * 유저 정보 조회
+   * @param authUser PrincipalDetails 객체
+   * @return 유저 정보
+   */
+  public UserInfoResponse getUserInfo(PrincipalDetails authUser){
+    User user = userRepository.findByUsername(authUser.getUser().getUsername()).orElseThrow(() -> {
+//      400 or 401 에러로 교체 할 것
+      throw new RuntimeException();
+    });
+
+    return user.toUserInfo();
+  }
+
+  /**
+   * 유저 정보 수정
+   * @param request keys (바꿀 항목) 배열, values (바꿀 내용) 배열
+   * @param authUser PrincipalDetails 객체
+   * @return 수정한 유저 정보
+   */
+  public UserInfoResponse updateUserInfo(UpdateUserInfoRequest request, PrincipalDetails authUser){
+    User user = userRepository.findByUsername(authUser.getUsername()).orElseThrow(() -> {
+//      Todo: 400 or 401로 교체 할 것
+      throw new RuntimeException();
+    });
+
+    List<String> keys = request.getKeys();
+    List<String> values = request.getValues();
+
+    if(keys.size() != values.size()){
+//      Todo: 400 bad request로 교체 할 것
+      throw new RuntimeException();
+    }
+
+    for(int i = 0; i<keys.size(); i++){
+      switch (keys.get(i)) {
+        case "nickname" -> user.setNickname(values.get(i));
+        case "image" -> user.setImage(values.get(i));
+        case "phone" -> user.setPhone(values.get(i));
+        default ->
+//        Todo: 400 bad request로 교체하던지 requestDto에서 값 검증 할것
+            throw new RuntimeException();
+      }
+    }
+
+    userRepository.save(user);
+
+    return userRepository.findByUsername(user.getUsername()).orElseThrow(() -> {
+      throw new RuntimeException();
+    }).toUserInfo();
   }
 }

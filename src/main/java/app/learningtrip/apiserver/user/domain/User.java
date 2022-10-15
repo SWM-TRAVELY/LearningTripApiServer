@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.user.domain;
 
+import app.learningtrip.apiserver.user.dto.response.UserInfoResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,11 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
@@ -66,6 +64,10 @@ public class User {
     this.email = email;
     this.nickname = nickname;
     this.loginProvider = loginProvider;
+  }
+
+  public UserInfoResponse toUserInfo(){
+    return new UserInfoResponse(this.email, this.nickname, this.image, this.phone, this.loginProvider);
   }
 
   public List<String> roles() {
