@@ -10,7 +10,7 @@ public class CourseDto {
 
     private String name;
 
-    private String user_id;
+    private Long user_id;
 
     private List<Integer> placeList;
 }

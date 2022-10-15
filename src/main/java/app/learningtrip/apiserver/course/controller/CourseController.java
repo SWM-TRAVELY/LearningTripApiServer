@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.course.controller;
 
+import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
 import app.learningtrip.apiserver.course.domain.CoursePlace;
 import app.learningtrip.apiserver.course.dto.request.CourseDto;
 import app.learningtrip.apiserver.course.dto.response.CourseDay;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,8 +43,8 @@ public class CourseController {
     }
 
     @GetMapping("/course/list")
-    public ResponseEntity<List<CourseThumbnail>> courseList() {
-        List<CourseThumbnail> courseThumbnailList = courseService.getList();
+    public ResponseEntity<List<CourseThumbnail>> courseList(@AuthenticationPrincipal PrincipalDetails user) {
+        List<CourseThumbnail> courseThumbnailList = courseService.getList(user.getUser());
 
         return ResponseEntity.ok().body(courseThumbnailList);
     }

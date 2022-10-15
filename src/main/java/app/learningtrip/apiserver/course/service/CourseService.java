@@ -12,6 +12,8 @@ import app.learningtrip.apiserver.course.repository.CourseRepository;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
 import app.learningtrip.apiserver.place.service.PlaceService;
+import app.learningtrip.apiserver.user.domain.User;
+import app.learningtrip.apiserver.user.repository.UserRepository;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class CourseService {
     private final CoursePlaceRepository coursePlaceRepository;
     private final PlaceService placeService;
     private final PlaceRepository placeRepository;
+    private final UserRepository userRepository;
 
     /**
      * 코스 정보 조회
@@ -74,12 +77,12 @@ public class CourseService {
     /**
      * 코스 리스트 조회
      */
-    public List<CourseThumbnail> getList() {
+    public List<CourseThumbnail> getList(User user) {
 
         List<CourseThumbnail> courseThumbnailList = new ArrayList<CourseThumbnail>();
 
         // course table 조회
-        List<Course> courseList = courseRepository.findAll();
+        List<Course> courseList = courseRepository.findAllByUserId(user.getId());
         if (courseList.size() == 0) {
             return courseThumbnailList;
         }
@@ -103,6 +106,7 @@ public class CourseService {
      * 코스 생성
      */
     public void setCourse(CourseDto courseDto) {
+        Optional<User> user = userRepository.findById(courseDto.getUser_id());
 
         // Course 탐색, 없으면 생성
         Optional<Course> course = courseRepository.findById(courseDto.getId());
@@ -110,7 +114,7 @@ public class CourseService {
         if (!course.isPresent()) {
             course = Optional.ofNullable(courseRepository.save(Course.builder()
                 .name(courseDto.getName())
-                .user_id(courseDto.getUser_id())
+                .user(user.get())
                 .build()));
         }
         else {
@@ -216,9 +220,11 @@ public class CourseService {
             name = Integer.toString(days-1)+"박 "+Integer.toString(days)+"일 "+region+" 여행 "+Integer.toString(num+1);
         }
 
+        Optional<User> user = userRepository.findById(1L);
+
         Course course = courseRepository.save(Course.builder()
             .name(name)
-            .user_id("admin@soma.com")
+            .user(user.get())
             .build());
 
         makePlaces(region, days, course);
