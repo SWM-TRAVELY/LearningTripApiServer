@@ -19,9 +19,7 @@ public class AuthController {
 
   private final AuthService authService;
 
-  @ApiOperation(
-      value = "테스트용 토큰 발급"
-      , notes = "원하는 유저의 토큰을 발급 (개발 테스트용)")
+  @ApiOperation(value = "테스트용 토큰 발급", notes = "원하는 유저의 토큰을 발급 (개발 테스트용)")
   @PostMapping("generate_token")
   public ResponseEntity<String> generateToken4Test(@RequestBody TokenGen4TestRequest request) {
     return ResponseEntity.ok().body(authService.tokenGen4Test(request));
