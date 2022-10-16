@@ -57,6 +57,9 @@ public class SecurityConfig {
     http.authorizeRequests()
         .antMatchers("/user/signup").permitAll()
         .antMatchers("/user/**").hasRole("USER")
+        .antMatchers("/course/list").hasRole("USER")
+        .antMatchers("/review").hasRole("USER")
+        .antMatchers("/helpful").hasRole("USER")
         .anyRequest().permitAll();
 
     return http.build();
