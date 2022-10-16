@@ -1,35 +1,52 @@
-package app.learningtrip.apiserver.course.domain;
+package app.learningtrip.apiserver.review.domain;
 
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.user.domain.User;
-import java.util.List;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Entity @Table(name = "course")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @Builder
-public class Course {
+@Entity
+@Table(name = "review")
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
+public class Review {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
 
-    private String name;
+    private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    private Date date;
+
+    private Integer rating;
+
+    private String imageURL1;
+
+    private String imageURL2;
+
+    private String imageURL3;
+
+    @ManyToOne
+    @JoinColumn(name = "place_id")
+    public Place place;
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     public User user;
 }

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private Long id;
 
   @Column(unique = true)
   private String username;
@@ -35,6 +35,8 @@ public class User {
   private String email;
 
   private String nickname;
+
+  private Integer experiencePoint;
 
   @Column(name = "login_provider")
   private String loginProvider;

@@ -1,35 +1,34 @@
-package app.learningtrip.apiserver.course.domain;
+package app.learningtrip.apiserver.notice.domain;
 
-import app.learningtrip.apiserver.place.domain.Place;
-import app.learningtrip.apiserver.user.domain.User;
-import java.util.List;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-@Entity @Table(name = "course")
+@Entity @Table(name = "notice")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @Builder
-public class Course {
+public class Notice {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    public User user;
+    private String content;
+
+    private Date date;
 }

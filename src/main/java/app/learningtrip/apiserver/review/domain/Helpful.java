@@ -1,8 +1,7 @@
-package app.learningtrip.apiserver.course.domain;
+package app.learningtrip.apiserver.review.domain;
 
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.user.domain.User;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,18 +17,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity @Table(name = "course")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @Builder
-public class Course {
+@Entity
+@Table(name = "helpful")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class Helpful {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
 
-    private String name;
+    private boolean helpful;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id")
+    public Review review;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public User user;
+
 }
