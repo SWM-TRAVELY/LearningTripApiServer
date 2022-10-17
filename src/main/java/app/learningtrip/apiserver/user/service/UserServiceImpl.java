@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.user.service;
 
+import app.learningtrip.apiserver.common.docs.StatusCode;
 import app.learningtrip.apiserver.common.dto.ResponseTemplate;
 import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
@@ -33,8 +34,8 @@ public class UserServiceImpl implements UserService{
   @Override
   public ResponseTemplate<TokenResponse> signUp(SignUpRequest request) {
 
-    if(checkUsernameDuplicated(request.getUsername()).getStatus() == 400){
-      return new ResponseTemplate<>(400, "UsernameAlreadyExist", null);
+    if(checkUsernameDuplicated(request.getUsername()).getStatus() == StatusCode.EMAIL_DUPLICATED){
+      return new ResponseTemplate<>(StatusCode.EMAIL_DUPLICATED, "UsernameAlreadyExist", null);
     }
 
     request.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService{
         jwtService.createJwt("refresh_token", user.getUsername()));
 
 
-    return new ResponseTemplate<>(200, "SignUpSuccess", token);
+    return new ResponseTemplate<>(StatusCode.OK, "SignUpSuccess", token);
   }
 
   /**
@@ -60,9 +61,9 @@ public class UserServiceImpl implements UserService{
   @Override
   public ResponseTemplate<Object> checkUsernameDuplicated(String username) {
     if(userRepository.findByUsername(username).isPresent()){
-      return new ResponseTemplate<>(400, "UsernameAlreadyExist", null);
+      return new ResponseTemplate<>(StatusCode.EMAIL_DUPLICATED, "UsernameAlreadyExist", null);
     }
-    return new ResponseTemplate<>(200, "UsernameNotExist", null);
+    return new ResponseTemplate<>(StatusCode.OK, "UsernameNotExist", null);
   }
 
   /**
