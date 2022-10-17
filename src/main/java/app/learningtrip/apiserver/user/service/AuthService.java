@@ -1,12 +1,16 @@
 package app.learningtrip.apiserver.user.service;
 
+import app.learningtrip.apiserver.common.dto.ResponseTemplate;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtProperties;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
-import app.learningtrip.apiserver.user.dto.request.ReissueTokenRequest;
+import app.learningtrip.apiserver.user.domain.User;
+import app.learningtrip.apiserver.user.dto.request.RefreshTokenRequest;
 import app.learningtrip.apiserver.user.dto.request.TokenGen4TestRequest;
 import app.learningtrip.apiserver.user.dto.response.ReissueTokenResponse;
+import app.learningtrip.apiserver.user.dto.response.TokenResponse;
 import app.learningtrip.apiserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -17,7 +21,7 @@ public class AuthService {
 
   private final UserRepository userRepository;
 
-  public ReissueTokenResponse reissueToken(ReissueTokenRequest request) {
+  public ResponseTemplate<ReissueTokenResponse> reissueToken(RefreshTokenRequest request) {
     String refreshToken = request.getRefresh_token();
     String username = jwtService.checkJwtValidation(refreshToken);
 
@@ -26,7 +30,8 @@ public class AuthService {
 //      RefreshToken 위조 익셉션으로 교체할것
       throw new RuntimeException();
     } else {
-      return new ReissueTokenResponse(jwtService.createJwt(JwtProperties.TOKEN_PREFIX+"access_token", username));
+      return new ResponseTemplate<>(200, "ReissueRefreshTokenSuccess",
+          new ReissueTokenResponse(jwtService.createJwt(JwtProperties.TOKEN_PREFIX+"access_token", username)));
     }
   }
 
@@ -41,5 +46,16 @@ public class AuthService {
     }
 
     return JwtProperties.TOKEN_PREFIX + jwtService.createJwt("access_token", request.getUsername());
+  }
+
+  public ResponseTemplate<TokenResponse> autoLogin(RefreshTokenRequest request) {
+    String username = jwtService.checkJwtValidation(request.getRefresh_token());
+
+    User user = userRepository.findByUsername(username).orElseThrow(() -> {throw new RuntimeException();});
+
+    return new ResponseTemplate<>(200, "AutoLoginSuccess", new TokenResponse(
+        jwtService.createJwt("access_token",user.getUsername()),
+        jwtService.createJwt("refresh_token", user.getUsername())
+    ));
   }
 }
