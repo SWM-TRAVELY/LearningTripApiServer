@@ -1,9 +1,11 @@
 package app.learningtrip.apiserver.user.controller;
 
+import app.learningtrip.apiserver.common.dto.ResponseTemplate;
 import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
 import app.learningtrip.apiserver.user.dto.request.SignUpRequest;
 import app.learningtrip.apiserver.user.dto.request.UpdateUserInfoRequest;
 import app.learningtrip.apiserver.user.dto.response.StatusResponse;
+import app.learningtrip.apiserver.user.dto.response.TokenResponse;
 import app.learningtrip.apiserver.user.dto.response.UserInfoResponse;
 import app.learningtrip.apiserver.user.service.UserServiceImpl;
 import javax.validation.Valid;
@@ -28,12 +30,12 @@ public class UserController {
   private final UserServiceImpl userService;
 
   @PostMapping("signup")
-  public ResponseEntity<StatusResponse> signUp(@Valid @RequestBody SignUpRequest request){
+  public ResponseEntity<ResponseTemplate<TokenResponse>> signUp(@Valid @RequestBody SignUpRequest request){
     return ResponseEntity.ok().body(userService.signUp(request));
   }
 
   @GetMapping("check_duplicated")
-  public ResponseEntity<StatusResponse> checkUsernameDuplicated(@RequestParam(name = "username") String username){
+  public ResponseEntity<ResponseTemplate<Object>> checkUsernameDuplicated(@RequestParam(name = "username") String username){
     return ResponseEntity.ok().body(userService.checkUsernameDuplicated(username));
   }
 
@@ -47,16 +49,5 @@ public class UserController {
   public ResponseEntity<UserInfoResponse> updateUserInfo(@RequestBody UpdateUserInfoRequest request,
       @AuthenticationPrincipal PrincipalDetails user) {
     return ResponseEntity.ok().body(userService.updateUserInfo(request, user));
-  }
-
-  @AllArgsConstructor
-  @Getter
-  public static class Test {
-    private String msg;
-  }
-
-  @GetMapping("test")
-  public ResponseEntity<Test> test(){
-    return ResponseEntity.ok().body(new Test("plz"));
   }
 }

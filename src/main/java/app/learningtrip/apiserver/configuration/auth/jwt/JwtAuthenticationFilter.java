@@ -70,8 +70,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //    Response 객체 헤더/바디 설정
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
-    response.getWriter()
-        .write(jwtService.createBodyWithTokens(accessToken,refreshToken));
+    response.getWriter().write(jwtService.createBodyWithTokens(accessToken,refreshToken));
 
   }
 

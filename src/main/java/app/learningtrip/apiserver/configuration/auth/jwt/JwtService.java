@@ -1,12 +1,20 @@
 package app.learningtrip.apiserver.configuration.auth.jwt;
 
+import app.learningtrip.apiserver.common.dto.ResponseTemplate;
+import app.learningtrip.apiserver.user.dto.response.TokenResponse;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.google.gson.Gson;
 import java.util.Date;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
 @Component
 public class JwtService {
+
+  private final Gson gson;
+
   /**
    * JWT 생성
    * @param tokenType 토큰 종류 (access_token or refresh_token)
@@ -47,8 +55,10 @@ public class JwtService {
    * @param refreshToken refreshToken
    * @return accessToken + refreshToken response body
    */
+
   public String createBodyWithTokens(String accessToken, String refreshToken) {
-    return "\"access_token\":" + JwtProperties.TOKEN_PREFIX + accessToken + ","
-        + "\"refresh_token\":" + JwtProperties.TOKEN_PREFIX + refreshToken;
+    return gson.toJson(new ResponseTemplate<>(200, "LoginSuccess",
+        new TokenResponse(JwtProperties.TOKEN_PREFIX + accessToken,
+        JwtProperties.TOKEN_PREFIX + refreshToken)));
   }
 }

@@ -1,10 +1,13 @@
 package app.learningtrip.apiserver.user.service;
 
+import app.learningtrip.apiserver.common.dto.ResponseTemplate;
 import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
+import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
 import app.learningtrip.apiserver.user.domain.User;
 import app.learningtrip.apiserver.user.dto.request.SignUpRequest;
 import app.learningtrip.apiserver.user.dto.request.UpdateUserInfoRequest;
 import app.learningtrip.apiserver.user.dto.response.StatusResponse;
+import app.learningtrip.apiserver.user.dto.response.TokenResponse;
 import app.learningtrip.apiserver.user.dto.response.UserInfoResponse;
 import app.learningtrip.apiserver.user.repository.UserRepository;
 import java.util.List;
@@ -20,16 +23,18 @@ public class UserServiceImpl implements UserService{
 
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+  private final JwtService jwtService;
+
   /**
    * 회원가입
    * @param request 회원가입에 필요한 정보
    * @return 회원가입에 대한 StatusResponse
    */
   @Override
-  public StatusResponse signUp(SignUpRequest request) {
+  public ResponseTemplate<TokenResponse> signUp(SignUpRequest request) {
 
-    if(!checkUsernameDuplicated(request.getUsername()).getStatus()){
-      return new StatusResponse(false, "UsernameAlreadyExist");
+    if(checkUsernameDuplicated(request.getUsername()).getStatus() == 400){
+      return new ResponseTemplate<>(400, "UsernameAlreadyExist", null);
     }
 
     request.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
@@ -39,20 +44,25 @@ public class UserServiceImpl implements UserService{
 
     userRepository.save(user);
 
-    return new StatusResponse(true, "SignUpSuccess");
+    TokenResponse token = new TokenResponse(jwtService.createJwt("access_token", user.getUsername()),
+        jwtService.createJwt("refresh_token", user.getUsername()));
+
+
+    return new ResponseTemplate<>(200, "SignUpSuccess", token);
   }
 
   /**
    * Username 중복 검사
+   *
    * @param username username
    * @return 중복 검사에 대한 StatusResponse
    */
   @Override
-  public StatusResponse checkUsernameDuplicated(String username) {
+  public ResponseTemplate<Object> checkUsernameDuplicated(String username) {
     if(userRepository.findByUsername(username).isPresent()){
-      return new StatusResponse(false, "UsernameAlreadyExist");
+      return new ResponseTemplate<>(400, "UsernameAlreadyExist", null);
     }
-    return new StatusResponse(true, "UsernameNotExist");
+    return new ResponseTemplate<>(200, "UsernameNotExist", null);
   }
 
   /**

@@ -55,6 +55,7 @@ public class SecurityConfig {
 
     // URL과 ROLE에 따른 API 접근 권한 부여
     http.authorizeRequests()
+        .antMatchers("/user/check_duplicated").permitAll()
         .antMatchers("/user/signup").permitAll()
         .antMatchers("/user/**").hasRole("USER")
         .antMatchers("/course/list").hasRole("USER")
