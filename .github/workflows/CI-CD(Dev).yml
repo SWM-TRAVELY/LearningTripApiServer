@@ -50,7 +50,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: "build/libs/api-server-0.0.1-SNAPSHOT.jar"
-          target: "/home/github-deploy/development"
+          target: "~/development"
           strip_components: 2
 
       - name: Run Server
