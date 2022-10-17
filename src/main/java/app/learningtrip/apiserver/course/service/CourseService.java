@@ -2,6 +2,7 @@ package app.learningtrip.apiserver.course.service;
 
 import app.learningtrip.apiserver.course.domain.Course;
 import app.learningtrip.apiserver.course.domain.CoursePlace;
+import app.learningtrip.apiserver.course.dto.request.CourseDto;
 import app.learningtrip.apiserver.course.dto.response.CourseDay;
 import app.learningtrip.apiserver.course.dto.response.CoursePlaceResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseResponse;
@@ -9,10 +10,14 @@ import app.learningtrip.apiserver.course.dto.response.CourseThumbnail;
 import app.learningtrip.apiserver.course.repository.CoursePlaceRepository;
 import app.learningtrip.apiserver.course.repository.CourseRepository;
 import app.learningtrip.apiserver.place.domain.Place;
+import app.learningtrip.apiserver.place.repository.PlaceRepository;
 import app.learningtrip.apiserver.place.service.PlaceService;
+import app.learningtrip.apiserver.user.domain.User;
+import app.learningtrip.apiserver.user.repository.UserRepository;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +32,8 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final CoursePlaceRepository coursePlaceRepository;
     private final PlaceService placeService;
+    private final PlaceRepository placeRepository;
+    private final UserRepository userRepository;
 
     /**
      * 코스 정보 조회
@@ -70,12 +77,12 @@ public class CourseService {
     /**
      * 코스 리스트 조회
      */
-    public List<CourseThumbnail> getList() {
+    public List<CourseThumbnail> getList(User user) {
 
         List<CourseThumbnail> courseThumbnailList = new ArrayList<CourseThumbnail>();
 
         // course table 조회
-        List<Course> courseList = courseRepository.findAll();
+        List<Course> courseList = courseRepository.findAllByUserId(user.getId());
         if (courseList.size() == 0) {
             return courseThumbnailList;
         }
@@ -94,6 +101,50 @@ public class CourseService {
 
         return courseThumbnailList;
     }
+
+    /**
+     * 코스 생성
+     */
+    public void setCourse(CourseDto courseDto) {
+        Optional<User> user = userRepository.findById(courseDto.getUser_id());
+
+        // Course 탐색, 없으면 생성
+        Optional<Course> course = courseRepository.findById(courseDto.getId());
+
+        if (!course.isPresent()) {
+            course = Optional.ofNullable(courseRepository.save(Course.builder()
+                .name(courseDto.getName())
+                .user(user.get())
+                .build()));
+        }
+        else {
+            course.get().setName(courseDto.getName());
+            courseRepository.save(course.get());
+        }
+
+        // Course-Place에서 현재 course 데이터 삭제
+        coursePlaceRepository.deleteAllByCourseId(course.get().getId());
+
+        List<Integer> placeIdList = courseDto.getPlaceList();
+        for (int placeNum = 0; placeNum < placeIdList.size(); placeNum++) {
+            Optional<Place> place = placeRepository.findById(Long.valueOf(placeIdList.get(placeNum)));
+            place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
+
+            coursePlaceRepository.save(CoursePlace.builder()
+                    .day(1)
+                    .sequence(placeNum+1)
+                    .course(course.get())
+                    .place(place.get())
+                    .build());
+        }
+    }
+
+    /**
+     * 코스 수정
+     */
+    public void modifyCourse(CourseDto courseDto) {
+    }
+
 
     /**
      * 추천 코스
@@ -169,9 +220,11 @@ public class CourseService {
             name = Integer.toString(days-1)+"박 "+Integer.toString(days)+"일 "+region+" 여행 "+Integer.toString(num+1);
         }
 
+        Optional<User> user = userRepository.findById(1L);
+
         Course course = courseRepository.save(Course.builder()
             .name(name)
-            .user_id("admin@soma.com")
+            .user(user.get())
             .build());
 
         makePlaces(region, days, course);

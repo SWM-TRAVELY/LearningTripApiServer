@@ -22,8 +22,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
   @Override
   public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
     OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService = new DefaultOAuth2UserService();
-    System.out.println(oAuth2UserRequest.getClientRegistration().toString());
-    System.out.println(oAuth2UserRequest.getAccessToken().toString());
 
     OAuth2User oAuth2User = oAuth2UserService.loadUser(oAuth2UserRequest);
 

@@ -60,7 +60,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 //        시큐리티 세션에 접근하여 강제로 인증 객체 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        chain.doFilter(request, response);
+//        chain.doFilter(request, response);
       }
     } catch (SignatureVerificationException | TokenExpiredException | InvalidClaimException e) {
       response.setStatus(401);
