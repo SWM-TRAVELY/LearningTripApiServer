@@ -38,7 +38,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            sudo ./development/kill.sh
+            cd development
+            sudo ./kill.sh
             sudo rm `ls | grep .jar | awk '{print $1}'`
             exit
 
