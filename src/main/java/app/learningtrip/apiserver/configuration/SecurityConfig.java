@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.configuration;
 
+import app.learningtrip.apiserver.configuration.auth.CustomAuthenticationEntryPoint;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtAuthenticationFilter;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtAuthorizationFilter;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
@@ -46,6 +47,8 @@ public class SecurityConfig {
         .httpBasic().disable(); // httpBasic: id/pw를 base64로 인코딩해서 authorization 헤더에 넣어서 http 통신
 
     http.apply(new CustomDsl()); //커스텀한 필터(corsFilter, 인증/인가 필터) 등록
+
+    http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
     http
         .oauth2Login().userInfoEndpoint().userService(customOAuth2UserService)
