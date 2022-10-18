@@ -47,7 +47,7 @@ public class User {
   private Boolean signUpStatus;
 
   public User(String username, String password, String role, String phone, String image,
-      String email, String nickname, String loginProvider, Boolean signUpStatus) {
+      String email, String nickname, String loginProvider, Boolean signUpStatus, String level, int exp) {
     this.username = username;
     this.password = password;
     this.role = role;
@@ -57,9 +57,10 @@ public class User {
     this.nickname = nickname;
     this.loginProvider = loginProvider;
     this.signUpStatus = signUpStatus;
+    this.level = level;
+    this.experiencePoint = exp;
   }
 
-  @Column(nullable = true)
   private String refreshToken;
 
   public User(String username, String image, String email, String nickname, String loginProvider) {
@@ -71,7 +72,8 @@ public class User {
   }
 
   public UserInfoResponse toUserInfo(){
-    return new UserInfoResponse(this.email, this.nickname, this.image, this.phone, this.loginProvider);
+    return new UserInfoResponse(this.email, this.nickname, this.image, this.phone,
+        this.loginProvider, this.level, this.experiencePoint);
   }
 
   public List<String> roles() {

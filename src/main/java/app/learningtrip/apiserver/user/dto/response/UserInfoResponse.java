@@ -11,4 +11,6 @@ public class UserInfoResponse {
   private String image;
   private String phone;
   private String loginProvider;
+  private String level;
+  private int exp;
 }

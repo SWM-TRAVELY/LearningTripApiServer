@@ -31,8 +31,9 @@ public class SignUpRequest {
   @Length(min = 2, max = 12)
   private String nickname;
 
-   public User toEntity(String email, String role, String image, String loginProvider, Boolean signUpStatus){
+   public User toEntity(String email, String role, String image, String loginProvider,
+       Boolean signUpStatus, String level, int exp){
      return new User(this.username, this.password, role, this.phone, image, email,
-         this.nickname, loginProvider, signUpStatus);
+         this.nickname, loginProvider, signUpStatus, level, exp);
    }
 }
