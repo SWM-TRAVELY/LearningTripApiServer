@@ -29,7 +29,12 @@ public class SwaggerConfig{
 
   private ApiInfo swaggerInfo() {
     return new ApiInfoBuilder().title("러닝트립 API 명세")
-        .description("Learning Trip").build();
+        .description("""
+            401(Unauthorized) 관련)
+            인가(권한)이 필요한 요청에 토큰이 없는 경우 -> message: "NoTokenException"
+            토큰이 만료 된 경우 -> message: "TokenExpiredException"
+            """)
+        .build();
   }
 
   @Bean

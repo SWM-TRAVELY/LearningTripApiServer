@@ -38,34 +38,33 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     String token = request.getHeader("Authorization");
 
     if (token == null || !token.startsWith(JwtProperties.TOKEN_PREFIX)) {
-      chain.doFilter(request, response);
-      return;
-    }
+//      xh
+      request.setAttribute("exception","NoTokenException");
+    } else {
 
-    try {
-//      JWT 토큰 유효성 검증과 동시에 username을 복호화 한다
-      String username = jwtService.checkJwtValidation(token);
+      try {
+//        JWT 토큰 유효성 검증과 동시에 username을 복호화 한다
+        String username = jwtService.checkJwtValidation(token);
 
-      if (username != null) {
+        if (username != null) {
 //        토큰에서 복호화한 username으로 DB에서 User 조회해서 PrincipalDetails 객체 생성
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new InvalidClaimException(null));
-        PrincipalDetails principalDetails = new PrincipalDetails(user);
+          User user = userRepository.findByUsername(username)
+              .orElseThrow(() -> new InvalidClaimException(null));
+          PrincipalDetails principalDetails = new PrincipalDetails(user);
 
 //        PrincipalDetails 객체와 권한으로 인증 객체 생성
 //        +) 위에서 토큰인증 했으므로 비밀번호 받아서 인증할 필요 없고 권한 처리 목적임
-        Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails,
-            null, principalDetails.getAuthorities());
+          Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails,
+              null, principalDetails.getAuthorities());
 
 //        시큐리티 세션에 접근하여 강제로 인증 객체 저장
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+          SecurityContextHolder.getContext().setAuthentication(authentication);
 
 //        chain.doFilter(request, response);
+        }
+      } catch (SignatureVerificationException | TokenExpiredException | InvalidClaimException e) {
+        request.setAttribute("exception", e.getClass().getSimpleName());
       }
-    } catch (SignatureVerificationException | TokenExpiredException | InvalidClaimException e) {
-      response.setStatus(401);
-    } finally {
-      response.setStatus(400);
     }
     super.doFilterInternal(request, response, chain);
   }
