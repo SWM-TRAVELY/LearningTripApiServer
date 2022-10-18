@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.user.service;
 
+import app.learningtrip.apiserver.common.docs.StatusCode;
 import app.learningtrip.apiserver.common.dto.ResponseTemplate;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtProperties;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
@@ -10,7 +11,6 @@ import app.learningtrip.apiserver.user.dto.response.ReissueTokenResponse;
 import app.learningtrip.apiserver.user.dto.response.TokenResponse;
 import app.learningtrip.apiserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class AuthService {
 //      RefreshToken 위조 익셉션으로 교체할것
       throw new RuntimeException();
     } else {
-      return new ResponseTemplate<>(200, "ReissueRefreshTokenSuccess",
+      return new ResponseTemplate<>(StatusCode.OK, "ReissueRefreshTokenSuccess",
           new ReissueTokenResponse(jwtService.createJwt(JwtProperties.TOKEN_PREFIX+"access_token", username)));
     }
   }
@@ -53,7 +53,7 @@ public class AuthService {
 
     User user = userRepository.findByUsername(username).orElseThrow(() -> {throw new RuntimeException();});
 
-    return new ResponseTemplate<>(200, "AutoLoginSuccess", new TokenResponse(
+    return new ResponseTemplate<>(StatusCode.OK, "AutoLoginSuccess", new TokenResponse(
         jwtService.createJwt("access_token",user.getUsername()),
         jwtService.createJwt("refresh_token", user.getUsername())
     ));

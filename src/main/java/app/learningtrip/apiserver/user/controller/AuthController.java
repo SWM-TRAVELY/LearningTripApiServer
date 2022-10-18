@@ -27,11 +27,13 @@ public class AuthController {
     return ResponseEntity.ok().body(authService.tokenGen4Test(request));
   }
 
+  @ApiOperation(value = "액세스 토큰 재발급", notes = "리프레쉬 토큰 받아서 액세스 토큰 재발급")
   @PostMapping("reissue_token")
   public ResponseEntity<ResponseTemplate<ReissueTokenResponse>> reissueToken(@RequestBody RefreshTokenRequest request) {
     return ResponseEntity.ok().body(authService.reissueToken(request));
   }
 
+  @ApiOperation(value = "자동 로그인", notes = "리프레쉬 토큰 받아서 액세스/리프레쉬 토큰 재발급, 사용자 앱 켰을 때 호출")
   @PostMapping("auto_login")
   public ResponseEntity<ResponseTemplate<TokenResponse>> autoLogin(@RequestBody RefreshTokenRequest request) {
     return ResponseEntity.ok().body(authService.autoLogin(request));
