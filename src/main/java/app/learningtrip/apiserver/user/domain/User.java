@@ -36,6 +36,8 @@ public class User {
 
   private String nickname;
 
+  private String level;
+
   private Integer experiencePoint;
 
   @Column(name = "login_provider")
@@ -77,5 +79,41 @@ public class User {
       return Arrays.asList(role.split(","));
     }
     return new ArrayList<>();
+  }
+
+  /**
+   * 경험치 상승에 따라 자동으로 레벨 업
+   * @param point 경험치
+   */
+  public void upExp(int point){
+    this.experiencePoint += point;
+    this.level = getLevelByExp(this.experiencePoint);
+  }
+
+  /**
+   * 경험치로 레벨 계산
+   * @param exp 경험치
+   * @return 경험치에 맞는 레벨
+   */
+  private String getLevelByExp(int exp){
+    if(exp == 0) {
+      return "초보 탐험가";
+    }
+    else if(exp > 0 && exp < 300) {
+      return "견습 탐험가";
+    }
+    else if(exp >= 300 && exp < 700) {
+      return "숙련 탐험가";
+    }
+    else if(exp >= 700 && exp < 1500) {
+      return "전문 탐험가";
+    }
+    else if(exp >= 1500 && exp < 3100) {
+      return "장인 탐험가";
+    }
+    else if(exp >= 3100) {
+      return "명인 탐험가";
+    }
+    return null;
   }
 }
