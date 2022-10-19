@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService{
 
     request.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
 
-    User user = request.toEntity(request.getUsername(), "ROLE_USER","");
+    User user = request.toEntity(request.getUsername(),
+        "ROLE_USER","https://image.learningtrip.app/profile/default.jpg");
 
     userRepository.save(user);
 
