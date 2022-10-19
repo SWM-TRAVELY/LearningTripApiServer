@@ -42,8 +42,7 @@ public class UserController {
     return ResponseEntity.ok().body(userService.checkUsernameDuplicated(username));
   }
 
-//  Todo: body 내용 변경 (레벨 등등 추가해야함)
-  @ApiOperation(value = "사용자 정보 조회", notes = "토큰 필수, 이거 body 바꿔야 해요 아직 개발 ㄴ")
+  @ApiOperation(value = "사용자 정보 조회", notes = "토큰 필수, email, phone은 null값도 있음.")
   @GetMapping("info")
   public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal PrincipalDetails user){
     return ResponseEntity.ok().body(userService.getUserInfo(user));

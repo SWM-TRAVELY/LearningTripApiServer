@@ -4,10 +4,10 @@ import app.learningtrip.apiserver.common.docs.StatusCode;
 import app.learningtrip.apiserver.common.dto.ResponseTemplate;
 import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
+import app.learningtrip.apiserver.level.repository.LevelRepository;
 import app.learningtrip.apiserver.user.domain.User;
 import app.learningtrip.apiserver.user.dto.request.SignUpRequest;
 import app.learningtrip.apiserver.user.dto.request.UpdateUserInfoRequest;
-import app.learningtrip.apiserver.user.dto.response.StatusResponse;
 import app.learningtrip.apiserver.user.dto.response.TokenResponse;
 import app.learningtrip.apiserver.user.dto.response.UserInfoResponse;
 import app.learningtrip.apiserver.user.repository.UserRepository;
@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
 
   private final UserRepository userRepository;
+
+  private final LevelRepository levelRepository;
 
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -40,8 +42,7 @@ public class UserServiceImpl implements UserService{
 
     request.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
 
-    User user = request.toEntity(request.getUsername(),
-        "ROLE_USER","","LT",true);
+    User user = request.toEntity(request.getUsername(), "ROLE_USER","");
 
     userRepository.save(user);
 
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService{
       throw new RuntimeException();
     });
 
-    return user.toUserInfo();
+    return user.toUserInfo(user.getLevel(levelRepository));
   }
 
   /**
@@ -115,6 +116,6 @@ public class UserServiceImpl implements UserService{
 
     return userRepository.findByUsername(user.getUsername()).orElseThrow(() -> {
       throw new RuntimeException();
-    }).toUserInfo();
+    }).toUserInfo(user.getLevel(levelRepository));
   }
 }
