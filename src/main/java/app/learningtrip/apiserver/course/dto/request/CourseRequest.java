@@ -4,13 +4,11 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class CourseDto {
+public class CourseRequest {
 
     private long id;
 
     private String name;
 
-    private Long user_id;
-
-    private List<Integer> placeList;
+    private List<CoursePlaceRequest> placeList;
 }
