@@ -17,22 +17,22 @@ import lombok.Setter;
 @AllArgsConstructor @NoArgsConstructor
 public class CourseThumbnail {
 
-    @ApiModelProperty(example = "코스 아이디")
+    @ApiModelProperty(example = "코스 아이디: Long")
     private Long id;
 
-    @ApiModelProperty(example = "코스 이름")
+    @ApiModelProperty(example = "코스 이름: String")
     private String name;
 
-    @ApiModelProperty(example = "코스 대표사진")
+    @ApiModelProperty(example = "코스 대표사진: String")
     private String imageURL;
 
-    @ApiModelProperty(example = "코스에 포함된 관광지1")
+    @ApiModelProperty(example = "코스에 포함된 관광지1: String")
     private String place1;
 
-    @ApiModelProperty(example = "코스에 포함된 관광지2")
+    @ApiModelProperty(example = "코스에 포함된 관광지2: String")
     private String place2;
 
-    @ApiModelProperty(example = "코스에 포함된 관광지3")
+    @ApiModelProperty(example = "코스에 포함된 관광지3: String")
     private String place3;
 
     public static CourseThumbnail toThumbnail(Course course, List<Place> placeList) {

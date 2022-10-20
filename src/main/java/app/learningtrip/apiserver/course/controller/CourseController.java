@@ -5,6 +5,8 @@ import app.learningtrip.apiserver.course.dto.request.CourseRequest;
 import app.learningtrip.apiserver.course.dto.response.CourseResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseThumbnail;
 import app.learningtrip.apiserver.course.service.CourseService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import java.rmi.NoSuchObjectException;
 import java.util.List;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
+@Api(tags = {"코스 API"})
 @RestController
 @RequiredArgsConstructor
 public class CourseController {
@@ -27,6 +31,7 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping("/course/make")
+    @ApiIgnore
     public ResponseEntity setMakeCourse() {
         courseService.makeCourses();
         return ResponseEntity.ok().body(200);
@@ -50,6 +55,7 @@ public class CourseController {
 
     @GetMapping("/course/{course_id}")
     @ApiOperation(value = "코스정보 조회", notes = "코스 정보를 조회한다.")
+    @ApiImplicitParam(name = "course_id", value = "코스 아이디")
     public ResponseEntity getCourse(@PathVariable(name = "course_id") long course_id, Model model) {
         CourseResponse courseResponse = courseService.getInfo(course_id);
 

@@ -3,6 +3,7 @@ package app.learningtrip.apiserver.course.dto.response;
 import app.learningtrip.apiserver.course.domain.Course;
 import app.learningtrip.apiserver.course.domain.CoursePlace;
 import app.learningtrip.apiserver.place.domain.Place;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -12,21 +13,29 @@ import lombok.Setter;
 @Getter @Setter @Builder
 public class CoursePlaceResponse {
 
-    Long id;
+    @ApiModelProperty(value = "관광지 아이디", example = "1")
+    private Long id;
 
-    String name;
+    @ApiModelProperty(example = "관광지 이름: String")
+    private String name;
 
-    String description;
+    @ApiModelProperty(example = "관광지 설명: String")
+    private String description;
 
-    String imageURL;
+    @ApiModelProperty(example = "관광지 대표 이미지: String")
+    private String imageURL;
 
-    String address;
+    @ApiModelProperty(example = "관광지 주소: String")
+    private String address;
 
-    Integer day;
+    @ApiModelProperty(example = "관광지를 방문할 일차: Integer")
+    private Integer day;
 
-    Integer sequence;
+    @ApiModelProperty(example = "해당 일차의 관광 순서: Interger")
+    private Integer sequence;
 
-    Double distance;
+    @ApiModelProperty(example = "앞의 관광지와의 거리: Double")
+    private Double distance;
 
     public static CoursePlaceResponse toResponse(CoursePlace coursePlace, Double distance) {
 
