@@ -31,7 +31,7 @@ public class AuthService {
       throw new RuntimeException();
     } else {
       return new ResponseTemplate<>(StatusCode.OK, "ReissueRefreshTokenSuccess",
-          new ReissueTokenResponse(jwtService.createJwt(JwtProperties.TOKEN_PREFIX+"access_token", username)));
+          new ReissueTokenResponse(jwtService.createJwt("access_token", username)));
     }
   }
 
@@ -53,9 +53,16 @@ public class AuthService {
 
     User user = userRepository.findByUsername(username).orElseThrow(() -> {throw new RuntimeException();});
 
-    return new ResponseTemplate<>(StatusCode.OK, "AutoLoginSuccess", new TokenResponse(
-        jwtService.createJwt("access_token",user.getUsername()),
-        jwtService.createJwt("refresh_token", user.getUsername())
-    ));
+    if(user.getRefreshToken().equals(request.getRefresh_token())){
+      return new ResponseTemplate<>(StatusCode.OK, "AutoLoginSuccess", new TokenResponse(
+          jwtService.createJwt("access_token",user.getUsername()),
+          jwtService.createJwt("refresh_token", user.getUsername())
+      ));
+    }
+    else {
+      throw new RuntimeException();
+    }
+
+
   }
 }
