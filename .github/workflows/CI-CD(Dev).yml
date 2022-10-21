@@ -66,11 +66,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd development
-            ls
-            echo `ls | grep .jar | awk '{print $1}'`
-            ls
             mv `ls | grep .jar | awk '{print $1}'` lt-dev.jar
-            ls
             nohup java -jar lt-dev.jar > nohup.out 2>&1 &
             exit
       
