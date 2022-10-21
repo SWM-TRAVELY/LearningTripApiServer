@@ -3,6 +3,7 @@ package app.learningtrip.apiserver.place.controller;
 import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import app.learningtrip.apiserver.place.service.PlaceService;
+import io.swagger.annotations.ApiOperation;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +34,7 @@ public class PlaceController {
     }
 
     @GetMapping("/home/place/recommend")
+    @ApiOperation(value = "추천 관광지 조회", notes = "추천하는 관광지를 조회한다.")
     public ResponseEntity recommendPlace(){
         List<PlaceThumbnail> placeThumbnailList = placeService.getRecommend();
 
@@ -40,6 +42,7 @@ public class PlaceController {
     }
 
     @GetMapping("/place/{place_id}")
+    @ApiOperation(value = "관광지 정보 조회", notes = "관광지 정보를 조회한다.")
     public ResponseEntity info(@PathVariable(name = "place_id") long place_id) {
         try {
             Optional<PlaceResponse> placeResponse = placeService.getInfo(place_id);
@@ -52,6 +55,7 @@ public class PlaceController {
     }
 
     @GetMapping("/place/related/{place_id}")
+    @ApiOperation(value = "유사 관광지 조회", notes = "특정 관광지와 유사한 관광지를 조회한다.")
     public ResponseEntity<List<PlaceThumbnail>> similarPlace(@PathVariable(name = "place_id") long place_id) {
         List<PlaceThumbnail> placeThumbnailResponse = placeService.getSimilar(place_id);
         Collections.shuffle(placeThumbnailResponse);
@@ -67,6 +71,7 @@ public class PlaceController {
     }
 
     @GetMapping("/place/nearby/{placeId}")
+    @ApiOperation(value = "주변 관광지 조회", notes = "특정 관광지의 주변에 있는 관광지를 조회한다.")
     public ResponseEntity<List<PlaceThumbnail>> nearbyPlace(@PathVariable("placeId") Long place_id){
         return ResponseEntity.ok().body(placeService.getNearby(place_id));
     }
