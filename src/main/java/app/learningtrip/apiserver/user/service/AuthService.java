@@ -31,7 +31,7 @@ public class AuthService {
       throw new RuntimeException();
     } else {
       return new ResponseTemplate<>(StatusCode.OK, "ReissueRefreshTokenSuccess",
-          new ReissueTokenResponse(jwtService.createJwt("access_token", username)));
+          new ReissueTokenResponse(JwtProperties.TOKEN_PREFIX + jwtService.createJwt("access_token", username)));
     }
   }
 
@@ -62,7 +62,8 @@ public class AuthService {
       userRepository.save(user);
 
       return new ResponseTemplate<>(StatusCode.OK, "AutoLoginSuccess",
-          new TokenResponse(accessToken, refreshToken));
+          new TokenResponse(JwtProperties.TOKEN_PREFIX + accessToken,
+              JwtProperties.TOKEN_PREFIX + refreshToken));
     }
     else {
       throw new RuntimeException();
