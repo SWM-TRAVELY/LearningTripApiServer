@@ -54,10 +54,15 @@ public class AuthService {
     User user = userRepository.findByUsername(username).orElseThrow(() -> {throw new RuntimeException();});
 
     if(user.getRefreshToken().equals(request.getRefresh_token())){
-      return new ResponseTemplate<>(StatusCode.OK, "AutoLoginSuccess", new TokenResponse(
-          jwtService.createJwt("access_token",user.getUsername()),
-          jwtService.createJwt("refresh_token", user.getUsername())
-      ));
+
+      String accessToken = jwtService.createJwt("access_token",user.getUsername());
+      String refreshToken = jwtService.createJwt("refresh_token", user.getUsername());
+
+      user.setRefreshToken(JwtProperties.TOKEN_PREFIX+refreshToken);
+      userRepository.save(user);
+
+      return new ResponseTemplate<>(StatusCode.OK, "AutoLoginSuccess",
+          new TokenResponse(accessToken, refreshToken));
     }
     else {
       throw new RuntimeException();
