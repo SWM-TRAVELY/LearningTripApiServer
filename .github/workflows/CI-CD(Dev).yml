@@ -17,8 +17,6 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: development
-          
-      - run: cat src/main/java/app/learningtrip/apiserver/level/domain/Level.java
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -30,6 +28,7 @@ jobs:
 
       - name: Build & Test
         run: |
+          cat src/main/java/app/learningtrip/apiserver/level/domain/Level.java
           echo "${{ secrets.DEV_DB_PROPERTIES }}" > src/main/resources/secret.properties
           echo "${{ secrets.JWT_PROPERTIES }}" > src/main/java/app/learningtrip/apiserver/configuration/auth/jwt/JwtProperties.java
           ./gradlew build --no-daemon
@@ -67,7 +66,11 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd development
+            ls
+            echo `ls | grep .jar | awk '{print $1}'`
+            ls
             mv `ls | grep .jar | awk '{print $1}'` lt-dev.jar
+            ls
             nohup java -jar lt-dev.jar > nohup.out 2>&1 &
             exit
       
