@@ -60,7 +60,8 @@ public class CourseService {
             }
             latitude = coursePlace.place.getLatitude();
             longitude = coursePlace.place.getLongitude();
-            coursePlaceResponses.add(CoursePlaceResponse.toResponse(coursePlace, distance));
+            Integer time = (int) (distance / 1 * 60);
+            coursePlaceResponses.add(CoursePlaceResponse.toResponse(coursePlace, distance, time));
         }
 
         CourseResponse courseResponse = CourseResponse.builder()
@@ -154,17 +155,19 @@ public class CourseService {
      * 코스 생성
      */
     public void setCourse(CourseRequest courseRequest, User user) {
+        System.out.println("in service");
 
-        // Course 탐색, 없으면 생성
-        Optional<Course> course = courseRepository.findById(courseRequest.getId());
-
-        if (!course.isPresent()) {
+        Optional<Course> course = Optional.empty();
+        if (courseRequest.getId() == null) {
             course = Optional.ofNullable(courseRepository.save(Course.builder()
                 .name(courseRequest.getName())
                 .user(user)
                 .build()));
         }
         else {
+            // Course 탐색, 없으면 생성
+            course = courseRepository.findById(courseRequest.getId());
+
             course.get().setName(courseRequest.getName());
             courseRepository.save(course.get());
         }

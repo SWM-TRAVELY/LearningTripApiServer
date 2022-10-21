@@ -65,6 +65,7 @@ public class CourseController {
     @PostMapping("/course")
     @ApiOperation(value = "코스 생성", notes = "코스를 생성한다.")
     public ResponseEntity setCourse(@RequestBody CourseRequest courseRequest, @AuthenticationPrincipal PrincipalDetails user) {
+        System.out.println(courseRequest);
         courseService.setCourse(courseRequest, user.getUser());
 
         return ResponseEntity.ok().body(200);
