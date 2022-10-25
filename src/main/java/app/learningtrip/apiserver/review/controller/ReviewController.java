@@ -7,6 +7,7 @@ import app.learningtrip.apiserver.review.dto.response.UserReviewResponse;
 import app.learningtrip.apiserver.review.service.ReviewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Api(tags = "리뷰 API")
 @RestController
@@ -28,12 +31,15 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/review")
-    @ApiOperation(value = "리뷰 생성", notes = "USER 권한 필요")
-    public Long insertReview(@RequestBody ReviewRequest reviewRequest, @AuthenticationPrincipal PrincipalDetails user) {
+    @ApiOperation(value = "리뷰 생성", notes = "USER 권한 필요, ContentType = multipart/form-data")
+    public ResponseEntity<Object> insertReview(
+        @RequestPart(name = "images") List<MultipartFile> images,
+        @RequestPart(name = "review") ReviewRequest review,
+        @AuthenticationPrincipal PrincipalDetails user) throws IOException {
 
-        Long review_id = reviewService.insert(reviewRequest, user.getUser());
+        Long review_id = reviewService.insert(images, review, user.getUser());
 
-        return review_id;
+        return ResponseEntity.ok().body(review_id);
     }
 
     @PutMapping("/review")

@@ -36,11 +36,7 @@ public class Review {
 
     private Integer rating;
 
-    private String imageURL1;
-
-    private String imageURL2;
-
-    private String imageURL3;
+    private Integer imageCount;
 
     @ManyToOne
     @JoinColumn(name = "place_id")

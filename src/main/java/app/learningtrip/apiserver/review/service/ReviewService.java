@@ -9,16 +9,24 @@ import app.learningtrip.apiserver.review.dto.response.UserReviewResponse;
 import app.learningtrip.apiserver.review.repository.ReviewRepository;
 import app.learningtrip.apiserver.user.domain.User;
 import app.learningtrip.apiserver.user.repository.UserRepository;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
@@ -27,10 +35,16 @@ public class ReviewService {
 
     private final HelpfulService helpfulService;
 
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${aws.s3.bucket-name}")
+    private String s3BucketName;
+
     /**
      * 리뷰 등록
      */
-    public Long insert(ReviewRequest reviewRequest, User user) {
+    public Long insert(List<MultipartFile> images, ReviewRequest reviewRequest, User user)
+        throws IOException {
         // review 중복 조회
         reviewRepository.findByPlaceIdAndUserId(reviewRequest.getPlace_id(), user.getId())
             .ifPresent(m -> {
@@ -50,12 +64,15 @@ public class ReviewService {
             .content(reviewRequest.getContent())
             .date(date)
             .rating(reviewRequest.getRating())
-            .imageURL1(MakeNotNull(reviewRequest.getImageURL1()))
-            .imageURL2(MakeNotNull(reviewRequest.getImageURL2()))
-            .imageURL3(MakeNotNull(reviewRequest.getImageURL3()))
+            .imageCount(images.isEmpty() ? 0 : images.size()) // images가 빈 리스트거나 null이면 0
             .place(place.get())
             .user(user)
             .build());
+
+//      이미지 1장 이상일때, S3에 업로드
+        if(review.getImageCount() != 0){
+            uploadImages(images, review.getId());
+        }
 
         return review.getId();
     }
@@ -76,15 +93,7 @@ public class ReviewService {
         if (review.get().getRating() != null && review.get().getRating() != reviewRequest.getRating()) {                     // 별점 수정 시
             review.get().setRating(reviewRequest.getRating());
         }
-        if (review.get().getImageURL1() != null && review.get().getImageURL1().equals(reviewRequest.getImageURL1()) == false) {    // imageURL1 수정 시
-            review.get().setImageURL1(MakeNotNull(reviewRequest.getImageURL1()));
-        }
-        if (review.get().getImageURL2() != null && review.get().getImageURL2().equals(reviewRequest.getImageURL2()) == false) {    // imageURL2 수정 시
-            review.get().setImageURL2(MakeNotNull(reviewRequest.getImageURL2()));
-        }
-        if (review.get().getImageURL3() != null && review.get().getImageURL3().equals(reviewRequest.getImageURL3()) == false) {    // imageURL3 수정 시
-            review.get().setImageURL3(MakeNotNull(reviewRequest.getImageURL3()));
-        }
+        // Todo: 이미지 수정 로직
         reviewRepository.save(review.get());
     }
 
@@ -149,5 +158,38 @@ public class ReviewService {
             return "";
         }
         return imageURL;
+    }
+
+    /**
+     * AWS S3 버킷에 이미지 업로드
+     * @param images MultipartFile 이미지 리스트
+     * @param reviewId 리뷰ID
+     * @return 업로드 이미지 링크 리스트
+     * @throws IOException getInputStream 에서 예외 발생 가능
+     */
+    private List<String> uploadImages(List<MultipartFile> images, Long reviewId)
+        throws IOException {
+
+        List<String> imageList = new ArrayList<>();
+        String path = "https://image.learningtrip.app/";
+
+        for(int i=0; i<images.size(); i++) {
+            String fileName = "review/" + Long.toString(reviewId) + "_" + Integer.toString(i) + ".jpg";
+
+            MultipartFile image = images.get(i);
+
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType(image.getContentType());
+            objectMetadata.setContentLength(image.getSize());
+
+            amazonS3Client.putObject(
+                new PutObjectRequest(s3BucketName, fileName, image.getInputStream(), objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+
+            imageList.add(path + fileName);
+        }
+
+        return imageList;
     }
 }

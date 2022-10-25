@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import lombok.Data;
 
+
 @Data
 public class UserReviewResponse {
 
@@ -19,14 +20,8 @@ public class UserReviewResponse {
     @ApiModelProperty(value = "리뷰 별점", example = "1~5")
     private Integer rating;
 
-    @ApiModelProperty(value = "리뷰 이미지1", example = "http://--")
-    private String imageURL1;
-
-    @ApiModelProperty(value = "리뷰 이미지2", example = "http://--")
-    private String imageURL2;
-
-    @ApiModelProperty(value = "리뷰 이미지3", example = "http://--")
-    private String imageURL3;
+    @ApiModelProperty(value = "이미지 개수", example = "3")
+    private Integer imageCount;
 
     @ApiModelProperty(value = "리뷰 작성일자", example = "2022-10-21")
     private String date;
@@ -41,9 +36,7 @@ public class UserReviewResponse {
         this.id = review.getId();
         this.content = review.getContent();
         this.rating = review.getRating();
-        this.imageURL1 = review.getImageURL1();
-        this.imageURL2 = review.getImageURL2();
-        this.imageURL3 = review.getImageURL3();
+        this.imageCount = review.getImageCount();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(review.getDate());
