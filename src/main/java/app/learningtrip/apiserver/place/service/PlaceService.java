@@ -3,6 +3,7 @@ package app.learningtrip.apiserver.place.service;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.domain.PlaceDetailCulture;
 import app.learningtrip.apiserver.place.domain.PlaceDetailTour;
+import app.learningtrip.apiserver.place.domain.Similar;
 import app.learningtrip.apiserver.place.dto.response.PlaceThumbnail;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailCultureResponse;
 import app.learningtrip.apiserver.place.dto.response.PlaceDetailTourResponse;
@@ -10,6 +11,7 @@ import app.learningtrip.apiserver.place.dto.response.PlaceResponse;
 import app.learningtrip.apiserver.place.repository.PlaceDetailCultureRepository;
 import app.learningtrip.apiserver.place.repository.PlaceDetailTourRepository;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
+import app.learningtrip.apiserver.place.repository.SimilarRepository;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceDetailTourRepository placeDetailTourRepository;
     private final PlaceDetailCultureRepository placeDetailCultureRepository;
+    private final SimilarRepository similarRepository;
 
     static final int TOUR = 12;
     static final int CULTURE = 14;
@@ -39,10 +42,7 @@ public class PlaceService {
 
         // place table 조회
         Optional<Place> place = placeRepository.findById(id);
-        if (place.isPresent() == false) {
-            return getInfoDummy(id);
-        }
-        //place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
+        place.orElseThrow(() -> new NoSuchElementException("Not Found Place Index"));
 
         System.out.println(place.get().getType());
         // PlaceResponse로 변환: type별 다른 placeDetailResponse 생성
@@ -72,7 +72,26 @@ public class PlaceService {
      * 유사 관광지 조회
      */
     public List<PlaceThumbnail> getSimilar(long place_id) {
-        List<PlaceThumbnail> placeThumbnailList = getNearby(place_id);
+        Optional<Similar> similar = similarRepository.findByPlaceId(place_id);
+        //similar.orElseThrow(() -> new NoSuchObjectException("올바르지 않은 place id입니다."));
+
+        List<String> similarString = List.of(similar.get().getSimilar().split(","));
+
+        List<PlaceThumbnail> placeThumbnailList = new ArrayList<PlaceThumbnail>();
+        int limit = 8;
+        if (similarString.size() < limit) {
+            limit = similarString.size();
+        }
+
+        for(int i=0; i<limit; i++) {
+            Long similarId = Long.valueOf(similarString.get(i));
+
+            Optional<Place> place = placeRepository.findById(similarId);
+            //place.orElseThrow(() -> new NoSuchObjectException("올바르지 않은 place id입니다."));
+
+            placeThumbnailList.add(PlaceThumbnail.toThumbnail(place.get()));
+        }
+        //List<PlaceThumbnail> placeThumbnailList = getNearby(place_id);
 
         return placeThumbnailList;
     }
