@@ -7,6 +7,6 @@ public interface StatusCode {
 
 //  700번대: user 관련
   int EMAIL_DUPLICATED = 701;
-
+  int CURRENT_PW_WRONG = 702;
 
 }

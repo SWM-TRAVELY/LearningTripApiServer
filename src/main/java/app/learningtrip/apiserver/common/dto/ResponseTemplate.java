@@ -1,10 +1,12 @@
 package app.learningtrip.apiserver.common.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Data
 public class ResponseTemplate<T> {
   private int status;
   private String message;

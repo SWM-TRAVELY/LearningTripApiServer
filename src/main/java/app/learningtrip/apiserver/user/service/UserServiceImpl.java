@@ -6,12 +6,14 @@ import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
 import app.learningtrip.apiserver.level.repository.LevelRepository;
 import app.learningtrip.apiserver.user.domain.User;
+import app.learningtrip.apiserver.user.dto.request.ResetPasswordRequest;
 import app.learningtrip.apiserver.user.dto.request.SignUpRequest;
 import app.learningtrip.apiserver.user.dto.request.UpdateUserInfoRequest;
 import app.learningtrip.apiserver.user.dto.response.TokenResponse;
 import app.learningtrip.apiserver.user.dto.response.UserInfoResponse;
 import app.learningtrip.apiserver.user.repository.UserRepository;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -118,5 +120,50 @@ public class UserServiceImpl implements UserService{
     return userRepository.findByUsername(user.getUsername()).orElseThrow(() -> {
       throw new RuntimeException();
     }).toUserInfo(user.getLevel(levelRepository));
+  }
+
+  /**
+   * 비밀번호 재설정
+   * @param request 현재/신규 비밀번호
+   * @param authUser 인가 사용자 정보
+   * @return 성공시 200, 실패시 702 반환
+   */
+  public ResponseTemplate<Object> resetPassword(ResetPasswordRequest request, PrincipalDetails authUser) {
+    User user = userRepository.findByUsername(authUser.getUsername()).orElseThrow(() -> {
+      throw new NoSuchElementException();
+    });
+
+    ResponseTemplate<Object> response = new ResponseTemplate<>();
+    response.setData(null);
+
+    if(bCryptPasswordEncoder.matches(request.getCurrent_password(), user.getPassword())){
+      user.setPassword(bCryptPasswordEncoder.encode(request.getNew_password()));
+      userRepository.save(user);
+
+      response.setStatus(200);
+      response.setMessage("ResetPasswordSuccess");
+    }
+    else{
+      response.setStatus(StatusCode.CURRENT_PW_WRONG);
+      response.setMessage("WrongCurrentPassword");
+    }
+
+    return response;
+  }
+
+
+  /**
+   * DB에서 user 삭제
+   * @param authUser 인가 사용자 정보
+   * @return 성공시 200 반환
+   */
+  public ResponseTemplate<Object> deleteAccount(PrincipalDetails authUser){
+    User user = userRepository.findByUsername(authUser.getUsername()).orElseThrow(() -> {
+      throw new NoSuchElementException();
+    });
+
+    userRepository.delete(user);
+
+    return new ResponseTemplate<>(200, "AccountDeleted", null);
   }
 }

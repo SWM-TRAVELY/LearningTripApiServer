@@ -2,6 +2,7 @@ package app.learningtrip.apiserver.user.controller;
 
 import app.learningtrip.apiserver.common.dto.ResponseTemplate;
 import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
+import app.learningtrip.apiserver.user.dto.request.ResetPasswordRequest;
 import app.learningtrip.apiserver.user.dto.request.SignUpRequest;
 import app.learningtrip.apiserver.user.dto.request.UpdateUserInfoRequest;
 import app.learningtrip.apiserver.user.dto.response.TokenResponse;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,5 +58,18 @@ public class UserController {
   public ResponseEntity<UserInfoResponse> updateUserInfo(@RequestBody UpdateUserInfoRequest request,
       @AuthenticationPrincipal PrincipalDetails user) {
     return ResponseEntity.ok().body(userService.updateUserInfo(request, user));
+  }
+
+  @ApiOperation(value = "비밀번호 변경", notes = "토큰 필수, 성공시 status 200, 실패시 702")
+  @PatchMapping("reset_password")
+  public ResponseEntity<Object> resetPassword(@RequestBody ResetPasswordRequest request, @AuthenticationPrincipal PrincipalDetails user){
+    return ResponseEntity.ok().body(userService.resetPassword(request, user));
+  }
+
+//  단순 DB에서 아예 유저 정보를 삭제할지, 아니면 비활성화 시킬지?
+  @ApiOperation(value = "회원 탈퇴", notes = "토큰 필수")
+  @DeleteMapping("delete")
+  public ResponseEntity<Object> deleteAccount(@AuthenticationPrincipal PrincipalDetails user){
+    return ResponseEntity.ok().body(userService.deleteAccount(user));
   }
 }
