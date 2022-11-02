@@ -1,7 +1,9 @@
 package app.learningtrip.apiserver.course.service;
 
+import app.learningtrip.apiserver.configuration.ApiKey;
 import app.learningtrip.apiserver.course.domain.Course;
 import app.learningtrip.apiserver.course.domain.CoursePlace;
+import app.learningtrip.apiserver.course.domain.GoogleMapApi;
 import app.learningtrip.apiserver.course.dto.request.CoursePlaceRequest;
 import app.learningtrip.apiserver.course.dto.request.CourseRequest;
 import app.learningtrip.apiserver.course.dto.response.CoursePlaceResponse;
@@ -20,8 +22,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.json.JSONObject;
+import java.io.IOException;
 
 @Service
 @Transactional
@@ -34,10 +44,25 @@ public class CourseService {
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
 
+    private final GoogleMapApi googleMapApi;
+
+    /**
+     * Google-Map-Api
+     *
+     * @return
+     */
+    public ResponseBody getGoogleMapApi(double latitude1, double longitude1, double latitude2, double longitude2) throws IOException, JSONException {
+        googleMapApi.makeDistanceTime(latitude1,longitude1,latitude2,longitude2);
+        System.out.println(googleMapApi.getDistance());
+        System.out.println(googleMapApi.getTime());
+
+        return null;
+    }
+
     /**
      * 코스 정보 조회
      */
-    public CourseResponse getInfo(Long id) {
+    public CourseResponse getInfo(Long id) throws JSONException, IOException {
 
         // course table 조회
         Optional<Course> course = courseRepository.findById(id);
@@ -51,16 +76,15 @@ public class CourseService {
         Double latitude = null;
         Double longitude = null;
         for (CoursePlace coursePlace : coursePlaceList) {
-            Double distance = Double.valueOf(0);
-            System.out.print("위도 경도 : ");
-            System.out.print(latitude);
-            System.out.print(longitude);
+            Integer distance = 0;
+            Integer time = 0;
             if (latitude != null & longitude != null) {
-                distance = getDistance(latitude, longitude, coursePlace.place.getLatitude(), coursePlace.place.getLongitude(), "kilometer");
+                googleMapApi.makeDistanceTime(latitude, longitude, coursePlace.place.getLatitude(), coursePlace.place.getLongitude());
+                distance = googleMapApi.getDistance();
+                time = googleMapApi.getTime();
             }
             latitude = coursePlace.place.getLatitude();
             longitude = coursePlace.place.getLongitude();
-            Integer time = (int) (distance / 1 * 60);
             coursePlaceResponses.add(CoursePlaceResponse.toResponse(coursePlace, distance, time));
         }
 
@@ -71,33 +95,6 @@ public class CourseService {
             .build();
 
         return courseResponse;
-    }
-
-    private static double getDistance(double lat1, double lon1, double lat2, double lon2, String unit) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-
-        if (unit == "kilometer") {
-            dist = dist * 1.609344;
-        } else if(unit == "meter"){
-            dist = dist * 1609.344;
-        }
-
-        return (dist);
-    }
-
-    // This function converts decimal degrees to radians
-    private static double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    // This function converts radians to decimal degrees
-    private static double rad2deg(double rad) {
-        return (rad * 180 / Math.PI);
     }
 
 //    public Model getInfoNotDay(Long id, Model model) {

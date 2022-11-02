@@ -8,9 +8,11 @@ import app.learningtrip.apiserver.course.service.CourseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -56,7 +58,8 @@ public class CourseController {
     @GetMapping("/course/{course_id}")
     @ApiOperation(value = "코스정보 조회", notes = "코스 정보를 조회한다.")
     @ApiImplicitParam(name = "course_id", value = "코스 아이디")
-    public ResponseEntity getCourse(@PathVariable(name = "course_id") long course_id, Model model) {
+    public ResponseEntity getCourse(@PathVariable(name = "course_id") long course_id)
+        throws JSONException, IOException {
         CourseResponse courseResponse = courseService.getInfo(course_id);
 
         return ResponseEntity.ok().body(courseResponse);
@@ -84,6 +87,12 @@ public class CourseController {
         courseService.delete(courseRequest, user.getUser());
 
         return ResponseEntity.ok().body(200);
+    }
+
+    @GetMapping("/distance")
+    public ResponseEntity getGoogleDistance() throws JSONException, IOException {
+
+        return ResponseEntity.ok().body(courseService.getGoogleMapApi(3.0, 127.0, 3.0, 127.0));
     }
 
 }

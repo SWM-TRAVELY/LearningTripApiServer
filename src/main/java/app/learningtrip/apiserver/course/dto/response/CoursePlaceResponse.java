@@ -33,12 +33,12 @@ public class CoursePlaceResponse {
     private Integer sequence;
 
     @ApiModelProperty(example = "앞의 관광지와의 거리: Double")
-    private Double distance;
+    private Integer distance;
 
     @ApiModelProperty(example = "앞의 관광지와의 시간: Double")
     private Integer time;
 
-    public static CoursePlaceResponse toResponse(CoursePlace coursePlace, Double distance, Integer time) {
+    public static CoursePlaceResponse toResponse(CoursePlace coursePlace, Integer distance, Integer time) {
 
         return CoursePlaceResponse.builder()
             .id(coursePlace.place.getId())
