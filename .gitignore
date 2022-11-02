@@ -38,5 +38,6 @@ out/
 
 ### Custom ###
 /src/main/resources/secret.properties
+/src/main/resources/application-API-KEY.properties
 /logs/**
 /src/main/java/app/learningtrip/apiserver/configuration/auth/jwt/JwtProperties.java
