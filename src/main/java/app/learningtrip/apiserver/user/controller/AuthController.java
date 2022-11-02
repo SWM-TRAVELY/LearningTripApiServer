@@ -1,8 +1,10 @@
 package app.learningtrip.apiserver.user.controller;
 
-import app.learningtrip.apiserver.user.dto.request.ReissueTokenRequest;
+import app.learningtrip.apiserver.common.dto.ResponseTemplate;
+import app.learningtrip.apiserver.user.dto.request.RefreshTokenRequest;
 import app.learningtrip.apiserver.user.dto.request.TokenGen4TestRequest;
 import app.learningtrip.apiserver.user.dto.response.ReissueTokenResponse;
+import app.learningtrip.apiserver.user.dto.response.TokenResponse;
 import app.learningtrip.apiserver.user.service.AuthService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +27,15 @@ public class AuthController {
     return ResponseEntity.ok().body(authService.tokenGen4Test(request));
   }
 
+  @ApiOperation(value = "액세스 토큰 재발급", notes = "리프레쉬 토큰 받아서 액세스 토큰 재발급")
   @PostMapping("reissue_token")
-  public ResponseEntity<ReissueTokenResponse> reissueToken(@RequestBody ReissueTokenRequest request) {
+  public ResponseEntity<ResponseTemplate<ReissueTokenResponse>> reissueToken(@RequestBody RefreshTokenRequest request) {
     return ResponseEntity.ok().body(authService.reissueToken(request));
+  }
+
+  @ApiOperation(value = "자동 로그인", notes = "리프레쉬 토큰 받아서 액세스/리프레쉬 토큰 재발급, 사용자 앱 켰을 때 호출")
+  @PostMapping("auto_login")
+  public ResponseEntity<ResponseTemplate<TokenResponse>> autoLogin(@RequestBody RefreshTokenRequest request) {
+    return ResponseEntity.ok().body(authService.autoLogin(request));
   }
 }
