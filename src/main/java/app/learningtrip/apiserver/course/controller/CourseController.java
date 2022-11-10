@@ -56,11 +56,21 @@ public class CourseController {
     }
 
     @GetMapping("/course/{course_id}")
-    @ApiOperation(value = "코스정보 조회", notes = "코스 정보를 조회한다.")
+    @ApiOperation(value = "추천 코스정보 조회", notes = "추천 코스의 정보를 조회한다.")
     @ApiImplicitParam(name = "course_id", value = "코스 아이디")
     public ResponseEntity getCourse(@PathVariable(name = "course_id") long course_id)
         throws JSONException, IOException {
-        CourseResponse courseResponse = courseService.getInfo(course_id);
+        CourseResponse courseResponse = courseService.getRecommendCourseInfo(course_id);
+
+        return ResponseEntity.ok().body(courseResponse);
+    }
+
+    @GetMapping("/course/user/{course_id}")
+    @ApiOperation(value = "유저 코스정보 조회", notes = "유저의 코스 정보를 조회한다.")
+    @ApiImplicitParam(name = "course_id", value = "코스 아이디")
+    public ResponseEntity getUserCourse(@PathVariable(name = "course_id") long course_id, @AuthenticationPrincipal PrincipalDetails user)
+        throws JSONException, IOException {
+        CourseResponse courseResponse = courseService.getUserCourseInfo(course_id, user.getUser());
 
         return ResponseEntity.ok().body(courseResponse);
     }

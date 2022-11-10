@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.course.dto.response;
 
+import app.learningtrip.apiserver.course.domain.CoursePlaceRecommend;
 import app.learningtrip.apiserver.course.domain.CoursePlaceUser;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -48,6 +49,21 @@ public class CoursePlaceResponse {
             .address(coursePlaceUser.place.getAddress())
             .day(coursePlaceUser.getDay())
             .sequence(coursePlaceUser.getSequence())
+            .distance(distance)
+            .time(time)
+            .build();
+    }
+
+    public static CoursePlaceResponse toResponse(CoursePlaceRecommend coursePlaceRecommend, Integer distance, Integer time) {
+
+        return CoursePlaceResponse.builder()
+            .id(coursePlaceRecommend.place.getId())
+            .name(coursePlaceRecommend.place.getName())
+            .description(coursePlaceRecommend.place.getDescription())
+            .imageURL(coursePlaceRecommend.place.getImageURL1())
+            .address(coursePlaceRecommend.place.getAddress())
+            .day(coursePlaceRecommend.getDay())
+            .sequence(coursePlaceRecommend.getSequence())
             .distance(distance)
             .time(time)
             .build();

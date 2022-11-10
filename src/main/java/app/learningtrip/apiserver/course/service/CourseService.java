@@ -60,9 +60,9 @@ public class CourseService {
     }
 
     /**
-     * 코스 정보 조회
+     * 유저 코스 정보 조회
      */
-    public CourseResponse getInfo(Long id) throws JSONException, IOException {
+    public CourseResponse getUserCourseInfo(Long id, User user) throws JSONException, IOException {
 
         // course table 조회
         Optional<CourseUser> course = courseUserRepository.findById(id);
@@ -70,6 +70,10 @@ public class CourseService {
 
         if (course.isPresent() == false) {
             throw new RuntimeException(Long.toString(id) + "번의 코스 정보를 찾을 수 없습니다.");
+        }
+
+        if (!course.get().user.equals(user)) {
+            throw new RuntimeException("코스 정보에 접근할 권한이 없습니다.");
         }
 
         List<CoursePlaceResponse> coursePlaceResponses = new ArrayList<CoursePlaceResponse>();
@@ -86,6 +90,44 @@ public class CourseService {
             latitude = coursePlaceUser.place.getLatitude();
             longitude = coursePlaceUser.place.getLongitude();
             coursePlaceResponses.add(CoursePlaceResponse.toResponse(coursePlaceUser, distance, time));
+        }
+
+        CourseResponse courseResponse = CourseResponse.builder()
+            .id(course.get().getId())
+            .name(course.get().getName())
+            .placeList(coursePlaceResponses)
+            .build();
+
+        return courseResponse;
+    }
+
+    /**
+     * 유저 코스 정보 조회
+     */
+    public CourseResponse getRecommendCourseInfo(Long id) throws JSONException, IOException {
+
+        // course table 조회
+        Optional<CourseRecommend> course = courseRecommendRepository.findById(id);
+        List<CoursePlaceRecommend> coursePlaceUserList = coursePlaceRecommendRepository.findAllByCourseIdOrderByDayAscSequenceAsc(id);
+
+        if (course.isPresent() == false) {
+            throw new RuntimeException(Long.toString(id) + "번의 코스 정보를 찾을 수 없습니다.");
+        }
+
+        List<CoursePlaceResponse> coursePlaceResponses = new ArrayList<CoursePlaceResponse>();
+        Double latitude = null;
+        Double longitude = null;
+        for (CoursePlaceRecommend coursePlaceRecommend : coursePlaceUserList) {
+            Integer distance = 0;
+            Integer time = 0;
+            if (latitude != null & longitude != null) {
+                googleMapApi.makeDistanceTime(latitude, longitude, coursePlaceRecommend.place.getLatitude(), coursePlaceRecommend.place.getLongitude());
+                distance = googleMapApi.getDistance();
+                time = googleMapApi.getTime();
+            }
+            latitude = coursePlaceRecommend.place.getLatitude();
+            longitude = coursePlaceRecommend.place.getLongitude();
+            coursePlaceResponses.add(CoursePlaceResponse.toResponse(coursePlaceRecommend, distance, time));
         }
 
         CourseResponse courseResponse = CourseResponse.builder()
