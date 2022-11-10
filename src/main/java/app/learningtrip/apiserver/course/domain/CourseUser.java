@@ -1,7 +1,6 @@
 package app.learningtrip.apiserver.course.domain;
 
-import app.learningtrip.apiserver.place.domain.Place;
-import java.io.Serializable;
+import app.learningtrip.apiserver.user.domain.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,24 +16,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity @Table(name = "course_place")
+@Entity @Table(name = "course_user")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @Builder
-public class CoursePlace implements Serializable {
+public class CourseUser {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    Long id;
+    private Long id;
 
-    Integer day;
-
-    Integer sequence;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id")
-    public Course course;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
-    public Place place;
+    @JoinColumn(name = "user_id")
+    public User user;
 }

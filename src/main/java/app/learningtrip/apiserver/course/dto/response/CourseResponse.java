@@ -1,14 +1,7 @@
 package app.learningtrip.apiserver.course.dto.response;
 
-import app.learningtrip.apiserver.course.domain.Course;
-import app.learningtrip.apiserver.course.domain.CoursePlace;
-import app.learningtrip.apiserver.place.domain.Place;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;

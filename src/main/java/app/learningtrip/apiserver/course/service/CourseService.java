@@ -1,16 +1,19 @@
 package app.learningtrip.apiserver.course.service;
 
-import app.learningtrip.apiserver.configuration.ApiKey;
-import app.learningtrip.apiserver.course.domain.Course;
-import app.learningtrip.apiserver.course.domain.CoursePlace;
+import app.learningtrip.apiserver.course.domain.CoursePlaceRecommend;
+import app.learningtrip.apiserver.course.domain.CourseRecommend;
+import app.learningtrip.apiserver.course.domain.CourseUser;
+import app.learningtrip.apiserver.course.domain.CoursePlaceUser;
 import app.learningtrip.apiserver.course.domain.GoogleMapApi;
 import app.learningtrip.apiserver.course.dto.request.CoursePlaceRequest;
 import app.learningtrip.apiserver.course.dto.request.CourseRequest;
 import app.learningtrip.apiserver.course.dto.response.CoursePlaceResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseThumbnail;
-import app.learningtrip.apiserver.course.repository.CoursePlaceRepository;
-import app.learningtrip.apiserver.course.repository.CourseRepository;
+import app.learningtrip.apiserver.course.repository.CoursePlaceRecommendRepository;
+import app.learningtrip.apiserver.course.repository.CoursePlaceUserRepository;
+import app.learningtrip.apiserver.course.repository.CourseRecommendRepository;
+import app.learningtrip.apiserver.course.repository.CourseUserRepository;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
 import app.learningtrip.apiserver.place.service.PlaceService;
@@ -22,15 +25,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.json.JSONObject;
 import java.io.IOException;
 
 @Service
@@ -38,8 +36,10 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CourseService {
 
-    private final CourseRepository courseRepository;
-    private final CoursePlaceRepository coursePlaceRepository;
+    private final CourseUserRepository courseUserRepository;
+    private final CoursePlaceUserRepository coursePlaceUserRepository;
+    private final CourseRecommendRepository courseRecommendRepository;
+    private final CoursePlaceRecommendRepository coursePlaceRecommendRepository;
     private final PlaceService placeService;
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
@@ -65,8 +65,8 @@ public class CourseService {
     public CourseResponse getInfo(Long id) throws JSONException, IOException {
 
         // course table 조회
-        Optional<Course> course = courseRepository.findById(id);
-        List<CoursePlace> coursePlaceList = coursePlaceRepository.findAllByCourseIdOrderByDayAscSequenceAsc(id);
+        Optional<CourseUser> course = courseUserRepository.findById(id);
+        List<CoursePlaceUser> coursePlaceUserList = coursePlaceUserRepository.findAllByCourseIdOrderByDayAscSequenceAsc(id);
 
         if (course.isPresent() == false) {
             throw new RuntimeException(Long.toString(id) + "번의 코스 정보를 찾을 수 없습니다.");
@@ -75,17 +75,17 @@ public class CourseService {
         List<CoursePlaceResponse> coursePlaceResponses = new ArrayList<CoursePlaceResponse>();
         Double latitude = null;
         Double longitude = null;
-        for (CoursePlace coursePlace : coursePlaceList) {
+        for (CoursePlaceUser coursePlaceUser : coursePlaceUserList) {
             Integer distance = 0;
             Integer time = 0;
             if (latitude != null & longitude != null) {
-                googleMapApi.makeDistanceTime(latitude, longitude, coursePlace.place.getLatitude(), coursePlace.place.getLongitude());
+                googleMapApi.makeDistanceTime(latitude, longitude, coursePlaceUser.place.getLatitude(), coursePlaceUser.place.getLongitude());
                 distance = googleMapApi.getDistance();
                 time = googleMapApi.getTime();
             }
-            latitude = coursePlace.place.getLatitude();
-            longitude = coursePlace.place.getLongitude();
-            coursePlaceResponses.add(CoursePlaceResponse.toResponse(coursePlace, distance, time));
+            latitude = coursePlaceUser.place.getLatitude();
+            longitude = coursePlaceUser.place.getLongitude();
+            coursePlaceResponses.add(CoursePlaceResponse.toResponse(coursePlaceUser, distance, time));
         }
 
         CourseResponse courseResponse = CourseResponse.builder()
@@ -128,21 +128,22 @@ public class CourseService {
         List<CourseThumbnail> courseThumbnailList = new ArrayList<CourseThumbnail>();
 
         // course table 조회
-        List<Course> courseList = courseRepository.findAllByUserId(user.getId());
-        if (courseList.size() == 0) {
+        List<CourseUser> courseUserList = courseUserRepository.findAllByUserId(user.getId());
+        if (courseUserList.size() == 0) {
             return courseThumbnailList;
         }
 
         // course_place table 조회
-        for (Course course : courseList) {
-            List<CoursePlace> coursePlaceList = coursePlaceRepository.findAllByCourseIdOrderByDayAscSequenceAsc(course.getId());
+        for (CourseUser courseUser : courseUserList) {
+            List<CoursePlaceUser> coursePlaceUserList = coursePlaceUserRepository.findAllByCourseIdOrderByDayAscSequenceAsc(
+                courseUser.getId());
 
             List<Place> placeList = new ArrayList<Place>();
-            for (CoursePlace coursePlace : coursePlaceList) {
-                placeList.add(coursePlace.getPlace());
+            for (CoursePlaceUser coursePlaceUser : coursePlaceUserList) {
+                placeList.add(coursePlaceUser.getPlace());
             }
 
-            courseThumbnailList.add(CourseThumbnail.toThumbnail(course, placeList));
+            courseThumbnailList.add(CourseThumbnail.toThumbnail(courseUser, placeList));
         }
 
         return courseThumbnailList;
@@ -154,23 +155,23 @@ public class CourseService {
     public void setCourse(CourseRequest courseRequest, User user) {
         System.out.println("in service");
 
-        Optional<Course> course = Optional.empty();
+        Optional<CourseUser> course = Optional.empty();
         if (courseRequest.getId() == null) {
-            course = Optional.ofNullable(courseRepository.save(Course.builder()
+            course = Optional.ofNullable(courseUserRepository.save(CourseUser.builder()
                 .name(courseRequest.getName())
                 .user(user)
                 .build()));
         }
         else {
             // Course 탐색, 없으면 생성
-            course = courseRepository.findById(courseRequest.getId());
+            course = courseUserRepository.findById(courseRequest.getId());
 
             course.get().setName(courseRequest.getName());
-            courseRepository.save(course.get());
+            courseUserRepository.save(course.get());
         }
 
         // Course-Place에서 현재 course 데이터 삭제
-        coursePlaceRepository.deleteAllByCourseId(course.get().getId());
+        coursePlaceUserRepository.deleteAllByCourseId(course.get().getId());
 
         // Course-Place 생성
         List<CoursePlaceRequest> placeList = courseRequest.getPlaceList();
@@ -178,7 +179,7 @@ public class CourseService {
             Optional<Place> place = placeRepository.findById(coursePlaceRequest.getId());
             place.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
 
-            coursePlaceRepository.save(CoursePlace.builder()
+            coursePlaceUserRepository.save(CoursePlaceUser.builder()
                 .day(coursePlaceRequest.getDay())
                 .sequence(coursePlaceRequest.getSequence())
                 .course(course.get())
@@ -192,14 +193,14 @@ public class CourseService {
      */
     public void delete(CourseRequest courseRequest, User user) {
         // Course 탐색, 없으면 생성
-        Optional<Course> course = courseRepository.findById(courseRequest.getId());
+        Optional<CourseUser> course = courseUserRepository.findById(courseRequest.getId());
         course.orElseThrow(() -> new NoSuchElementException("존재하지 않은 Place입니다."));
 
         // Course-Place에서 course 데이터 삭제
-        coursePlaceRepository.deleteAllByCourseId(course.get().getId());
+        coursePlaceUserRepository.deleteAllByCourseId(course.get().getId());
 
         // Course에서 삭제
-        courseRepository.delete(course.get());
+        courseUserRepository.delete(course.get());
     }
 
 
@@ -207,7 +208,7 @@ public class CourseService {
      * 추천 코스
      */
     public List<CourseThumbnail> getRecommend() throws NoSuchObjectException {
-        int countOfCourse = courseRepository.countAllBy();
+        int countOfCourse = courseRecommendRepository.countAllBy();
         if (countOfCourse < 4) {
             return getRecommendDummy();
         }
@@ -217,13 +218,13 @@ public class CourseService {
         for (int i = 0; i < 4; i++) {
             int index = (int)(Math.random() * countOfCourse) + 1;
 
-            Optional<Course> course = courseRepository.findById(Long.valueOf(index));
+            Optional<CourseRecommend> course = courseRecommendRepository.findById(Long.valueOf(index));
             course.orElseThrow(() -> new NoSuchObjectException("없는 경로를 조회했습니다."));
 
-            List<CoursePlace> coursePlaceList = coursePlaceRepository.findAllByCourseIdOrderByDayAscSequenceAsc(Long.valueOf(index));
+            List<CoursePlaceRecommend> coursePlaceRecommendList = coursePlaceRecommendRepository.findAllByCourseIdOrderByDayAscSequenceAsc(Long.valueOf(index));
             List<Place> placeList = new ArrayList<Place>();
-            for (CoursePlace coursePlace : coursePlaceList) {
-                placeList.add(coursePlace.getPlace());
+            for (CoursePlaceRecommend coursePlaceRecommend : coursePlaceRecommendList) {
+                placeList.add(coursePlaceRecommend.getPlace());
             }
 
             CourseThumbnail courseThumbnail = CourseThumbnail.toThumbnail(course.get(), placeList);
@@ -235,7 +236,7 @@ public class CourseService {
     /**
      * 추천 코스 생성
      */
-    public void makePlaces(String region, int days, Course course) {
+    public void makePlaces(String region, int days, CourseRecommend courseRecommend) {
         int placeCountOfDay = 2;
 
         List<Place> placeList =  placeService.findSeoulTextbookPlace();
@@ -259,10 +260,10 @@ public class CourseService {
 
                 duplicationCheckList.add(index);
 
-                coursePlaceRepository.save(CoursePlace.builder()
+                coursePlaceRecommendRepository.save(CoursePlaceRecommend.builder()
                     .day(day)
                     .sequence(placeCount+1)
-                    .course(course)
+                    .course(courseRecommend)
                     .place(placeList.get(index))
                     .build());
             }
@@ -279,12 +280,12 @@ public class CourseService {
 
         Optional<User> user = userRepository.findById(1L);
 
-        Course course = courseRepository.save(Course.builder()
+        CourseRecommend courseRecommend = courseRecommendRepository.save(CourseRecommend.builder()
             .name(name)
             .user(user.get())
             .build());
 
-        makePlaces(region, days, course);
+        makePlaces(region, days, courseRecommend);
     }
 
     public void makeCourses() {

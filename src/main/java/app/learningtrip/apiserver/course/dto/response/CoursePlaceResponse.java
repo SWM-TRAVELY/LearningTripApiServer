@@ -1,6 +1,6 @@
 package app.learningtrip.apiserver.course.dto.response;
 
-import app.learningtrip.apiserver.course.domain.CoursePlace;
+import app.learningtrip.apiserver.course.domain.CoursePlaceUser;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -38,16 +38,16 @@ public class CoursePlaceResponse {
     @ApiModelProperty(example = "앞의 관광지와의 시간: Double")
     private Integer time;
 
-    public static CoursePlaceResponse toResponse(CoursePlace coursePlace, Integer distance, Integer time) {
+    public static CoursePlaceResponse toResponse(CoursePlaceUser coursePlaceUser, Integer distance, Integer time) {
 
         return CoursePlaceResponse.builder()
-            .id(coursePlace.place.getId())
-            .name(coursePlace.place.getName())
-            .description(coursePlace.place.getDescription())
-            .imageURL(coursePlace.place.getImageURL1())
-            .address(coursePlace.place.getAddress())
-            .day(coursePlace.getDay())
-            .sequence(coursePlace.getSequence())
+            .id(coursePlaceUser.place.getId())
+            .name(coursePlaceUser.place.getName())
+            .description(coursePlaceUser.place.getDescription())
+            .imageURL(coursePlaceUser.place.getImageURL1())
+            .address(coursePlaceUser.place.getAddress())
+            .day(coursePlaceUser.getDay())
+            .sequence(coursePlaceUser.getSequence())
             .distance(distance)
             .time(time)
             .build();
