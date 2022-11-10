@@ -32,13 +32,6 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    @GetMapping("/course/make")
-    @ApiIgnore
-    public ResponseEntity setMakeCourse() {
-        courseService.makeCourses();
-        return ResponseEntity.ok().body(200);
-    }
-
     @GetMapping("/home/course/recommend")
     @ApiOperation(value = "추천 코스 조회", notes = "사용자에게 추천하는 코스를 조회한다.")
     public ResponseEntity<List<CourseThumbnail>> getRecommendCourse() throws NoSuchObjectException {
