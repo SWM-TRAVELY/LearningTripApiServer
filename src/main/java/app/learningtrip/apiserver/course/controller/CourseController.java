@@ -91,6 +91,7 @@ public class CourseController {
 
         return ResponseEntity.ok().body(200);
     }
+
     @DeleteMapping("/course")
     @ApiOperation(value = "코스 삭제", notes = "코스를 삭제한다.")
     public ResponseEntity deleteCourse(@RequestBody CourseRequest courseRequest, @AuthenticationPrincipal PrincipalDetails user) {
@@ -98,11 +99,4 @@ public class CourseController {
 
         return ResponseEntity.ok().body(200);
     }
-
-    @GetMapping("/distance")
-    public ResponseEntity getGoogleDistance() throws JSONException, IOException {
-
-        return ResponseEntity.ok().body(courseService.getGoogleMapApi(3.0, 127.0, 3.0, 127.0));
-    }
-
 }
