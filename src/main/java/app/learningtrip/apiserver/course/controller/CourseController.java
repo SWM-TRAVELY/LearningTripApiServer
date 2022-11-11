@@ -32,13 +32,6 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    @GetMapping("/course/make")
-    @ApiIgnore
-    public ResponseEntity setMakeCourse() {
-        courseService.makeCourses();
-        return ResponseEntity.ok().body(200);
-    }
-
     @GetMapping("/home/course/recommend")
     @ApiOperation(value = "추천 코스 조회", notes = "사용자에게 추천하는 코스를 조회한다.")
     public ResponseEntity<List<CourseThumbnail>> getRecommendCourse() throws NoSuchObjectException {
@@ -56,11 +49,21 @@ public class CourseController {
     }
 
     @GetMapping("/course/{course_id}")
-    @ApiOperation(value = "코스정보 조회", notes = "코스 정보를 조회한다.")
+    @ApiOperation(value = "추천 코스정보 조회", notes = "추천 코스의 정보를 조회한다.")
     @ApiImplicitParam(name = "course_id", value = "코스 아이디")
     public ResponseEntity getCourse(@PathVariable(name = "course_id") long course_id)
         throws JSONException, IOException {
-        CourseResponse courseResponse = courseService.getInfo(course_id);
+        CourseResponse courseResponse = courseService.getRecommendCourseInfo(course_id);
+
+        return ResponseEntity.ok().body(courseResponse);
+    }
+
+    @GetMapping("/course/user/{course_id}")
+    @ApiOperation(value = "유저 코스정보 조회", notes = "유저의 코스 정보를 조회한다.")
+    @ApiImplicitParam(name = "course_id", value = "코스 아이디")
+    public ResponseEntity getUserCourse(@PathVariable(name = "course_id") long course_id, @AuthenticationPrincipal PrincipalDetails user)
+        throws JSONException, IOException {
+        CourseResponse courseResponse = courseService.getUserCourseInfo(course_id, user.getUser());
 
         return ResponseEntity.ok().body(courseResponse);
     }
@@ -81,6 +84,7 @@ public class CourseController {
 
         return ResponseEntity.ok().body(200);
     }
+
     @DeleteMapping("/course")
     @ApiOperation(value = "코스 삭제", notes = "코스를 삭제한다.")
     public ResponseEntity deleteCourse(@RequestBody CourseRequest courseRequest, @AuthenticationPrincipal PrincipalDetails user) {
@@ -88,11 +92,4 @@ public class CourseController {
 
         return ResponseEntity.ok().body(200);
     }
-
-    @GetMapping("/distance")
-    public ResponseEntity getGoogleDistance() throws JSONException, IOException {
-
-        return ResponseEntity.ok().body(courseService.getGoogleMapApi(3.0, 127.0, 3.0, 127.0));
-    }
-
 }
