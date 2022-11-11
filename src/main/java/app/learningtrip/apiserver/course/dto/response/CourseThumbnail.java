@@ -59,11 +59,9 @@ public class CourseThumbnail {
         for (Place place : placeList) {
             String imageURL = place.getImageURL1();
             if (!imageURL.equals("")) {
-                System.out.println(place.getName() + " : " + place.getImageURL1());
                 courseThumbnail.setImageURL(imageURL);
                 break;
             }
-            System.out.println("imageURL empty");
         }
 
         return courseThumbnail;
@@ -93,11 +91,9 @@ public class CourseThumbnail {
         for (Place place : placeList) {
             String imageURL = place.getImageURL1();
             if (!imageURL.equals("")) {
-                System.out.println(place.getName() + " : " + place.getImageURL1());
                 courseThumbnail.setImageURL(imageURL);
                 break;
             }
-            System.out.println("imageURL empty");
         }
 
         return courseThumbnail;
