@@ -46,6 +46,8 @@ public class CourseService {
 
     private final GoogleMapApi googleMapApi;
 
+    private final int HOME_RECOMMEND_COURSE = 4;
+
     /**
      * Google-Map-Api
      *
@@ -232,13 +234,13 @@ public class CourseService {
         List<CourseThumbnail> courseThumbnailList = new ArrayList<CourseThumbnail>();
 
         List<Integer> duplicationCheckList = new ArrayList<Integer>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < HOME_RECOMMEND_COURSE; i++) {
             int index = (int)(Math.random() * countOfCourse) + 1;
 
             // 중복 체크
             int flag = 0;
-            for (int listLength = 0; listLength < duplicationCheckList.size(); listLength++) {
-                if (index == duplicationCheckList.get(listLength)) {
+            for (int listItem : duplicationCheckList) {
+                if (index == listItem) {
                     flag = 1;
                     break;
                 }
@@ -247,6 +249,7 @@ public class CourseService {
                 i--;
                 continue;
             }
+            duplicationCheckList.add(index);
 
             // 코스 탐색
             Optional<CourseRecommend> course = courseRecommendRepository.findById(Long.valueOf(index));
