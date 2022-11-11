@@ -14,7 +14,9 @@ import org.springframework.stereotype.Repository;
 public interface KeywordRepository extends JpaRepository<Keyword, Long> {
 
     @Query(value = "SELECT * FROM keyword k "
-        + "ORDER BY (k.place_count + k.search_count) DESC "
+        + "ORDER BY (k.place_count + (k.search_count * 10)) DESC "
         + "LIMIT 10", nativeQuery = true)
     List<Keyword> findTop10ByOrderByPlaceCountPlusSearchCountDesc();
+
+    Optional<Keyword> findByKeyword(String keyword);
 }
