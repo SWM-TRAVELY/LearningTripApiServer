@@ -28,7 +28,6 @@ jobs:
 
       - name: Build & Test
         run: |
-          cat src/main/java/app/learningtrip/apiserver/level/domain/Level.java
           echo "${{ secrets.DEV_DB_PROPERTIES }}" > src/main/resources/secret.properties
           echo "${{ secrets.JWT_PROPERTIES }}" > src/main/java/app/learningtrip/apiserver/configuration/auth/jwt/JwtProperties.java
           echo "${{ secrets.API_KEY_PROPERTIES }}" > src/main/resources/application-API-KEY.properties
