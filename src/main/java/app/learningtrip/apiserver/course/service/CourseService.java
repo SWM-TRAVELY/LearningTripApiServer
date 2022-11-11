@@ -231,9 +231,24 @@ public class CourseService {
 
         List<CourseThumbnail> courseThumbnailList = new ArrayList<CourseThumbnail>();
 
+        List<Integer> duplicationCheckList = new ArrayList<Integer>();
         for (int i = 0; i < 4; i++) {
             int index = (int)(Math.random() * countOfCourse) + 1;
 
+            // 중복 체크
+            int flag = 0;
+            for (int listLength = 0; listLength < duplicationCheckList.size(); listLength++) {
+                if (index == duplicationCheckList.get(listLength)) {
+                    flag = 1;
+                    break;
+                }
+            }
+            if (flag == 1) {
+                i--;
+                continue;
+            }
+
+            // 코스 탐색
             Optional<CourseRecommend> course = courseRecommendRepository.findById(Long.valueOf(index));
             course.orElseThrow(() -> new NoSuchObjectException("없는 경로를 조회했습니다."));
 
