@@ -17,11 +17,19 @@ import lombok.Setter;
 @Getter @Setter @Builder
 public class Keyword {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private String name;
+    private Long id;
+
+    private String keyword;
+
+    private String places;
+
+    private String wordCount;
+
+    private Integer placeCount;
+
+    private Integer searchCount;
 
     private String imageURL;
-
-    private Integer count;
 }
