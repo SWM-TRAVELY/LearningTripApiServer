@@ -2,6 +2,7 @@ package app.learningtrip.apiserver.course.controller;
 
 import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
 import app.learningtrip.apiserver.course.dto.request.CourseRequest;
+import app.learningtrip.apiserver.course.dto.response.CourseOptionsResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseThumbnail;
 import app.learningtrip.apiserver.course.service.CourseService;
@@ -91,5 +92,17 @@ public class CourseController {
         courseService.delete(courseRequest, user.getUser());
 
         return ResponseEntity.ok().body(200);
+    }
+
+    @GetMapping("/course/options")
+    @ApiOperation(value = "코스 옵션 가져오기", notes = "코스 옵션(학년, 지역)을 가져온다")
+    public ResponseEntity<CourseOptionsResponse> getCourseOptions(){
+        return ResponseEntity.ok().body(courseService.getCourseOptions());
+    }
+
+    @GetMapping("/course/options/keyword/{keyword}")
+    @ApiOperation(value = "코스 옵션 키워드 조회", notes = "코스 옵션 중 키워드 검색")
+    public ResponseEntity<List<String>> getKeywordOfCourseOptions(@PathVariable(name = "keyword") String keyword){
+        return ResponseEntity.ok().body(courseService.getKeywordOfCourseOptions(keyword));
     }
 }

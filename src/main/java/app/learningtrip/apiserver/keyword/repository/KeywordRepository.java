@@ -19,4 +19,7 @@ public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     List<Keyword> findTop10ByOrderByPlaceCountPlusSearchCountDesc();
 
     Optional<Keyword> findByKeyword(String keyword);
+
+    @Query(value = "select k.keyword from Keyword k where k.keyword like %:keyword% order by k.keyword")
+    List<String> findKeywordsByNameLike(@Param("keyword") String keyword);
 }
