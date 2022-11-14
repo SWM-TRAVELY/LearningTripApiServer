@@ -5,8 +5,11 @@ import app.learningtrip.apiserver.course.domain.CourseRecommend;
 import app.learningtrip.apiserver.course.domain.CourseUser;
 import app.learningtrip.apiserver.course.domain.CoursePlaceUser;
 import app.learningtrip.apiserver.course.domain.GoogleMapApi;
+import app.learningtrip.apiserver.course.domain.Grade;
+import app.learningtrip.apiserver.course.domain.Province;
 import app.learningtrip.apiserver.course.dto.request.CoursePlaceRequest;
 import app.learningtrip.apiserver.course.dto.request.CourseRequest;
+import app.learningtrip.apiserver.course.dto.response.CourseOptionsResponse;
 import app.learningtrip.apiserver.course.dto.response.CoursePlaceResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseThumbnail;
@@ -14,9 +17,13 @@ import app.learningtrip.apiserver.course.repository.CoursePlaceRecommendReposito
 import app.learningtrip.apiserver.course.repository.CoursePlaceUserRepository;
 import app.learningtrip.apiserver.course.repository.CourseRecommendRepository;
 import app.learningtrip.apiserver.course.repository.CourseUserRepository;
+import app.learningtrip.apiserver.course.repository.GradeRepository;
+import app.learningtrip.apiserver.course.repository.ProvinceRepository;
+import app.learningtrip.apiserver.keyword.repository.KeywordRepository;
 import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
 import app.learningtrip.apiserver.place.service.PlaceService;
+import app.learningtrip.apiserver.search.service.SearchServiceImpl;
 import app.learningtrip.apiserver.user.domain.User;
 import app.learningtrip.apiserver.user.repository.UserRepository;
 import java.rmi.NoSuchObjectException;
@@ -27,6 +34,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import okhttp3.ResponseBody;
 import org.json.JSONException;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
@@ -43,6 +52,14 @@ public class CourseService {
     private final PlaceService placeService;
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
+
+    private final GradeRepository gradeRepository;
+
+    private final ProvinceRepository provinceRepository;
+
+    private final KeywordRepository keywordRepository;
+
+    private final SearchServiceImpl searchService;
 
     private final GoogleMapApi googleMapApi;
 
@@ -335,5 +352,30 @@ public class CourseService {
                 }
             }
         }
+    }
+
+    /**
+     * 코스 옵션 (학년, 지역) 조회
+     * @return 코스 옵션 (학년, 지역)
+     */
+    public CourseOptionsResponse getCourseOptions(){
+        CourseOptionsResponse response = new CourseOptionsResponse();
+
+        List<Grade> gradeList = gradeRepository.findAll(Sort.by(Direction.ASC, "id"));
+        List<Province> provinceList = provinceRepository.findAll(Sort.by(Direction.ASC, "id"));
+
+        response.gradeToOptions(gradeList);
+        response.provinceToOptions(provinceList);
+
+        return response;
+    }
+
+    /**
+     * 코스 옵션 키워드 검색
+     * @param keyword 키워드
+     * @return 키워드 리스트
+     */
+    public List<String> getKeywordOfCourseOptions(String keyword){
+        return searchService.sortSearchList(keywordRepository.findKeywordsByNameLike(keyword), keyword);
     }
 }
