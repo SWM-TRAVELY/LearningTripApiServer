@@ -62,7 +62,7 @@ public class GoogleMapApi {
                 JSONObject duration = element.getJSONObject("duration");
 
                 this.distance = (Integer) distance.get("value");
-                this.time = (Integer) duration.get("value");
+                this.time = (Integer) duration.get("value") / 60;
 
             } else {
                 System.err.println("GoogleMapApi Error Occurred");
