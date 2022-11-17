@@ -1,9 +1,7 @@
-package app.learningtrip.apiserver.course.dto;
+package app.learningtrip.apiserver.category.dto;
 
-import app.learningtrip.apiserver.course.domain.Grade;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -2,7 +2,7 @@ package app.learningtrip.apiserver.course.controller;
 
 import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
 import app.learningtrip.apiserver.course.dto.request.CourseRequest;
-import app.learningtrip.apiserver.course.dto.response.CourseOptionsResponse;
+import app.learningtrip.apiserver.category.dto.CourseOptionsResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseThumbnail;
 import app.learningtrip.apiserver.course.service.CourseService;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import springfox.documentation.annotations.ApiIgnore;
 
 @Api(tags = {"코스 API"})
 @RestController
@@ -92,17 +90,5 @@ public class CourseController {
         courseService.delete(courseRequest, user.getUser());
 
         return ResponseEntity.ok().body(200);
-    }
-
-    @GetMapping("/course/options")
-    @ApiOperation(value = "코스 옵션 가져오기", notes = "코스 옵션(학년, 지역)을 가져온다")
-    public ResponseEntity<CourseOptionsResponse> getCourseOptions(){
-        return ResponseEntity.ok().body(courseService.getCourseOptions());
-    }
-
-    @GetMapping("/course/options/keyword/{keyword}")
-    @ApiOperation(value = "코스 옵션 키워드 조회", notes = "코스 옵션 중 키워드 검색")
-    public ResponseEntity<List<String>> getKeywordOfCourseOptions(@PathVariable(name = "keyword") String keyword){
-        return ResponseEntity.ok().body(courseService.getKeywordOfCourseOptions(keyword));
     }
 }
