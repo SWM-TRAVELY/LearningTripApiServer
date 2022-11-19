@@ -91,4 +91,12 @@ public class CourseController {
 
         return ResponseEntity.ok().body(200);
     }
+
+    @GetMapping("/course/create")
+    @ApiOperation(value = "코스 생성 추천", notes = "사용자가 입력한 값에 따라 코스를 생성하여 추천다.")
+    public ResponseEntity createGetCourse() throws NoSuchObjectException {
+        List<CourseThumbnail> courseThumbnailList = courseService.getRecommend();
+
+        return ResponseEntity.ok().body(courseThumbnailList);
+    }
 }
