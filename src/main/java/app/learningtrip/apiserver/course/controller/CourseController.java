@@ -1,6 +1,7 @@
 package app.learningtrip.apiserver.course.controller;
 
 import app.learningtrip.apiserver.configuration.auth.PrincipalDetails;
+import app.learningtrip.apiserver.course.dto.request.CourseCreate;
 import app.learningtrip.apiserver.course.dto.request.CourseRequest;
 import app.learningtrip.apiserver.category.dto.CourseOptionsResponse;
 import app.learningtrip.apiserver.course.dto.response.CourseResponse;
@@ -11,7 +12,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.rmi.NoSuchObjectException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
@@ -90,5 +95,15 @@ public class CourseController {
         courseService.delete(courseRequest, user.getUser());
 
         return ResponseEntity.ok().body(200);
+    }
+
+    @PostMapping("/course/recommend")
+    @ApiOperation(value = "코스 생성 추천", notes = "사용자가 입력한 값에 따라 코스를 생성하여 추천다.")
+    public ResponseEntity createGetCourse(@RequestBody CourseCreate courseCreate)
+        throws NoSuchObjectException {
+        System.out.println(courseCreate.getStart());
+        List<CourseThumbnail> courseThumbnailList = courseService.getRecommend();
+
+        return ResponseEntity.ok().body(courseThumbnailList);
     }
 }
