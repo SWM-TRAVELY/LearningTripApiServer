@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.configuration;
 
+import app.learningtrip.apiserver.configuration.auth.CustomAuthenticationEntryPoint;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtAuthenticationFilter;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtAuthorizationFilter;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
@@ -47,6 +48,8 @@ public class SecurityConfig {
 
     http.apply(new CustomDsl()); //커스텀한 필터(corsFilter, 인증/인가 필터) 등록
 
+    http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+
     http
         .oauth2Login().userInfoEndpoint().userService(customOAuth2UserService)
         .and()
@@ -59,6 +62,8 @@ public class SecurityConfig {
         .antMatchers("/user/signup").permitAll()
         .antMatchers("/user/**").hasRole("USER")
         .antMatchers("/course/list").hasRole("USER")
+        .antMatchers("/course").hasRole("USER")
+        .antMatchers("/course/user/**").hasRole("USER")
         .antMatchers("/review").hasRole("USER")
         .antMatchers("/helpful").hasRole("USER")
         .anyRequest().permitAll();

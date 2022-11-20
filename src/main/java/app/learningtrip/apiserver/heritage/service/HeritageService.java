@@ -6,6 +6,7 @@ import app.learningtrip.apiserver.heritage.dto.response.HeritageThumbnail;
 import app.learningtrip.apiserver.heritage.repository.HeritageRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,7 @@ public class HeritageService {
 
         // heritage table에서 값 찾기
         Optional<Heritage> heritage = heritageRepository.findById(id);
-        if (heritage.isPresent() == false) {
-            return getInfoDummy(id);
-        }
+        heritage.orElseThrow(() -> new NoSuchElementException("Not Found Heritage Index"));
 
         HeritageResponse heritageResponse = HeritageResponse.toResponse(heritage.get());
 

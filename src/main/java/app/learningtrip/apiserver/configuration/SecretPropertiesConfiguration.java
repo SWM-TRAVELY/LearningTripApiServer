@@ -20,5 +20,8 @@ public class SecretPropertiesConfiguration {
 
     @Value("spring.jpa.hibernate.ddl-auto")
     private String ddlAuto;
+
+    @Value("server.port")
+    private String port;
 }
 

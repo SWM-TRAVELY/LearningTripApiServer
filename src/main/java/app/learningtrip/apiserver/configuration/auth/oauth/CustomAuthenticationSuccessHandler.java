@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.configuration.auth.oauth;
 
+import app.learningtrip.apiserver.configuration.auth.jwt.JwtProperties;
 import app.learningtrip.apiserver.configuration.auth.jwt.JwtService;
 import app.learningtrip.apiserver.user.domain.User;
 import app.learningtrip.apiserver.user.repository.UserRepository;
@@ -40,7 +41,7 @@ public class CustomAuthenticationSuccessHandler extends
     String refreshToken = jwtService.createJwt("refresh_token", username);
 
     user.setImage(attributes.getImage());
-    user.setRefreshToken(refreshToken);
+    user.setRefreshToken(JwtProperties.TOKEN_PREFIX+refreshToken);
 
     userRepository.save(user);
 

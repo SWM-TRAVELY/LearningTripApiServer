@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.user.domain;
 
+import app.learningtrip.apiserver.level.repository.LevelRepository;
 import app.learningtrip.apiserver.user.dto.response.UserInfoResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +46,7 @@ public class User {
   private Boolean signUpStatus;
 
   public User(String username, String password, String role, String phone, String image,
-      String email, String nickname, String loginProvider, Boolean signUpStatus) {
+      String email, String nickname) {
     this.username = username;
     this.password = password;
     this.role = role;
@@ -53,8 +54,9 @@ public class User {
     this.image = image;
     this.email = email;
     this.nickname = nickname;
-    this.loginProvider = loginProvider;
-    this.signUpStatus = signUpStatus;
+    this.loginProvider = "LT";
+    this.signUpStatus = true;
+    this.experiencePoint = 0;
   }
 
   @Column(nullable = true)
@@ -68,8 +70,8 @@ public class User {
     this.loginProvider = loginProvider;
   }
 
-  public UserInfoResponse toUserInfo(){
-    return new UserInfoResponse(this.email, this.nickname, this.image, this.phone, this.loginProvider);
+  public UserInfoResponse toUserInfo(String level){
+    return new UserInfoResponse(this.email, this.nickname, this.image, this.phone, this.loginProvider, this.experiencePoint, level);
   }
 
   public List<String> roles() {
@@ -77,5 +79,9 @@ public class User {
       return Arrays.asList(role.split(","));
     }
     return new ArrayList<>();
+  }
+
+  public String getLevel(LevelRepository levelRepository) {
+    return levelRepository.findLevelByExp(this.experiencePoint).orElse(null);
   }
 }

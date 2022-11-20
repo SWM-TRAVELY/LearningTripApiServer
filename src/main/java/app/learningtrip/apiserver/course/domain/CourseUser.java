@@ -1,8 +1,6 @@
 package app.learningtrip.apiserver.course.domain;
 
-import app.learningtrip.apiserver.place.domain.Place;
 import app.learningtrip.apiserver.user.domain.User;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,10 +16,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity @Table(name = "course")
+@Entity @Table(name = "course_user")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @Builder
-public class Course {
+public class CourseUser {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
