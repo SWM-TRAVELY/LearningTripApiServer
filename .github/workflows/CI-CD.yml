@@ -28,6 +28,7 @@ jobs:
       run: |
         echo "${{ secrets.DB_PROPERTIES }}" > src/main/resources/secret.properties
         echo "${{ secrets.JWT_PROPERTIES }}" > src/main/java/app/learningtrip/apiserver/configuration/auth/jwt/JwtProperties.java
+        echo "${{ secrets.API_KEY_PROPERTIES }}" > src/main/resources/application-API-KEY.properties
         ./gradlew build --no-daemon
         
     - name: Kill Server process
