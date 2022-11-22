@@ -2,6 +2,7 @@ package app.learningtrip.apiserver.category.service;
 
 import app.learningtrip.apiserver.category.domain.Grade;
 import app.learningtrip.apiserver.category.domain.Province;
+import app.learningtrip.apiserver.category.dto.CourseOptions;
 import app.learningtrip.apiserver.category.dto.CourseOptionsResponse;
 import app.learningtrip.apiserver.category.repository.GradeRepository;
 import app.learningtrip.apiserver.category.repository.ProvinceRepository;
@@ -41,6 +42,16 @@ public class CategoryService {
         response.provinceToOptions(provinceList);
 
         return response;
+    }
+
+    public List<CourseOptions> getCategoryList(){
+        CourseOptionsResponse response = new CourseOptionsResponse();
+
+        List<Grade> gradeList = gradeRepository.findAll(Sort.by(Direction.ASC, "id"));
+
+        response.gradeToOptions(gradeList);
+
+        return response.getGrade();
     }
 
     /**

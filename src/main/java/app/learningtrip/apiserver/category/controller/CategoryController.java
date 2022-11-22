@@ -1,5 +1,6 @@
 package app.learningtrip.apiserver.category.controller;
 
+import app.learningtrip.apiserver.category.dto.CourseOptions;
 import app.learningtrip.apiserver.category.dto.CourseOptionsResponse;
 import app.learningtrip.apiserver.category.service.CategoryService;
 import io.swagger.annotations.Api;
@@ -33,7 +34,7 @@ public class CategoryController {
 
     @GetMapping("/category")
     @ApiOperation(value = "카테고리 목록 조회", notes = "카테고리(지역, 학년) 목록을 조회한다.")
-    public ResponseEntity<CourseOptionsResponse> getCategory(){
-        return ResponseEntity.ok().body(categoryService.getCourseOptions());
+    public ResponseEntity<List<CourseOptions>> getCategory(){
+        return ResponseEntity.ok().body(categoryService.getCategoryList());
     }
 }
