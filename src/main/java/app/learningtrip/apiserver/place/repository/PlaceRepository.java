@@ -35,4 +35,9 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
         + "p.address, p.imageURL1) "
         + "from Place p where p.name like %:keyword% order by p.name")
     Optional<List<PlaceSearchResult>> findPlacesByNameLike(@Param("keyword") String keyword);
+
+    @Query(value = "select new app.learningtrip.apiserver.search.dto.PlaceSearchResult(p.id, p.name, "
+        + "p.address, p.imageURL1) "
+        + "from Place p where p.id = :id")
+    PlaceSearchResult findPlaceById(@Param("id") Long id);
 }
