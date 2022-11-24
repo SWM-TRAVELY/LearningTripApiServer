@@ -1,16 +1,20 @@
 package app.learningtrip.apiserver.search.service;
 
 import app.learningtrip.apiserver.category.repository.GradeRepository;
+import app.learningtrip.apiserver.keyword.domain.Keyword;
+import app.learningtrip.apiserver.keyword.repository.KeywordRepository;
 import app.learningtrip.apiserver.place.domain.PlaceRelatedInfo;
 import app.learningtrip.apiserver.place.repository.PlaceRelatedInfoRepository;
 import app.learningtrip.apiserver.place.repository.PlaceRepository;
 import app.learningtrip.apiserver.search.dto.PlaceSearchResult;
+import io.swagger.models.auth.In;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -22,6 +26,8 @@ public class SearchServiceImpl implements SearchService {
   private final PlaceRelatedInfoRepository placeRelatedInfoRepository;
 
   private final GradeRepository gradeRepository;
+
+  private final KeywordRepository keywordRepository;
 
   public List<String> sortSearchList(List<String> searchList, String keyword){
     List<String> sortedList = new ArrayList<>();
@@ -100,6 +106,19 @@ public class SearchServiceImpl implements SearchService {
 
       placeRelatedInfoList.forEach(place -> {
         placeSearchList.add(placeRepository.findPlaceById(place.getId()));
+      });
+
+      return placeSearchList;
+    }
+
+    Keyword keyword1 = keywordRepository.findByKeyword(keyword).orElse(null);
+
+    if(keyword1 != null){
+      List<PlaceSearchResult> placeSearchList = new ArrayList<>();
+
+      List<String> placeList = List.of(keyword1.getPlaces().split(","));
+      placeList.forEach(place-> {
+        placeSearchList.add(placeRepository.findPlaceById(Long.valueOf(place)));
       });
 
       return placeSearchList;
