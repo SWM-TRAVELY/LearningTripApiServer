@@ -37,4 +37,12 @@ public class CoursePlaceRecommend {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
     public Place place;
+
+    public CoursePlaceRecommend(Integer day, Integer sequence, CourseRecommend course,
+        Place place) {
+        this.day = day;
+        this.sequence = sequence;
+        this.course = course;
+        this.place = place;
+    }
 }
